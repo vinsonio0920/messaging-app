@@ -1,9 +1,18 @@
 {
   "type": "module",
   "dependencies": {
-    "express": "^5.2.1"
+    "@prisma/adapter-pg": "^7.9.1",
+    "@prisma/client": "^7.9.1",
+    "express": "^5.2.1",
+    "pg": "^8.22.0"
   },
   "devDependencies": {
-    "prettier": "3.9.6"
+    "dotenv": "^17.4.2",
+    "prettier": "3.9.6",
+    "prisma": "^7.9.1"
+  },
+  "allowScripts": {
+    "@prisma/engines@7.9.1": true,
+    "prisma@7.9.1": true
   }
 }
