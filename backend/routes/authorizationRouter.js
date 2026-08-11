@@ -1,9 +1,8 @@
 import { Router } from "express";
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
+import bcrypt from "bcryptjs";
 import {
-  getSignInPage,
-  getSignUpPage,
   postSignInPage,
   postSignUpPage,
 } from "../controllers/authorizationController.js";
@@ -22,7 +21,8 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "Incorrect username" });
         }
-        if (user.password !== password) {
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
           return done(null, false, { message: "Incorrect password" });
         }
         return done(null, user);
@@ -48,9 +48,7 @@ passport.deserializeUser(async (id, done) => {
 
 const authorizationRouter = Router();
 
-authorizationRouter.get("/sign-up", getSignUpPage);
 authorizationRouter.post("/sign-up", postSignUpPage);
-authorizationRouter.get("/sign-in", getSignInPage);
 authorizationRouter.post("/sign-in", postSignInPage);
 
 export { authorizationRouter };

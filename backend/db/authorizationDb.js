@@ -3,10 +3,12 @@ import { prisma } from "../lib/prisma.js";
 async function createUser(email, password, username, profile) {
   try {
     const newUser = await prisma.user.create({
-      email,
-      password,
-      username,
-      profile,
+      data: {
+        email,
+        password,
+        username,
+        profile,
+      },
     });
 
     return newUser;
@@ -48,4 +50,19 @@ async function findUserById(id) {
   }
 }
 
-export { createUser, findUser, findUserById };
+async function findUserByEmail(email) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: email,
+      },
+    });
+
+    return user;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export { createUser, findUser, findUserById, findUserByEmail };
