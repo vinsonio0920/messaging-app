@@ -3,8 +3,9 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import {
-  postSignInPage,
-  postSignUpPage,
+  postSignIn,
+  postSignUp,
+  postSignOut,
 } from "../controllers/authorizationController.js";
 import { findUserByEmail, findUserById } from "../db/authorizationDb.js";
 
@@ -48,7 +49,8 @@ passport.deserializeUser(async (id, done) => {
 
 const authorizationRouter = Router();
 
-authorizationRouter.post("/sign-up", postSignUpPage);
-authorizationRouter.post("/sign-in", postSignInPage);
+authorizationRouter.post("/sign-up", postSignUp);
+authorizationRouter.post("/sign-in", postSignIn);
+authorizationRouter.post("/sign-out", postSignOut);
 
 export { authorizationRouter };

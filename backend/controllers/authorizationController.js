@@ -60,7 +60,7 @@ const validateSignUp = [
     .withMessage(`Username ${lengthErr(3, 64)}`),
 ];
 
-const postSignUpPage = [
+const postSignUp = [
   validateSignUp,
   async (req, res, next) => {
     const errors = validationResult(req);
@@ -100,7 +100,7 @@ const postSignUpPage = [
   },
 ];
 
-async function postSignInPage(req, res, next) {
+async function postSignIn(req, res, next) {
   // seems like... I DID IT IN HEADERS INSTEAD OF BODY!!!
   passport.authenticate("local", (err, user, info) => {
     if (err)
@@ -139,6 +139,17 @@ async function postSignInPage(req, res, next) {
   })(req, res, next);
 }
 
-// log out!
+async function postSignOut(req, res, next) {
+  req.logout((err) => {
+    if (err) return next(err);
 
-export { postSignUpPage, postSignInPage };
+    res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: null,
+      errors: null,
+    });
+  });
+}
+
+export { postSignUp, postSignIn, postSignOut };
