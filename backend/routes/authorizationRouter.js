@@ -6,7 +6,7 @@ import {
   postSignInPage,
   postSignUpPage,
 } from "../controllers/authorizationController.js";
-import { findUser, findUserById } from "../db/authorizationDb.js";
+import { findUserByEmail, findUserById } from "../db/authorizationDb.js";
 
 passport.use(
   new LocalStrategy(
@@ -14,12 +14,12 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    async (email, password, done) => {
+    async (username, password, done) => {
       try {
-        const user = await findUser(email, password);
+        const user = await findUserByEmail(username);
 
         if (!user) {
-          return done(null, false, { message: "Incorrect username" });
+          return done(null, false, { message: "Incorrect email" });
         }
         const match = await bcrypt.compare(password, user.password);
         if (!match) {

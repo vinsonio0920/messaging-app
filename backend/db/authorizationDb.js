@@ -19,22 +19,6 @@ async function createUser(email, password, username, profile) {
   }
 }
 
-async function findUser(email, password) {
-  try {
-    const user = await prisma.user.findFirst({
-      where: {
-        email: email,
-        password: password,
-      },
-    });
-
-    return user;
-  } catch (err) {
-    console.error(err);
-    throw new Error(err);
-  }
-}
-
 async function findUserById(id) {
   try {
     const user = await prisma.user.findUniqueOrThrow({
@@ -52,9 +36,12 @@ async function findUserById(id) {
 
 async function findUserByEmail(email) {
   try {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: {
-        email: email,
+        email: {
+          equals: email,
+          mode: "insensitive",
+        },
       },
     });
 
@@ -65,4 +52,4 @@ async function findUserByEmail(email) {
   }
 }
 
-export { createUser, findUser, findUserById, findUserByEmail };
+export { createUser, findUserById, findUserByEmail };

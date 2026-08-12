@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import { body, validationResult, matchedData } from "express-validator";
 import { createUser, findUserByEmail } from "../db/authorizationDb.js";
 import { requiredErr, lengthErr } from "../utils.js";
+import passport from "passport";
 
 const emailErr = "must be a valid email address";
 const inUseErr = "is already registered";
@@ -99,8 +100,45 @@ const postSignUpPage = [
   },
 ];
 
-async function postSignInPage(req, res) {
-  req.send("Posting sign in page...");
+async function postSignInPage(req, res, next) {
+  // seems like... I DID IT IN HEADERS INSTEAD OF BODY!!!
+  passport.authenticate("local", (err, user, info) => {
+    if (err)
+      return res.status(500).json({
+        apiVersion: "1.0",
+        status: "error",
+        data: null,
+        errors: [
+          {
+            type: null,
+            value: null,
+            message: "Error with running local strategy",
+            path: null,
+            location: null,
+          },
+        ],
+      });
+    if (!user)
+      return res.status(400).json({
+        apiVersion: "1.0",
+        status: "error",
+        data: null,
+        errors: [
+          {
+            type: null,
+            value: null,
+            message: "Email or password is incorrect",
+            path: null,
+            location: null,
+          },
+        ],
+      });
+
+    res.json("WOrking... hold on!");
+    // sign jwt...
+  })(req, res, next);
 }
+
+// log out!
 
 export { postSignUpPage, postSignInPage };
