@@ -8,6 +8,7 @@ import {
   postSignOut,
 } from "../controllers/authorizationController.js";
 import { findUserByEmail, findUserById } from "../db/authorizationDb.js";
+import { verifyToken } from "../utils.js";
 
 passport.use(
   new LocalStrategy(
@@ -52,5 +53,8 @@ const authorizationRouter = Router();
 authorizationRouter.post("/sign-up", postSignUp);
 authorizationRouter.post("/sign-in", postSignIn);
 authorizationRouter.post("/sign-out", postSignOut);
+authorizationRouter.get("/test", verifyToken, (req, res) =>
+  res.send("You did it!"),
+);
 
 export { authorizationRouter };

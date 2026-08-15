@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { body, validationResult, matchedData } from "express-validator";
 import { createUser, findUserByEmail } from "../db/authorizationDb.js";
 import { requiredErr, lengthErr } from "../utils.js";
@@ -134,14 +135,34 @@ async function postSignIn(req, res, next) {
         ],
       });
 
-    res.json("WOrking... hold on!");
-    // sign jwt...
+    // we are going to do a hybrid passport/jwt authentication
+    // log in to create sessionId
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+
+      // sign jwt
+      jwt.sign({ user }, process.env.SECRET, (err, token) => {
+        if (err) return next(err);
+
+        // returns successful response if everything goes well
+        res.json({
+          apiVersion: "1.0",
+          status: "success",
+          data: {
+            token,
+          },
+          errors: null,
+        });
+      });
+    });
   })(req, res, next);
 }
 
 async function postSignOut(req, res, next) {
   req.logout((err) => {
     if (err) return next(err);
+
+    // maybe also remove jwt here as well
 
     res.json({
       apiVersion: "1.0",

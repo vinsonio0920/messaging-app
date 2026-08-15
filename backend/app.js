@@ -27,6 +27,25 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", authorizationRouter);
 
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(err.statusCode || 500).json({
+    apiVersion: "1.0",
+    status: "error",
+    data: null,
+    errors: [
+      {
+        type: null,
+        value: null,
+        message: err.message,
+        path: null,
+        location: null,
+      },
+    ],
+  });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, (error) => {
   if (error) throw error;
