@@ -5,6 +5,15 @@ const requiredErr = "is required";
 const lengthErr = (minLength, maxLength) =>
   `must be between ${minLength} and ${maxLength} characters`;
 
+// make sure user can't sign in a second time
+function verifyNotSignedin(req, res, next) {
+  if (req.isAuthenticated()) {
+    throw new CustomForbiddenError("You are already signed in.");
+  } else {
+    next();
+  }
+}
+
 // jwt verification middleware
 function verifyToken(req, res, next) {
   // get auth header value
@@ -24,9 +33,8 @@ function verifyToken(req, res, next) {
     });
   } else {
     // forbidden
-    console.error("forbidden");
     throw new CustomForbiddenError("You are not signed in yet.");
   }
 }
 
-export { requiredErr, lengthErr, verifyToken };
+export { requiredErr, lengthErr, verifyNotSignedin, verifyToken };
