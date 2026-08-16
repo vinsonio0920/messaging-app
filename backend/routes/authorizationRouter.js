@@ -54,7 +54,7 @@ authorizationRouter.post("/sign-up", postSignUp);
 authorizationRouter.post("/sign-in", postSignIn);
 authorizationRouter.post("/sign-out", postSignOut);
 authorizationRouter.get("/test", verifyToken, (req, res) =>
-  res.send("You did it!"),
+  res.json("You did it!"),
 );
 
 export { authorizationRouter };

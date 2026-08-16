@@ -1,3 +1,4 @@
+import jwt from "jsonwebtoken";
 import { CustomForbiddenError } from "./errors/CustomForbiddenError.js";
 
 const requiredErr = "is required";
@@ -6,15 +7,24 @@ const lengthErr = (minLength, maxLength) =>
 
 // jwt verification middleware
 function verifyToken(req, res, next) {
-  console.log("running!");
   // get auth header value
   const bearerHeader = req.headers["authorization"];
-  console.log(`bearer: ${bearerHeader}`);
-  // check if bearer is undefined
+
   if (typeof bearerHeader !== "undefined") {
+    // get jwt token from bearerHeader
+    const bearer = bearerHeader.split(" ");
+    const bearerToken = bearer[1];
+    req.token = bearerToken;
+
+    // verify the jwt token
+    jwt.verify(req.token, process.env.SECRET, (err, authData) => {
+      if (err) throw new CustomForbiddenError("You are not signed in yet.");
+
+      next();
+    });
   } else {
     // forbidden
-    console.log("forbidden");
+    console.error("forbidden");
     throw new CustomForbiddenError("You are not signed in yet.");
   }
 }

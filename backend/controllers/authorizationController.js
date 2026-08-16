@@ -141,19 +141,24 @@ async function postSignIn(req, res, next) {
       if (err) return next(err);
 
       // sign jwt
-      jwt.sign({ user }, process.env.SECRET, (err, token) => {
-        if (err) return next(err);
+      jwt.sign(
+        { user },
+        process.env.SECRET,
+        { expiresIn: "1d" },
+        (err, token) => {
+          if (err) return next(err);
 
-        // returns successful response if everything goes well
-        res.json({
-          apiVersion: "1.0",
-          status: "success",
-          data: {
-            token,
-          },
-          errors: null,
-        });
-      });
+          // returns successful response if everything goes well
+          res.json({
+            apiVersion: "1.0",
+            status: "success",
+            data: {
+              token,
+            },
+            errors: null,
+          });
+        },
+      );
     });
   })(req, res, next);
 }
@@ -162,7 +167,8 @@ async function postSignOut(req, res, next) {
   req.logout((err) => {
     if (err) return next(err);
 
-    // maybe also remove jwt here as well
+    // also remove jwt here as well
+    req.token = undefined;
 
     res.json({
       apiVersion: "1.0",
