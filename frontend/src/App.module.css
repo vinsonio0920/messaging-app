@@ -1,0 +1,110 @@
+.navbar,
+.navbar ul {
+  height: 100%;
+}
+
+.navbar ul {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar a {
+  color: #000;
+  text-decoration: none;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.logoLink span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+/* home/messages li */
+
+.messagesParentLi {
+  flex: 1 1 auto;
+}
+
+.homeLink,
+.messagesUl a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+
+.messagesUl li p {
+  margin: 0;
+}
+
+.homeLink .homeIcon {
+  font-size: 2rem;
+  margin-right: 0.75rem;
+}
+
+.profilePicture {
+  border-radius: 50%;
+  margin-right: 0.75rem;
+}
+
+.emptyChatsPara {
+  margin: 1rem 0 !important;
+  padding-left: 0.75rem;
+}
+
+.createButton {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--standard-border-radius);
+  width: 100%;
+  padding: 0.25rem;
+}
+
+.createButton:hover,
+.dropdownButton:hover {
+  background-color: #d5d5d5;
+}
+
+.createButton:active,
+.dropdownButton:active {
+  background-color: #d9d9d9;
+}
+
+.createButton .createIcon {
+  font-size: 2rem;
+  margin-right: 0.75rem;
+}
+
+/* profile li */
+
+.profileLi {
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  border-top: 1px solid #c4c4c4;
+  padding: 1rem;
+}
+
+.profileLi p {
+  margin-right: auto;
+}
+
+.dropdownButton {
+  border: none;
+  border-radius: 50%;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+}
+
+.dropdownIcon {
+  position: relative;
+  top: 0.1rem;
+}
