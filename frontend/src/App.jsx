@@ -4,30 +4,36 @@ import styles from "./App.module.css";
 import { useState } from "react";
 
 function App() {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
 
-  function handleDropdownClick() {
-    setShowDropdown(!showDropdown);
+  function handleSidebarClick() {
+    setShowSidebar(!showSidebar);
   }
 
   return (
     <div className={styles.pageContainer}>
       <nav
-        className={`${styles.navbar} ${showDropdown ? styles.showDropdown : ""}`}
+        className={`${styles.navbar} ${showSidebar ? styles.showSidebar : styles.hideSidebar}`}
       >
         <ul>
           <li className={styles.logoLi}>
             <Link to="/" className={styles.logoLink}>
               <img src={logoSvg} width="40" height="40" alt="Logo" />
-              <span>Message</span>
+              <span className={styles.sidebarText}>Message</span>
             </Link>
             <button
               type="button"
-              className={styles.logoButton}
-              onClick={handleDropdownClick}
+              className={styles.sidebarButton}
+              onClick={handleSidebarClick}
             >
-              <span className={`material-symbols-outlined ${styles.logoIcon}`}>
-                menu
+              <span
+                className={`material-symbols-outlined ${styles.sidebarIcon}`}
+              >
+                <span className={styles.menuIcon}>menu</span>
+                <span className={styles.openSidebarIcon}>
+                  arrow_forward_ios
+                </span>
+                <span className={styles.closeSidebarIcon}>arrow_back_ios</span>
               </span>
             </button>
           </li>
@@ -40,7 +46,7 @@ function App() {
                   >
                     home
                   </span>
-                  Home
+                  <span className={styles.sidebarText}>Home</span>
                 </Link>
               </li>
               <li>
@@ -51,11 +57,11 @@ function App() {
                     width="32"
                     className={styles.profilePicture}
                   />
-                  <p>Random Kasinski</p>
+                  <p className={styles.sidebarText}>Random Kasinski</p>
                 </Link>
               </li>
               <li>
-                <p className={styles.emptyChatsPara}>
+                <p className={`${styles.emptyChatsPara} ${styles.sidebarText}`}>
                   You have no chats right now.
                 </p>
               </li>
@@ -66,7 +72,7 @@ function App() {
                   >
                     add
                   </span>
-                  Create a new chat
+                  <span className={styles.sidebarText}>Create a new chat</span>
                 </button>
               </li>
             </ul>
@@ -78,8 +84,11 @@ function App() {
               width="40"
               className={styles.profilePicture}
             />
-            <p>Test Profile</p>
-            <button type="button" className={styles.dropdownButton}>
+            <p className={styles.sidebarText}>Test Profile</p>
+            <button
+              type="button"
+              className={`${styles.dropdownButton} ${styles.sidebarText}`}
+            >
               <span
                 className={`material-symbols-outlined ${styles.dropdownIcon}`}
               >

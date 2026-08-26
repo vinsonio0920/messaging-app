@@ -5,6 +5,11 @@
 
 /* navbar */
 
+.openSidebarIcon,
+.closeSidebarIcon {
+  display: none;
+}
+
 .navbar {
   position: absolute;
   top: 0;
@@ -50,13 +55,13 @@
   align-items: center;
 }
 
-.logoButton {
+.sidebarButton {
   border: none;
   border-radius: var(--standard-border-radius);
   padding: 0.1rem 0.25rem;
 }
 
-.logoIcon {
+.sidebarIcon {
   position: relative;
   font-size: 2rem;
 }
@@ -69,15 +74,15 @@
 
 /* show navbar when dropdown is clicked */
 
-.navbar.showDropdown {
+.navbar.showSidebar {
   background-color: #e6e8ec;
 }
 
-.navbar.showDropdown ul > *:not(.logoLi) {
+.navbar.showSidebar ul > *:not(.logoLi) {
   display: block;
 }
 
-.navbar.showDropdown .profileLi {
+.navbar.showSidebar .profileLi {
   display: flex !important;
 }
 
@@ -129,13 +134,13 @@
 
 .createButton:hover,
 .dropdownButton:hover,
-.logoButton:hover {
+.sidebarButton:hover {
   background-color: #d5d5d5;
 }
 
 .createButton:active,
 .dropdownButton:active,
-.logoButton:active {
+.sidebarButton:active {
   background-color: #d9d9d9;
 }
 
@@ -182,9 +187,97 @@
 }
 
 @media (min-width: 500px) {
+  /* sidebar closed */
+
+  .navbar.hideSidebar {
+    width: 5rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .navbar.hideSidebar span,
+  .navbar.hideSidebar img {
+    margin: 0;
+  }
+
+  .navbar.hideSidebar li {
+    display: flex;
+    justify-content: center;
+  }
+
+  .navbar.hideSidebar .homeLink,
+  .navbar.hideSidebar a,
+  .navbar.hideSidebar button {
+    margin: 0.75rem 0;
+    padding: 0;
+  }
+
+  .navbar.hideSidebar button {
+    display: block;
+    width: 2rem;
+  }
+
+  .navbar.hideSidebar .messagesUl {
+    width: 100%;
+  }
+
+  .navbar.hideSidebar .sidebarButton {
+    position: absolute;
+    left: 3.4rem;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  }
+
+  .navbar.hideSidebar .profileLi {
+    padding: 1rem 0;
+  }
+
+  .navbar.hideSidebar .sidebarText {
+    display: none;
+  }
+
+  .navbar.hideSidebar .createButton {
+    width: 100%;
+    height: auto;
+    padding: 0.25rem 0;
+  }
+
+  .navbar.hideSidebar .createIcon {
+    margin: 0;
+  }
+
+  /* sidebar open */
+
+  .navbar.showSidebar {
+    padding-top: 1rem;
+  }
+
+  .navbar.showSidebar .openSidebarIcon {
+    display: none;
+  }
+
+  .navbar.showSidebar .sidebarButton {
+    position: relative;
+    left: 0;
+  }
+
+  .navbar.showSidebar .closeSidebarIcon {
+    position: relative;
+    top: 0.05rem;
+    left: 0.25rem;
+    display: block;
+    font-size: 1.5rem;
+  }
+
+  /* default styling */
+
+  .menuIcon {
+    display: none;
+  }
+
   .navbar {
     position: static;
     width: 300px;
+    padding: 0.5rem 1rem 0 1rem;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   }
 
   .navbar ul > *:not(.logoLi) {
@@ -192,12 +285,30 @@
   }
 
   .logoLi {
-    position: static;
+    position: relative;
     width: 100%;
     height: auto;
     box-shadow: none;
     padding: 0;
     margin-bottom: 2.5rem;
+  }
+
+  .sidebarButton {
+    position: relative;
+    left: 1rem;
+
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    padding: 0rem;
+  }
+
+  .openSidebarIcon {
+    position: relative;
+    top: 0.1rem;
+    left: 0.1rem;
+    font-size: 1.5rem;
+    display: block;
   }
 
   .homeLink,
@@ -216,8 +327,11 @@
   }
 
   .mainContent {
-    margin-left: 1.25rem;
+    margin: 1.25rem;
   }
+}
+
+@media (min-width: 1000px) {
 }
 
 /* 
