@@ -1,17 +1,22 @@
-import { Link } from "react-router";
+import { Link, Outlet } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 
 function App() {
   return (
-    <>
+    <div className={styles.pageContainer}>
       <nav className={styles.navbar}>
         <ul>
-          <li>
+          <li className={styles.logoLi}>
             <Link to="/" className={styles.logoLink}>
               <img src={logoSvg} width="40" height="40" alt="Logo" />
               <span>Message</span>
             </Link>
+            <button type="button" className={styles.logoButton}>
+              <span className={`material-symbols-outlined ${styles.logoIcon}`}>
+                menu
+              </span>
+            </button>
           </li>
           <li className={styles.messagesParentLi}>
             <ul className={styles.messagesUl}>
@@ -72,7 +77,10 @@ function App() {
           </li>
         </ul>
       </nav>
-    </>
+      <main className={styles.mainContent}>
+        <Outlet />
+      </main>
+    </div>
   );
 }
 

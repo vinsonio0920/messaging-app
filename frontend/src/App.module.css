@@ -1,3 +1,14 @@
+.pageContainer {
+  display: flex;
+  height: 100%;
+}
+
+/* navbar */
+
+.navbar {
+  width: 0px;
+}
+
 .navbar,
 .navbar ul {
   height: 100%;
@@ -8,15 +19,46 @@
   flex-direction: column;
 }
 
+.navbar ul > *:not(.logoLi) {
+  display: none;
+}
+
 .navbar a {
   color: #000;
   text-decoration: none;
 }
 
+.logoLi {
+  /* header for mobile */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3.5rem;
+  background-color: #e6e8ec;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  padding: 0 0.5rem 0 0.75rem;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2.5rem;
+}
+
 .logoLink {
   display: flex;
   align-items: center;
-  margin-bottom: 3rem;
+}
+
+.logoButton {
+  border: none;
+  border-radius: var(--standard-border-radius);
+  padding: 0.1rem 0.25rem;
+}
+
+.logoIcon {
+  position: relative;
+  font-size: 2rem;
 }
 
 .logoLink span {
@@ -68,12 +110,14 @@
 }
 
 .createButton:hover,
-.dropdownButton:hover {
+.dropdownButton:hover,
+.logoButton:hover {
   background-color: #d5d5d5;
 }
 
 .createButton:active,
-.dropdownButton:active {
+.dropdownButton:active,
+.logoButton:active {
   background-color: #d9d9d9;
 }
 
@@ -108,3 +152,51 @@
   position: relative;
   top: 0.1rem;
 }
+
+/* main content */
+
+.mainContent {
+  flex: 1;
+  border-radius: 10px;
+  background-color: #fff;
+  width: 100%;
+  margin-left: 0;
+}
+
+@media (min-width: 500px) {
+  .navbar {
+    width: 300px;
+  }
+
+  .navbar ul > *:not(.logoLi) {
+    display: flex;
+  }
+
+  .logoLi {
+    position: static;
+    width: 100%;
+    height: auto;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .homeLink,
+  .messagesUl a {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+  }
+
+  .createButton {
+    padding: 0.5rem;
+  }
+
+  .mainContent {
+    margin-left: 1.25rem;
+  }
+}
+
+/* 
+  But first... I have to work the homepage first!
+  Now the real question is how do I make the media queries look good?
+*/

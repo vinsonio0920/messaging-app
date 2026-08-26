@@ -29,8 +29,8 @@ body {
     sans-serif;
   background-color: #e6e8ec;
   height: 100%;
-  margin: 0;
-  padding: 1.5rem;
+  margin: 3.75rem 0 0 0;
+  padding: 0.5rem;
 }
 
 #root {
@@ -45,4 +45,11 @@ ul {
 
 button:hover {
   cursor: pointer;
+}
+
+@media (min-width: 500px) {
+  body {
+    margin-top: 0;
+    padding: 1.25rem;
+  }
 }
