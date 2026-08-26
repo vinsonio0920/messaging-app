@@ -40,7 +40,7 @@
 .logoLi {
   /* header for mobile */
   height: 3.5rem;
-  background-color: #e6e8ec;
+  background-color: var(--standard-background-color);
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   padding: 0 0.5rem 0 0.75rem;
 
@@ -75,7 +75,7 @@
 /* show navbar when dropdown is clicked */
 
 .navbar.showSidebar {
-  background-color: #e6e8ec;
+  background-color: var(--standard-background-color);
 }
 
 .navbar.showSidebar ul > *:not(.logoLi) {
@@ -97,6 +97,14 @@
   display: flex;
   align-items: center;
   padding: 0.5rem;
+}
+
+.homeLink,
+.messagesUl a {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: var(--standard-border-radius);
 }
 
 .messagesUl {
@@ -130,18 +138,21 @@
   border-radius: var(--standard-border-radius);
   width: 100%;
   padding: 0.25rem;
+  background-color: transparent;
 }
 
 .createButton:hover,
 .dropdownButton:hover,
-.sidebarButton:hover {
-  background-color: #d5d5d5;
+.sidebarButton:hover,
+.messagesUl a:hover {
+  background-color: #e6e6e6;
 }
 
 .createButton:active,
 .dropdownButton:active,
-.sidebarButton:active {
-  background-color: #d9d9d9;
+.sidebarButton:active,
+.messagesUl a:active {
+  background-color: #e9e9e9;
 }
 
 .createButton .createIcon {
@@ -156,19 +167,32 @@
   align-items: center;
   font-weight: 500;
   border-top: 1px solid #c4c4c4;
-  padding: 1rem;
+  padding: 1rem 0.5rem;
+}
+
+.profileLi img {
+  padding-left: 0.5rem;
 }
 
 .profileLi p {
   margin-right: auto;
+  font-weight: 500;
+}
+
+.navbar.showSidebar .profileLi img {
+  width: calc(40px + 0.5rem);
 }
 
 .dropdownButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1rem;
   border: none;
-  border-radius: 50%;
-  width: 1.75rem;
-  height: 1.75rem;
-  padding: 0;
+  border-radius: var(--standard-border-radius);
+  width: 100%;
+  padding-right: 0.5rem;
+  background-color: transparent;
 }
 
 .dropdownIcon {
@@ -197,6 +221,7 @@
   .navbar.hideSidebar span,
   .navbar.hideSidebar img {
     margin: 0;
+    padding: 0;
   }
 
   .navbar.hideSidebar li {
@@ -205,10 +230,18 @@
   }
 
   .navbar.hideSidebar .homeLink,
+  .navbar.hideSidebar button:not(.sidebarButton),
   .navbar.hideSidebar a,
-  .navbar.hideSidebar button {
-    margin: 0.75rem 0;
-    padding: 0;
+  .navbar.hideSidebar .createButton {
+    width: 100%;
+    margin: 0;
+    height: 3.25rem;
+  }
+
+  .navbar.hideSidebar a {
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .navbar.hideSidebar button {
@@ -234,12 +267,6 @@
     display: none;
   }
 
-  .navbar.hideSidebar .createButton {
-    width: 100%;
-    height: auto;
-    padding: 0.25rem 0;
-  }
-
   .navbar.hideSidebar .createIcon {
     margin: 0;
   }
@@ -247,7 +274,14 @@
   /* sidebar open */
 
   .navbar.showSidebar {
+    position: absolute;
     padding-top: 1rem;
+  }
+
+  .navbar.showSidebar + .mainContent {
+    /* closed sidebar width + original margin left */
+    /* gives an overlay while still keeping main content in same spot */
+    margin-left: calc(5rem + 1.25rem);
   }
 
   .navbar.showSidebar .openSidebarIcon {
@@ -311,19 +345,20 @@
     display: block;
   }
 
-  .homeLink,
-  .messagesUl a {
-    display: flex;
-    align-items: center;
-    padding: 0.75rem;
-  }
-
   .messagesUl {
     padding: 0;
   }
 
   .createButton {
     padding: 0.5rem;
+  }
+
+  .profileLi {
+    padding: 1rem 0;
+  }
+
+  .dropdownButton {
+    padding: 0 0.5rem 0 0;
   }
 
   .mainContent {

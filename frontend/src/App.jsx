@@ -78,24 +78,21 @@ function App() {
             </ul>
           </li>
           <li className={styles.profileLi}>
-            <img
-              src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg"
-              alt="Your profile picture"
-              width="40"
-              className={styles.profilePicture}
-            />
-            <p className={styles.sidebarText}>Test Profile</p>
-            <button
-              type="button"
-              className={`${styles.dropdownButton} ${styles.sidebarText}`}
-            >
+            <button type="button" className={`${styles.dropdownButton}`}>
+              <img
+                src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg"
+                alt="Your profile picture"
+                width="40"
+                className={styles.profilePicture}
+              />
+              <p className={styles.sidebarText}>Test Profile</p>
               <span
-                className={`material-symbols-outlined ${styles.dropdownIcon}`}
+                className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
               >
                 keyboard_arrow_down
               </span>
+              {/* profile settings here */}
             </button>
-            {/* profile settings here */}
           </li>
         </ul>
       </nav>

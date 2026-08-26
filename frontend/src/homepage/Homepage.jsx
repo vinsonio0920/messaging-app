@@ -1,7 +1,7 @@
 const Homepage = () => {
   return (
     <>
-      <h1>Home</h1>
+      <h1>Home. Testing timing is the key</h1>
     </>
   );
 };
