@@ -1,18 +1,31 @@
 import { Link, Outlet } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
+import { useState } from "react";
 
 function App() {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  function handleDropdownClick() {
+    setShowDropdown(!showDropdown);
+  }
+
   return (
     <div className={styles.pageContainer}>
-      <nav className={styles.navbar}>
+      <nav
+        className={`${styles.navbar} ${showDropdown ? styles.showDropdown : ""}`}
+      >
         <ul>
           <li className={styles.logoLi}>
             <Link to="/" className={styles.logoLink}>
               <img src={logoSvg} width="40" height="40" alt="Logo" />
               <span>Message</span>
             </Link>
-            <button type="button" className={styles.logoButton}>
+            <button
+              type="button"
+              className={styles.logoButton}
+              onClick={handleDropdownClick}
+            >
               <span className={`material-symbols-outlined ${styles.logoIcon}`}>
                 menu
               </span>
