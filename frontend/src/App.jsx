@@ -5,9 +5,16 @@ import { useState } from "react";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(false);
 
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
+    setShowOverlay(!showOverlay);
+  }
+
+  function handleOverlayClick() {
+    setShowSidebar(!showSidebar);
+    setShowOverlay(!showOverlay);
   }
 
   return (
@@ -99,6 +106,10 @@ function App() {
       <main className={styles.mainContent}>
         <Outlet />
       </main>
+      <div
+        className={`overlay ${showOverlay ? "showOverlay" : ""}`}
+        onClick={handleOverlayClick}
+      ></div>
     </div>
   );
 }

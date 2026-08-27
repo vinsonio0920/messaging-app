@@ -48,9 +48,30 @@ button:hover {
   cursor: pointer;
 }
 
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  z-index: 99;
+  display: none;
+}
+
+.overlay.showOverlay {
+  display: block;
+}
+
 @media (min-width: 500px) {
   body {
     margin: 0;
     padding: 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .overlay {
+    display: none !important;
   }
 }

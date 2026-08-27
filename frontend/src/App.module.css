@@ -16,6 +16,7 @@
   left: 0;
   width: 100%;
   z-index: 999;
+  background-color: var(--standard-background-color);
 }
 
 .navbar,
@@ -308,7 +309,7 @@
   }
 
   .navbar {
-    position: static;
+    position: relative;
     width: 300px;
     padding: 0.5rem 1rem 0 1rem;
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
@@ -367,9 +368,19 @@
 }
 
 @media (min-width: 1000px) {
+  .navbar.showSidebar {
+    position: static;
+    padding-top: 1rem;
+  }
+
+  .navbar.showSidebar + .mainContent {
+    /* closed sidebar width + original margin left */
+    /* gives an overlay while still keeping main content in same spot */
+    margin-left: 1.25rem;
+  }
 }
 
 /* 
-  But first... I have to work the homepage first!
+  After, I will need to work on 
   Now the real question is how do I make the media queries look good?
 */
