@@ -87,6 +87,17 @@
   display: flex !important;
 }
 
+/* hidden navbar */
+
+.navbar.hideSidebar {
+  z-index: auto;
+  background-color: transparent;
+}
+
+.navbar.hideSidebar + .mainContent {
+  z-index: 3;
+}
+
 /* home/messages li */
 
 .messagesParentLi {
