@@ -1,3 +1,5 @@
 import logoSvg from "./logo.svg";
 
-export { logoSvg };
+import signUpMobile from "./images/signUpMobile.png";
+
+export { logoSvg, signUpMobile };
