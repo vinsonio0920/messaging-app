@@ -1,11 +1,15 @@
 import { Link } from "react-router";
-import { signUpMobile } from "../assets";
+import { logoSvg, signUpMobile } from "../assets";
 import styles from "./SignUp.module.css";
 
 const SignIn = () => {
   return (
     <div className={styles.signInContainer}>
       <div className={styles.imageContainer}>
+        <div className={styles.logoContainer}>
+          <img src={logoSvg} width="40" height="40" alt="Logo" />
+          <span>Message</span>
+        </div>
         <img
           src={signUpMobile}
           className={styles.signInImage}
@@ -16,8 +20,8 @@ const SignIn = () => {
       <section className={styles.formSection}>
         <h1>Connect to the World</h1>
         <p>
-          Start talking to people all around the globe. Be social like we were
-          always meant to be.
+          The advent of the internet has connected us more than the biggest of
+          expectations. Join in on the fun and create an account.
         </p>
         <form method="POST">
           <div>
@@ -50,7 +54,7 @@ const SignIn = () => {
             <button type="submit">Sign Up</button>
           </div>
         </form>
-        <p>
+        <p className={styles.signInPara}>
           Already have an account? <Link to="/sign-in">Sign in</Link>
         </p>
       </section>

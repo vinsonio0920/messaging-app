@@ -1,0 +1,104 @@
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #1a1a26 !important;
+  color: #fff;
+}
+
+.imageContainer {
+  position: relative;
+}
+
+.logoContainer {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: flex;
+  align-items: center;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.logoContainer img {
+  filter: invert(1);
+}
+
+.logoContainer span {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-left: 0.5rem;
+}
+
+.signInContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.signInImage {
+  object-fit: cover;
+  width: 100%;
+  min-height: 30vh;
+  max-height: 40vh;
+}
+
+.formSection {
+  max-width: 500px;
+  padding: 1rem;
+}
+
+.formSection h1 {
+  font-weight: 500;
+  margin: 0.5rem 0 1rem 0;
+}
+
+form {
+  margin-top: 2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+input,
+button[type="submit"] {
+  font-size: 1rem;
+  border: none;
+  border-radius: var(--standard-border-radius);
+  width: 100%;
+  padding: 0.5rem 0.5rem;
+}
+
+input {
+  border: 1px solid #4c4b4b;
+  margin-bottom: 1rem;
+}
+
+button[type="submit"] {
+  font-weight: 500;
+  color: #fff;
+  background-color: #405989;
+  border: none;
+  margin-top: 0.5rem;
+  padding: 0.6rem 0.5rem;
+}
+
+button[type="submit"]:hover {
+  background-color: #4a679d;
+}
+
+button[type="submit"]:active {
+  background-color: #405989;
+}
+
+.signInPara {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.signInPara a {
+  color: #97b2d5;
+}
+
+.signInPara a:hover {
+  text-decoration: underline;
+}
