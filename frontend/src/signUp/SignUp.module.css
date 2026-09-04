@@ -5,6 +5,11 @@ body {
   color: #fff;
 }
 
+.signInContainer {
+  display: flex;
+  flex-direction: column;
+}
+
 .imageContainer {
   position: relative;
 }
@@ -28,11 +33,6 @@ body {
   margin-left: 0.5rem;
 }
 
-.signInContainer {
-  display: flex;
-  flex-direction: column;
-}
-
 .signInImage {
   object-fit: cover;
   width: 100%;
@@ -42,12 +42,13 @@ body {
 
 .formSection {
   max-width: 500px;
+  margin: 0 auto 5rem auto;
   padding: 1rem;
 }
 
 .formSection h1 {
   font-weight: 500;
-  margin: 0.5rem 0 1rem 0;
+  margin: 3vw 0 1rem 0;
 }
 
 form {
@@ -101,4 +102,41 @@ button[type="submit"]:active {
 
 .signInPara a:hover {
   text-decoration: underline;
+}
+
+@media (min-width: 800px) {
+  .signInContainer {
+    flex-direction: row;
+  }
+
+  .imageContainer {
+    flex: 1;
+  }
+
+  .signInImage {
+    object-position: 60% bottom;
+    height: 100vh;
+    max-height: none;
+  }
+
+  .formSection {
+    flex: 1;
+    max-width: none;
+    margin: 3rem 1rem;
+  }
+
+  .formContainer {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+@media (min-width: 1000px) {
+  .signInImage {
+    object-position: 70% bottom;
+  }
+
+  .formSection {
+    margin: 5rem 1rem;
+  }
 }
