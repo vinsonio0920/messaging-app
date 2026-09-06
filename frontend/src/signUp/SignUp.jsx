@@ -2,7 +2,7 @@ import { Link } from "react-router";
 import { logoSvg, signUpMobile } from "../assets";
 import styles from "./SignUp.module.css";
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <div className={styles.signInContainer}>
       <div className={styles.imageContainer}>
@@ -64,4 +64,4 @@ const SignIn = () => {
   );
 };
 
-export { SignIn };
+export { SignUp };
