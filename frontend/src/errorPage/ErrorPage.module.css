@@ -1,0 +1,30 @@
+body {
+  padding: 1rem;
+}
+
+.pageContainer {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -5rem;
+}
+
+.pageContainer h1 {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+.pageContainer p {
+  text-align: center;
+}
+
+.pageContainer a {
+  color: #397fda;
+}
+
+.pageContainer a:hover {
+  text-decoration: underline;
+}

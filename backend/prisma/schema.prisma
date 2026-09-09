@@ -31,8 +31,8 @@ model Message {
   message  String
   sender   User     @relation(fields: [senderId], references: [id])
   senderId Int
-  chat     Chat     @relation(fields: [chatId], references: [id])
-  chatId   Int
+  chat     Chat?    @relation(fields: [chatId], references: [id])
+  chatId   Int?
 }
 
 model Chat {
