@@ -6,6 +6,7 @@ import {
   postSignIn,
   postSignUp,
   postSignOut,
+  checkAuthentication,
 } from "../controllers/authorizationController.js";
 import { findUserByEmail, findUserById } from "../db/authorizationDb.js";
 import { verifyNotSignedin, verifyToken } from "../utils.js";
@@ -50,11 +51,9 @@ passport.deserializeUser(async (id, done) => {
 
 const authorizationRouter = Router();
 
+authorizationRouter.get("/check-authentication", checkAuthentication);
 authorizationRouter.post("/sign-up", postSignUp);
 authorizationRouter.post("/sign-in", verifyNotSignedin, postSignIn);
 authorizationRouter.post("/sign-out", postSignOut);
-authorizationRouter.get("/test", verifyToken, (req, res) =>
-  res.json("You did it!"),
-);
 
 export { authorizationRouter };

@@ -61,6 +61,10 @@ const validateSignUp = [
     .withMessage(`Username ${lengthErr(3, 64)}`),
 ];
 
+async function checkAuthentication(req, res) {
+  return res.json(req.isAuthenticated());
+}
+
 const postSignUp = [
   validateSignUp,
   async (req, res, next) => {
@@ -179,4 +183,4 @@ async function postSignOut(req, res, next) {
   });
 }
 
-export { postSignUp, postSignIn, postSignOut };
+export { checkAuthentication, postSignUp, postSignIn, postSignOut };
