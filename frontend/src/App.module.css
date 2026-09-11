@@ -127,11 +127,6 @@
   margin: 0;
 }
 
-.homeLink .homeIcon {
-  font-size: 2rem;
-  margin-right: 0.75rem;
-}
-
 .profilePicture {
   border-radius: 50%;
   margin-right: 0.75rem;
@@ -167,7 +162,9 @@
   background-color: #e9e9e9;
 }
 
-.createButton .createIcon {
+.homeLink .homeIcon,
+.createButton .createIcon,
+.dropdownButton .signInIcon {
   font-size: 2rem;
   margin-right: 0.75rem;
 }
@@ -391,7 +388,15 @@
   }
 }
 
-/* 
-  After, I will need to work on 
-  Now the real question is how do I make the media queries look good?
-*/
+/* error styling */
+.errorContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin-top: -5rem;
+}
+
+.errorContainer p {
+  color: #ff0000;
+}

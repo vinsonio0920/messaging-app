@@ -1,11 +1,21 @@
 import { Link, Outlet } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [error, setError] = useState(null);
+
+  // we fetch without a library in order to learn more!
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_SERVER_URL}/check-authentication`)
+      .then((response) => response.json())
+      .then((response) => setIsAuthenticated(response))
+      .catch(() => setError(true));
+  }, []);
 
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
@@ -15,6 +25,17 @@ function App() {
   function handleOverlayClick() {
     setShowSidebar(!showSidebar);
     setShowOverlay(!showOverlay);
+  }
+
+  if (error) {
+    return (
+      <div className={styles.errorContainer}>
+        <p>
+          There was an error with the authentication check. Please try again
+          later.
+        </p>
+      </div>
+    );
   }
 
   return (
@@ -85,21 +106,38 @@ function App() {
             </ul>
           </li>
           <li className={styles.profileLi}>
-            <button type="button" className={`${styles.dropdownButton}`}>
-              <img
-                src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg"
-                alt="Your profile picture"
-                width="40"
-                className={styles.profilePicture}
-              />
-              <p className={styles.sidebarText}>Test Profile</p>
-              <span
-                className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
+            {isAuthenticated ? (
+              <button
+                type="button"
+                className={`${styles.dropdownButton} ${styles.signedInButton}`}
               >
-                keyboard_arrow_down
-              </span>
-              {/* profile settings here */}
-            </button>
+                <img
+                  src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg"
+                  alt="Your profile picture"
+                  width="40"
+                  className={styles.profilePicture}
+                />
+                <p className={styles.sidebarText}>Test Profile</p>
+                <span
+                  className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
+                >
+                  keyboard_arrow_down
+                </span>
+                {/* profile settings here */}
+              </button>
+            ) : (
+              <Link
+                to="/sign-in"
+                className={`${styles.dropdownButton} ${styles.notSignedInButton}`}
+              >
+                <span
+                  className={`material-symbols-outlined ${styles.signInIcon}`}
+                >
+                  login
+                </span>
+                <p className={styles.sidebarText}>Sign in</p>
+              </Link>
+            )}
           </li>
         </ul>
       </nav>
