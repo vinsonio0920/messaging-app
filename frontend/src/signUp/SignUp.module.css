@@ -55,6 +55,10 @@ form {
   margin-top: 2rem;
 }
 
+.fieldContainer {
+  margin-bottom: 1rem;
+}
+
 label {
   display: block;
   margin-bottom: 0.5rem;
@@ -66,12 +70,22 @@ button[type="submit"] {
   border: none;
   border-radius: var(--standard-border-radius);
   width: 100%;
-  padding: 0.5rem 0.5rem;
+  padding: 0.6rem 0.5rem;
 }
 
 input {
   border: 1px solid #4c4b4b;
-  margin-bottom: 1rem;
+}
+
+input.invalid {
+  border: 1px solid red;
+  background-color: #ffd3d3;
+}
+
+.inputErrorPara {
+  font-size: 0.95rem;
+  color: #ff2424;
+  margin-top: 0.25rem;
 }
 
 button[type="submit"] {
@@ -79,7 +93,7 @@ button[type="submit"] {
   color: #fff;
   background-color: #405989;
   border: none;
-  margin-top: 0.5rem;
+  margin-top: 1rem;
   padding: 0.6rem 0.5rem;
 }
 
