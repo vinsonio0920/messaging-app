@@ -120,12 +120,12 @@ function App() {
                 className={`${styles.dropdownButton} ${styles.signedInButton}`}
               >
                 <img
-                  src="https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg"
+                  src={user.profile}
                   alt="Your profile picture"
                   width="40"
                   className={styles.profilePicture}
                 />
-                <p className={styles.sidebarText}>Test Profile</p>
+                <p className={styles.sidebarText}>{user.username}</p>
                 <span
                   className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
                 >

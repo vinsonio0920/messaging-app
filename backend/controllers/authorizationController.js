@@ -62,7 +62,16 @@ const validateSignUp = [
 ];
 
 async function checkAuthentication(req, res) {
-  return res.json(req.isAuthenticated());
+  const { jwtToken } = req.body;
+
+  jwt.verify(jwtToken, process.env.SECRET, function (err, decoded) {
+    if (err) {
+      console.error(err);
+      return res.json(false);
+    }
+
+    return res.json(decoded.user);
+  });
 }
 
 const postSignUp = [
@@ -81,15 +90,15 @@ const postSignUp = [
     }
 
     const { email, password, username } = matchedData(req);
-    // during this step, add picture to supabase and copy the link
-    // we'll use a placeholder link for now
+    const defaultProfilePicture =
+      "https://i.pinimg.com/236x/13/74/20/137420f5b9c39bc911e472f5d20f053e.jpg";
     try {
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await createUser(
         email,
         hashedPassword,
         username,
-        "placeholder.link",
+        defaultProfilePicture,
       );
       return res.json({
         apiVersion: "1.0",

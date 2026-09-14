@@ -9,7 +9,7 @@ import {
   checkAuthentication,
 } from "../controllers/authorizationController.js";
 import { findUserByEmail, findUserById } from "../db/authorizationDb.js";
-import { verifyNotSignedin, verifyToken } from "../utils.js";
+import { verifyNotSignedin } from "../utils.js";
 
 passport.use(
   new LocalStrategy(
@@ -51,7 +51,7 @@ passport.deserializeUser(async (id, done) => {
 
 const authorizationRouter = Router();
 
-authorizationRouter.get("/check-authentication", checkAuthentication);
+authorizationRouter.post("/check-authentication", checkAuthentication);
 authorizationRouter.post("/sign-up", postSignUp);
 authorizationRouter.post("/sign-in", verifyNotSignedin, postSignIn);
 authorizationRouter.post("/sign-out", postSignOut);
