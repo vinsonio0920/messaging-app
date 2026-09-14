@@ -1,4 +1,4 @@
-import { signUpAction } from "./actions.js";
+import { signInAction, signUpAction } from "./actions.js";
 import { App } from "./App.jsx";
 import { ErrorPage } from "./errorPage/errorPage.jsx";
 import { Homepage } from "./homepage/Homepage.jsx";
@@ -25,6 +25,7 @@ const routes = [
   {
     path: "/sign-in",
     element: <SignIn />,
+    action: signInAction,
   },
 ];
 

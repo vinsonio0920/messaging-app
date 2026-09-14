@@ -43,4 +43,29 @@ const signUpAction = async ({ request }) => {
   }
 };
 
-export { signUpAction };
+const signInAction = async ({ request }) => {
+  const formData = Object.fromEntries(await request.formData());
+  const url = `${import.meta.env.VITE_SERVER_URL}/sign-in`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      body: new URLSearchParams(formData),
+    });
+
+    const result = await response.json();
+
+    if (result.status === "success") {
+      const token = result.data.token;
+      localStorage.setItem("jwtToken", token);
+
+      return redirect("/");
+    } else {
+      return result;
+    }
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export { signUpAction, signInAction };
