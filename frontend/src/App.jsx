@@ -6,14 +6,22 @@ import { useEffect, useState } from "react";
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
   // we fetch without a library in order to learn more!
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL}/check-authentication`)
+    const url = `${import.meta.env.VITE_SERVER_URL}/check-authentication`;
+    const jwtToken = localStorage.getItem("jwtToken");
+
+    fetch(url, {
+      method: "POST",
+      body: new URLSearchParams({
+        jwtToken: jwtToken,
+      }),
+    })
       .then((response) => response.json())
-      .then((response) => setIsAuthenticated(response))
+      .then((response) => setUser(response))
       .catch(() => setError(true));
   }, []);
 
@@ -106,7 +114,7 @@ function App() {
             </ul>
           </li>
           <li className={styles.profileLi}>
-            {isAuthenticated ? (
+            {user ? (
               <button
                 type="button"
                 className={`${styles.dropdownButton} ${styles.signedInButton}`}

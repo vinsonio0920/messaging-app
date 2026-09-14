@@ -13,7 +13,7 @@ const signUpAction = async ({ request }) => {
     const result = await response.json();
     if (result.status === "success") {
       // automatically sign in user for convenience
-      const signInUrl = `${import.meta.env.VITE_BLOG_API_WEBSITE}/sign-in`;
+      const signInUrl = `${import.meta.env.VITE_SERVER_URL}/sign-in`;
 
       const response = await fetch(signInUrl, {
         method: "POST",
