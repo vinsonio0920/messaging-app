@@ -27,9 +27,26 @@
   text-align: center;
 }
 
+.formContainer input {
+  margin-bottom: 1rem;
+}
+
+input.invalid {
+  border: 1px solid #ff0000;
+  background-color: #ffe3e3;
+}
+
+.inputErrorPara {
+  color: #ff3434;
+  background-color: #ffe3e3;
+  border-radius: 5px;
+  padding: 0.65rem;
+  margin: 0 0 1rem 0;
+}
+
 .signInPara {
   text-align: center;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .signInPara a {

@@ -79,7 +79,7 @@ input {
 
 input.invalid {
   border: 1px solid red;
-  background-color: #ffd3d3;
+  background-color: #ffe3e3;
 }
 
 .inputErrorPara {
