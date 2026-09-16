@@ -6,10 +6,11 @@ import { useEffect, useState } from "react";
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [showOverlay, setShowOverlay] = useState(false);
+  const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
-  // we fetch without a library in order to learn more!
+  // Checks if the user is signed in
   useEffect(() => {
     const url = `${import.meta.env.VITE_SERVER_URL}/check-authentication`;
     const jwtToken = localStorage.getItem("jwtToken");
@@ -25,6 +26,18 @@ function App() {
       .catch(() => setError(true));
   }, []);
 
+  // remove dropdown on any click that isn't the profile's
+  useEffect(() => {
+    window.addEventListener("click", (event) => {
+      if (
+        event.target.dataset.type !== "profile" &&
+        event.target.parentNode.dataset.type !== "profile"
+      ) {
+        setShowProfileDropdown(false);
+      }
+    });
+  }, []);
+
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
     setShowOverlay(!showOverlay);
@@ -34,6 +47,12 @@ function App() {
     setShowSidebar(!showSidebar);
     setShowOverlay(!showOverlay);
   }
+
+  function handleProfileDropdownClick() {
+    setShowProfileDropdown(!showProfileDropdown);
+  }
+
+  function handleSignOutClick() {}
 
   if (error) {
     return (
@@ -115,24 +134,45 @@ function App() {
           </li>
           <li className={styles.profileLi}>
             {user ? (
-              <button
-                type="button"
-                className={`${styles.dropdownButton} ${styles.signedInButton}`}
-              >
-                <img
-                  src={user.profile}
-                  alt="Your profile picture"
-                  width="40"
-                  className={styles.profilePicture}
-                />
-                <p className={styles.sidebarText}>{user.username}</p>
-                <span
-                  className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
+              <div className={styles.profileContainer}>
+                <button
+                  type="button"
+                  data-type="profile"
+                  className={`${styles.dropdownButton} ${styles.signedInButton}`}
+                  onClick={handleProfileDropdownClick}
                 >
-                  keyboard_arrow_down
-                </span>
-                {/* profile settings here */}
-              </button>
+                  <img
+                    src={user.profile}
+                    alt="Your profile picture"
+                    width="40"
+                    className={styles.profilePicture}
+                  />
+                  <p className={styles.sidebarText}>{user.username}</p>
+                  <span
+                    className={`material-symbols-outlined ${styles.dropdownIcon} ${styles.sidebarText}`}
+                  >
+                    keyboard_arrow_down
+                  </span>
+                </button>
+                <ul
+                  className={`${styles.profileDropdown} ${showProfileDropdown ? null : styles.hidden}`}
+                >
+                  <li>
+                    <button
+                      type="button"
+                      data-type="profile"
+                      onClick={handleSignOutClick}
+                    >
+                      <span
+                        className={`material-symbols-outlined ${styles.signOutIcon}`}
+                      >
+                        logout
+                      </span>
+                      Sign out
+                    </button>
+                  </li>
+                </ul>
+              </div>
             ) : (
               <Link
                 to="/sign-in"
