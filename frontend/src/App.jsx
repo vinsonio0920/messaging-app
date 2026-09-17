@@ -52,7 +52,28 @@ function App() {
     setShowProfileDropdown(!showProfileDropdown);
   }
 
-  function handleSignOutClick() {}
+  async function handleSignOutClick() {
+    const url = `${import.meta.env.VITE_SERVER_URL}/sign-out`;
+
+    try {
+      const response = await fetch(url, {
+        method: "POST",
+      });
+
+      const result = await response.json();
+
+      if (result.status === "success") {
+        // remove jwtToken on localStorage and update user state
+        localStorage.removeItem("jwtToken");
+        setUser(false);
+      } else {
+        console.error(result);
+        return result;
+      }
+    } catch {
+      setError(true);
+    }
+  }
 
   if (error) {
     return (
