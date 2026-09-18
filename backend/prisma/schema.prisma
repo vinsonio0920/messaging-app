@@ -16,13 +16,6 @@ model User {
   online   Boolean   @default(false)
   messages Message[]
   chats    Chat[]
-  friends  Friend[]
-}
-
-model Friend {
-  id     Int  @id @default(autoincrement())
-  user   User @relation(fields: [userId], references: [id])
-  userId Int
 }
 
 model Message {
@@ -33,6 +26,13 @@ model Message {
   senderId Int
   chat     Chat?    @relation(fields: [chatId], references: [id])
   chatId   Int?
+}
+
+model UserFriends {
+  id       Int     @id @default(autoincrement())
+  user1    Int
+  user2    Int
+  accepted Boolean
 }
 
 model Chat {
