@@ -1,0 +1,17 @@
+.messageFormContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+.messageForm {
+  background-color: #fff;
+  border-radius: var(--standard-border-radius);
+  padding: 1rem;
+}
+
+.messageForm h1 {
+  font-weight: 500;
+}

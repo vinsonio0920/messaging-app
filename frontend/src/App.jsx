@@ -2,11 +2,13 @@ import { Link, Outlet } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 import { useEffect, useState } from "react";
+import { MessageForm } from "./messageForm/MessageForm.jsx";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [showOverlay, setShowOverlay] = useState(true);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
+  const [showMessageForm, setShowMessageForm] = useState(false);
   const [user, setUser] = useState(null);
   const [error, setError] = useState(null);
 
@@ -52,6 +54,11 @@ function App() {
     setShowProfileDropdown(!showProfileDropdown);
   }
 
+  function handleAddMessageClick() {
+    setShowMessageForm(true);
+    setShowOverlay(true);
+  }
+
   async function handleSignOutClick() {
     const url = `${import.meta.env.VITE_SERVER_URL}/sign-out`;
 
@@ -88,6 +95,7 @@ function App() {
 
   return (
     <div className={styles.pageContainer}>
+      <MessageForm />
       <nav
         className={`${styles.navbar} ${showSidebar ? styles.showSidebar : styles.hideSidebar}`}
       >
@@ -142,7 +150,11 @@ function App() {
                 </p>
               </li>
               <li>
-                <button type="button" className={styles.createButton}>
+                <button
+                  type="button"
+                  className={styles.createButton}
+                  onClick={handleAddMessageClick}
+                >
                   <span
                     className={`material-symbols-outlined ${styles.createIcon}`}
                   >
