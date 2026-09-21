@@ -3,15 +3,74 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 999;
+  width: 100%;
+  max-width: 600px;
+  padding: 1rem;
+  z-index: 9999;
 }
 
-.messageForm {
+.messageDiv {
   background-color: #fff;
-  border-radius: var(--standard-border-radius);
+  border-radius: 15px;
   padding: 1rem;
 }
 
-.messageForm h1 {
+.messageDiv h1 {
   font-weight: 500;
+}
+
+.messageForm {
+  margin: 1rem 0;
+}
+
+.messageForm input[type="text"] {
+  font-size: 1rem;
+  border-color: #cacaca;
+  border-radius: 999px;
+  margin-bottom: 1rem;
+
+  /* search icon */
+  padding-left: 2.7rem;
+  background-image: url(../assets/search.svg);
+  background-repeat: no-repeat;
+  background-position: 0.6rem center;
+}
+
+.usersUl {
+  max-height: 18.75rem;
+  overflow: scroll;
+}
+
+.usersUl li {
+  display: flex;
+  align-items: center;
+  border-radius: var(--standard-border-radius);
+  padding: 0.5rem;
+}
+
+.usersUl li:hover {
+  cursor: pointer;
+  background-color: #f0f0f0;
+}
+
+.usersUl li:active {
+  background-color: #f3f3f3;
+}
+
+.profilePicture {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+}
+
+.submitButton {
+  margin-top: 1.5rem !important;
+}
+
+/* error */
+
+.errorPara {
+  color: #ff0000;
+  margin-top: 0;
 }
