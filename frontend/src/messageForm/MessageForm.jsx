@@ -2,9 +2,16 @@ import { useEffect, useState } from "react";
 import styles from "./MessageForm.module.css";
 
 const MessageForm = ({ user }) => {
+  const [search, setSearch] = useState("");
   const [users, setUsers] = useState(null);
   const [friends, setFriends] = useState(null);
   const [error, setError] = useState(null);
+
+  const usersList =
+    users &&
+    users.filter((user) =>
+      user.username.toLowerCase().includes(search.toLowerCase()),
+    );
 
   // fetch all users
   useEffect(() => {
@@ -54,8 +61,11 @@ const MessageForm = ({ user }) => {
     }
   }
 
+  function handleInputChange(event) {
+    setSearch(event.target.value);
+  }
+
   // make sure to not send a new message request if users are already messaging!
-  // also add search functionality
 
   return (
     <div className={`${styles.messageFormContainer} messageFormContainer`}>
@@ -66,6 +76,8 @@ const MessageForm = ({ user }) => {
             type="text"
             id="search"
             name="search"
+            value={search}
+            onChange={handleInputChange}
             onKeyDown={handleInputEnter}
           />
           <input type="hidden" id="targetUser" name="targetUser" value="" />
@@ -74,9 +86,10 @@ const MessageForm = ({ user }) => {
               There was an error getting the users. Please try again later.
             </p>
           ) : null}
-          {users && users.length > 0 ? (
+          {users && users.length == 0 && <p>There are no users right now!</p>}
+          {usersList && usersList.length > 0 ? (
             <ul className={styles.usersUl}>
-              {users.map((user) => (
+              {usersList.map((user) => (
                 <li data-id={user.id} key={user.id}>
                   <img
                     src={user.profile}
@@ -89,7 +102,7 @@ const MessageForm = ({ user }) => {
               ))}
             </ul>
           ) : (
-            <p>There are no users right now!</p>
+            <p>No users found</p>
           )}
           <div>
             <button type="submit" className={styles.submitButton}>
