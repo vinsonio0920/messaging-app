@@ -3,7 +3,7 @@ import styles from "./MessageForm.module.css";
 
 const MessageForm = () => {
   const [users, setUsers] = useState(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState(false);
 
   // fetch all users
   useEffect(() => {
@@ -38,6 +38,28 @@ const MessageForm = () => {
           <input type="text" id="search" name="search" />
           <input type="hidden" id="targetUser" name="targetUser" value="" />
         </form>
+        {error ? (
+          <p className={styles.errorPara}>
+            There was an error getting the users. Please try again later.
+          </p>
+        ) : null}
+        {users && users.length > 0 ? (
+          <ul className={styles.usersUl}>
+            {users.map((user) => (
+              <li data-id={user.id} key={user.id}>
+                <img
+                  src={user.profile}
+                  alt={`${user.username}'s profile picture`}
+                  width="32"
+                  className={styles.profilePicture}
+                />
+                <span>{user.username}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>There are no users right now!</p>
+        )}
       </div>
     </div>
   );
