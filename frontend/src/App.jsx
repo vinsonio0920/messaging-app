@@ -99,7 +99,7 @@ function App() {
 
   return (
     <div className={styles.pageContainer}>
-      {showMessageForm && <MessageForm />}
+      {showMessageForm && <MessageForm user={user} />}
       <nav
         className={`${styles.navbar} ${showSidebar ? styles.showSidebar : styles.hideSidebar}`}
       >

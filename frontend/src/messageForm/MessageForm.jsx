@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import styles from "./MessageForm.module.css";
 
-const MessageForm = () => {
+const MessageForm = ({ user }) => {
   const [users, setUsers] = useState(null);
+  const [friends, setFriends] = useState(null);
   const [error, setError] = useState(null);
 
   // fetch all users
   useEffect(() => {
-    async function fetchData() {
+    async function fetchUserData() {
       try {
         const url = `${import.meta.env.VITE_SERVER_URL}/users`;
 
@@ -25,8 +26,27 @@ const MessageForm = () => {
       }
     }
 
-    fetchData();
-  }, []);
+    async function fetchFriendsData() {
+      try {
+        const url = `${import.meta.env.VITE_SERVER_URL}/users/${user.id}/friends`;
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          setFriends(result.data);
+        } else {
+          throw new Error("Error fetcher user's friends");
+        }
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      }
+    }
+
+    fetchUserData();
+    fetchFriendsData();
+  }, [user]);
 
   function handleInputEnter(event) {
     if (event.key === "Enter") {
@@ -36,8 +56,6 @@ const MessageForm = () => {
 
   // make sure to not send a new message request if users are already messaging!
   // also add search functionality
-
-  // and finally, we need to first fix the overlay issue and then submit the styling commit!
 
   return (
     <div className={`${styles.messageFormContainer} messageFormContainer`}>
