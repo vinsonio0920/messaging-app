@@ -15,4 +15,21 @@ async function findAllUsers() {
   }
 }
 
-export { findAllUsers };
+async function findUserFriends(userId) {
+  try {
+    const userFriends = await prisma.userFriends.findMany({
+      where: {
+        user1: {
+          equals: Number(userId),
+        },
+      },
+    });
+
+    return userFriends;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export { findAllUsers, findUserFriends };
