@@ -6,7 +6,7 @@ import { MessageForm } from "./messageForm/MessageForm.jsx";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(true);
+  const [showOverlay, setShowOverlay] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [user, setUser] = useState(null);
@@ -42,12 +42,16 @@ function App() {
 
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
-    setShowOverlay(!showOverlay);
+    setShowOverlay(true);
   }
 
   function handleOverlayClick() {
-    setShowSidebar(!showSidebar);
-    setShowOverlay(!showOverlay);
+    setShowOverlay(false);
+    if (showMessageForm) {
+      setShowMessageForm(false);
+    } else {
+      setShowSidebar(false);
+    }
   }
 
   function handleProfileDropdownClick() {
@@ -95,7 +99,7 @@ function App() {
 
   return (
     <div className={styles.pageContainer}>
-      <MessageForm />
+      {showMessageForm && <MessageForm />}
       <nav
         className={`${styles.navbar} ${showSidebar ? styles.showSidebar : styles.hideSidebar}`}
       >

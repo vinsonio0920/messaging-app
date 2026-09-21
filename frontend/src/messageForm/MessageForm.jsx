@@ -40,7 +40,7 @@ const MessageForm = () => {
   // and finally, we need to first fix the overlay issue and then submit the styling commit!
 
   return (
-    <div className={styles.messageFormContainer}>
+    <div className={`${styles.messageFormContainer} messageFormContainer`}>
       <div className={styles.messageDiv}>
         <h1>Create a New Message Chat</h1>
         <form className={styles.messageForm}>
