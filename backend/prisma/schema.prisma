@@ -32,7 +32,7 @@ model UserFriends {
   id       Int     @id @default(autoincrement())
   user1    Int
   user2    Int
-  accepted Boolean
+  accepted Boolean @default(false)
 }
 
 model Chat {
