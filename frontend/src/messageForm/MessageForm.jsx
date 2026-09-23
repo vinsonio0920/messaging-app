@@ -1,10 +1,46 @@
 import { useEffect, useState } from "react";
 import styles from "./MessageForm.module.css";
 
+const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
+  // complete after we do select
+  let friendStatus;
+
+  function handleUserLiClick(event) {
+    const userId = event.currentTarget.dataset.id;
+
+    setSelectedUser(userId);
+  }
+
+  return (
+    <li
+      data-id={user.id}
+      className={Number(selectedUser) === user.id ? styles.selected : null}
+      onClick={handleUserLiClick}
+    >
+      <div className={styles.leftLi}>
+        <img
+          src={user.profile}
+          alt={`${user.username}'s profile picture`}
+          width="32"
+          className={styles.profilePicture}
+        />
+        <span>{user.username}</span>
+      </div>
+      <span className={styles.messageStatus}></span>
+      {Number(selectedUser) === user.id ? (
+        <span className={`material-symbols-outlined ${styles.checkmarkIcon}`}>
+          check
+        </span>
+      ) : null}
+    </li>
+  );
+};
+
 const MessageForm = ({ user }) => {
   const [search, setSearch] = useState("");
   const [users, setUsers] = useState(null);
   const [friends, setFriends] = useState(null);
+  const [selectedUser, setSelectedUser] = useState("");
   const [error, setError] = useState(null);
 
   const usersList =
@@ -80,7 +116,12 @@ const MessageForm = ({ user }) => {
             onChange={handleInputChange}
             onKeyDown={handleInputEnter}
           />
-          <input type="hidden" id="targetUser" name="targetUser" value="" />
+          <input
+            type="hidden"
+            id="targetUser"
+            name="targetUser"
+            value={selectedUser}
+          />
           {error ? (
             <p className={styles.errorPara}>
               There was an error getting the users. Please try again later.
@@ -90,22 +131,24 @@ const MessageForm = ({ user }) => {
           {usersList && usersList.length > 0 ? (
             <ul className={styles.usersUl}>
               {usersList.map((user) => (
-                <li data-id={user.id} key={user.id}>
-                  <img
-                    src={user.profile}
-                    alt={`${user.username}'s profile picture`}
-                    width="32"
-                    className={styles.profilePicture}
-                  />
-                  <span>{user.username}</span>
-                </li>
+                <UserLi
+                  user={user}
+                  friends={friends}
+                  selectedUser={selectedUser}
+                  setSelectedUser={setSelectedUser}
+                  key={user.id}
+                />
               ))}
             </ul>
           ) : (
             <p>No users found</p>
           )}
           <div>
-            <button type="submit" className={styles.submitButton}>
+            <button
+              type="submit"
+              className={styles.submitButton}
+              disabled={selectedUser ? false : true}
+            >
               Send Request
             </button>
           </div>
