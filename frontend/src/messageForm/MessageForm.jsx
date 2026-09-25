@@ -5,6 +5,14 @@ const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
   // complete after we do select
   let friendStatus;
 
+  const findFriendStatus =
+    friends && friends.find((friend) => friend.user2 === user.id);
+  if (findFriendStatus && findFriendStatus.accepted === true) {
+    friendStatus = "friends";
+  } else if (findFriendStatus) {
+    friendStatus = "requested";
+  }
+
   function handleUserLiClick(event) {
     const userId = event.currentTarget.dataset.id;
 
@@ -26,12 +34,19 @@ const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
         />
         <span>{user.username}</span>
       </div>
-      <span className={styles.messageStatus}></span>
-      {Number(selectedUser) === user.id ? (
-        <span className={`material-symbols-outlined ${styles.checkmarkIcon}`}>
-          check
-        </span>
-      ) : null}
+      <div className={styles.rightLi}>
+        {friendStatus && friendStatus === "friends" && (
+          <span className={styles.friendStatus}>Friends</span>
+        )}
+        {friendStatus && friendStatus === "requested" && (
+          <span className={styles.friendStatus}>Requested</span>
+        )}
+        {Number(selectedUser) === user.id ? (
+          <span className={`material-symbols-outlined ${styles.checkmarkIcon}`}>
+            check
+          </span>
+        ) : null}
+      </div>
     </li>
   );
 };
@@ -48,6 +63,15 @@ const MessageForm = ({ user }) => {
     users.filter((user) =>
       user.username.toLowerCase().includes(search.toLowerCase()),
     );
+  // disable the submit button if already requested/messaging
+  let disableButton;
+  const selectedUserObject =
+    friends && friends.find((friend) => friend.user2 === Number(selectedUser));
+  if (selectedUserObject) {
+    disableButton = true;
+  } else {
+    disableButton = false;
+  }
 
   // fetch all users
   useEffect(() => {
@@ -147,7 +171,7 @@ const MessageForm = ({ user }) => {
             <button
               type="submit"
               className={styles.submitButton}
-              disabled={selectedUser ? false : true}
+              disabled={disableButton}
             >
               Send Request
             </button>
