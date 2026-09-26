@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import styles from "./MessageForm.module.css";
+import { compareUsersList } from "../utils";
 
 const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
   // complete after we do select
@@ -60,9 +61,12 @@ const MessageForm = ({ user }) => {
 
   const usersList =
     users &&
-    users.filter((user) =>
-      user.username.toLowerCase().includes(search.toLowerCase()),
-    );
+    users
+      .filter((user) =>
+        user.username.toLowerCase().includes(search.toLowerCase()),
+      )
+      .sort(compareUsersList(friends));
+
   // disable the submit button if already requested/messaging
   let disableButton;
   const selectedUserObject =
