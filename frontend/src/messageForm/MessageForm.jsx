@@ -16,6 +16,7 @@ const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
 
   function handleUserLiClick(event) {
     const userId = event.currentTarget.dataset.id;
+    console.log(userId);
 
     setSelectedUser(userId);
   }
@@ -71,7 +72,7 @@ const MessageForm = ({ user }) => {
   let disableButton;
   const selectedUserObject =
     friends && friends.find((friend) => friend.user2 === Number(selectedUser));
-  if (selectedUserObject) {
+  if (selectedUserObject || !selectedUser) {
     disableButton = true;
   } else {
     disableButton = false;
@@ -93,7 +94,10 @@ const MessageForm = ({ user }) => {
         }
       } catch (error) {
         console.error(error);
-        setError(true);
+        setError({
+          message:
+            "There was an error getting the users. Please try again later.",
+        });
       }
     }
 
@@ -129,6 +133,34 @@ const MessageForm = ({ user }) => {
     setSearch(event.target.value);
   }
 
+  async function handleSubmitClick(event) {
+    event.preventDefault();
+
+    try {
+      const url = `${import.meta.env.VITE_SERVER_URL}/users/${user.id}/friends/${selectedUser}`;
+
+      const response = await fetch(url, {
+        method: "POST",
+      });
+
+      const result = await response.json();
+      if (result.status === "success") {
+        // update to make friend requested/friended and reset states
+        const newFriends = [...friends, result.data];
+        setFriends(newFriends);
+        setError(null);
+      } else {
+        throw new Error("Problem posting request to server");
+      }
+    } catch (err) {
+      console.error(err);
+      setError({
+        message:
+          "There was an error submitting your request. Please try again later.",
+      });
+    }
+  }
+
   // make sure to not send a new message request if users are already messaging!
 
   return (
@@ -150,11 +182,7 @@ const MessageForm = ({ user }) => {
             name="targetUser"
             value={selectedUser}
           />
-          {error ? (
-            <p className={styles.errorPara}>
-              There was an error getting the users. Please try again later.
-            </p>
-          ) : null}
+          {error ? <p className={styles.errorPara}>{error.message}</p> : null}
           {users && users.length == 0 && <p>There are no users right now!</p>}
           {usersList && usersList.length > 0 ? (
             <ul className={styles.usersUl}>
@@ -176,6 +204,7 @@ const MessageForm = ({ user }) => {
               type="submit"
               className={styles.submitButton}
               disabled={disableButton}
+              onClick={handleSubmitClick}
             >
               Send Request
             </button>
