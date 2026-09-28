@@ -23,7 +23,6 @@ async function getAllUsers(req, res, next) {
 
 async function getUserFriends(req, res, next) {
   const { userId } = req.params;
-  console.log(userId);
 
   try {
     const userFriends = await findUserFriends(userId);
@@ -83,25 +82,25 @@ async function createFriendRequest(req, res, next) {
 
     // if other person already requested, then make them message (and friends)!
     if (userFriends && otherUserFriends) {
-      const makeFriends = await makeUserFriends(
-        userFriends.id,
-        otherUserFriends.id,
-      );
+      await makeUserFriends(userFriends.id, otherUserFriends.id);
 
       return res.json({
         apiVersion: "1.0",
         status: "success",
-        data: makeFriends,
-        errors: null,
-      });
-    } else {
-      return res.json({
-        apiVersion: "1.0",
-        status: "success",
-        data: userFriends,
+        data: {
+          ...userFriends,
+          accepted: true,
+        },
         errors: null,
       });
     }
+
+    return res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: userFriends,
+      errors: null,
+    });
   } catch (err) {
     next(err);
   }
