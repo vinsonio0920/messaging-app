@@ -15,6 +15,27 @@ async function findAllUsers() {
   }
 }
 
+async function findOtherFriendRequesting(userId) {
+  // find rows where user didn't request but friend did
+  try {
+    const otherFriendRequesting = await prisma.userFriends.findMany({
+      where: {
+        AND: {
+          user2: {
+            equals: Number(userId),
+          },
+          accepted: false,
+        },
+      },
+    });
+
+    return otherFriendRequesting;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
 async function findUserFriends(userId) {
   try {
     const userFriends = await prisma.userFriends.findMany({
@@ -101,6 +122,7 @@ async function makeUserFriends(useFriends1Id, userFriends2Id) {
 export {
   findAllUsers,
   findUserFriends,
+  findOtherFriendRequesting,
   findUserFriendById,
   createUserFriends,
   makeUserFriends,

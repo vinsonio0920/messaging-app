@@ -1,6 +1,7 @@
 import {
   createUserFriends,
   findAllUsers,
+  findOtherFriendRequesting,
   findUserFriendById,
   findUserFriends,
   makeUserFriends,
@@ -25,12 +26,13 @@ async function getUserFriends(req, res, next) {
   const { userId } = req.params;
 
   try {
+    const otherFriendRequesting = await findOtherFriendRequesting(userId);
     const userFriends = await findUserFriends(userId);
 
     return res.json({
       apiVersion: "1.0",
       status: "success",
-      data: userFriends,
+      data: [...otherFriendRequesting, ...userFriends],
       errors: null,
     });
   } catch (err) {
@@ -47,7 +49,7 @@ async function getUserFriend(req, res, next) {
     return res.json({
       apiVersion: "1.0",
       status: "success",
-      data: userFriend,
+      data: [otherUserFriends, userFriend],
       errors: null,
     });
   } catch (err) {

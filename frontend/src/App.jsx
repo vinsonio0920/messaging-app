@@ -42,7 +42,7 @@ function App() {
 
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
-    setShowOverlay(true);
+    setShowOverlay(!showOverlay);
   }
 
   function handleOverlayClick() {

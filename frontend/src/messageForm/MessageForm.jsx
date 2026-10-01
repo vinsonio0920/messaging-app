@@ -1,22 +1,37 @@
 import { useEffect, useState } from "react";
 import styles from "./MessageForm.module.css";
-import { compareUsersList } from "../utils";
+import { compareUsersList, sortPendingAcceptance } from "../utils";
 
-const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
-  // complete after we do select
+// finally we have to also add requesting from the other user side
+
+const UserLi = ({
+  currentUserId,
+  user,
+  friends,
+  selectedUser,
+  setSelectedUser,
+}) => {
   let friendStatus;
 
+  // user 1 is equal to user.id and ...
+  const otherFriendRequested =
+    friends &&
+    friends.find(
+      (friend) =>
+        friend.user1 === user.id && friend.user2 === Number(currentUserId),
+    );
   const findFriendStatus =
     friends && friends.find((friend) => friend.user2 === user.id);
   if (findFriendStatus && findFriendStatus.accepted === true) {
     friendStatus = "friends";
   } else if (findFriendStatus) {
     friendStatus = "requested";
+  } else if (otherFriendRequested) {
+    friendStatus = "pending acceptance";
   }
 
   function handleUserLiClick(event) {
     const userId = event.currentTarget.dataset.id;
-    console.log(userId);
 
     setSelectedUser(userId);
   }
@@ -37,11 +52,8 @@ const UserLi = ({ user, friends, selectedUser, setSelectedUser }) => {
         <span>{user.username}</span>
       </div>
       <div className={styles.rightLi}>
-        {friendStatus && friendStatus === "friends" && (
-          <span className={styles.friendStatus}>Friends</span>
-        )}
-        {friendStatus && friendStatus === "requested" && (
-          <span className={styles.friendStatus}>Requested</span>
+        {friendStatus && (
+          <span className={styles.friendStatus}>{friendStatus}</span>
         )}
         {Number(selectedUser) === user.id ? (
           <span className={`material-symbols-outlined ${styles.checkmarkIcon}`}>
@@ -66,7 +78,8 @@ const MessageForm = ({ user }) => {
       .filter((user) =>
         user.username.toLowerCase().includes(search.toLowerCase()),
       )
-      .sort(compareUsersList(friends));
+      .sort(compareUsersList(friends, user))
+      .sort(sortPendingAcceptance(friends, user));
 
   // disable the submit button if already requested/messaging
   let disableButton;
@@ -88,7 +101,12 @@ const MessageForm = ({ user }) => {
         const result = await response.json();
 
         if (result.status === "success") {
-          setUsers(result.data);
+          // remove the user itself from the user list
+          const newUsers = result.data.filter(
+            (resultUser) => resultUser.id !== Number(user.id),
+          );
+
+          setUsers(newUsers);
         } else {
           throw new Error("Error fetching the users");
         }
@@ -186,13 +204,14 @@ const MessageForm = ({ user }) => {
           {users && users.length == 0 && <p>There are no users right now!</p>}
           {usersList && usersList.length > 0 ? (
             <ul className={styles.usersUl}>
-              {usersList.map((user) => (
+              {usersList.map((userLi) => (
                 <UserLi
-                  user={user}
+                  currentUserId={user.id}
+                  user={userLi}
                   friends={friends}
                   selectedUser={selectedUser}
                   setSelectedUser={setSelectedUser}
-                  key={user.id}
+                  key={userLi.id}
                 />
               ))}
             </ul>
