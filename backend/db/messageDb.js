@@ -24,4 +24,23 @@ async function createChat(userId, friendId) {
   }
 }
 
-export { createChat };
+async function findAllChats(userId) {
+  try {
+    const chats = await prisma.chat.findMany({
+      where: {
+        members: {
+          some: {
+            id: Number(userId),
+          },
+        },
+      },
+    });
+
+    return chats;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+export { createChat, findAllChats };

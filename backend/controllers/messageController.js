@@ -1,6 +1,21 @@
-// we will also need to think about how to add/create chats!
-// for this I think it would be wise for a frontend detour so...
-async function getAllChats() {}
+import { findAllChats } from "../db/messageDb.js";
+
+async function getAllChats(req, res, next) {
+  const { userId } = req.params;
+
+  try {
+    const chats = await findAllChats(userId);
+
+    return res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: chats,
+      errors: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 async function createMessage(req, res, next) {
   // we need to add image to supabase first!
@@ -8,4 +23,4 @@ async function createMessage(req, res, next) {
   res.send("creating...");
 }
 
-export { createMessage };
+export { createMessage, getAllChats };
