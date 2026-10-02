@@ -10,7 +10,8 @@ function App() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
+  const [chats, setChats] = useState(null);
+  const [errors, setErrors] = useState([]);
 
   // Checks if the user is signed in
   useEffect(() => {
@@ -25,8 +26,34 @@ function App() {
     })
       .then((response) => response.json())
       .then((response) => setUser(response))
-      .catch(() => setError(true));
+      .catch(() => setErrors((prevState) => [...prevState, "auth"]));
   }, []);
+
+  // fetch all user chats for list
+  // also update chat after user made friends!
+  useEffect(() => {
+    if (!user) return;
+
+    async function fetchChats() {
+      try {
+        const url = `${import.meta.env.VITE_SERVER_URL}/messages/${user.id}/error`;
+
+        const response = await fetch(url);
+        const result = await response.json();
+
+        if (result.status === "success") {
+          setChats(result.data);
+        } else {
+          throw new Error("Error fetching the chats!");
+        }
+      } catch (error) {
+        console.error(error);
+        setErrors((prevState) => [...prevState, "chats"]);
+      }
+    }
+
+    fetchChats();
+  }, [user]);
 
   // remove dropdown on any click that isn't the profile's
   useEffect(() => {
@@ -82,11 +109,11 @@ function App() {
         return result;
       }
     } catch {
-      setError(true);
+      setErrors(true);
     }
   }
 
-  if (error) {
+  if (errors && errors.includes("auth")) {
     return (
       <div className={styles.errorContainer}>
         <p>
