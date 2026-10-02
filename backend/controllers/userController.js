@@ -1,3 +1,4 @@
+import { createChat } from "../db/messageDb.js";
 import {
   createUserFriends,
   findAllUsers,
@@ -85,6 +86,9 @@ async function createFriendRequest(req, res, next) {
     // if other person already requested, then make them message (and friends)!
     if (userFriends && otherUserFriends) {
       await makeUserFriends(userFriends.id, otherUserFriends.id);
+
+      // make a chat with the two users as well!
+      await createChat(userId, friendId);
 
       return res.json({
         apiVersion: "1.0",
