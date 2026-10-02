@@ -104,6 +104,7 @@
   flex: 1 1 auto;
 }
 
+.chatsError,
 .homeLink,
 .messagesUl a {
   display: flex;
@@ -111,6 +112,7 @@
   padding: 0.5rem;
 }
 
+.chatsError,
 .homeLink,
 .messagesUl a {
   display: flex;
@@ -125,6 +127,13 @@
 
 .messagesUl li p {
   margin: 0;
+}
+
+.chatsError {
+  display: flex !important;
+  font-size: 0.925rem;
+  align-items: center;
+  color: #ff0000;
 }
 
 .profilePicture {
@@ -165,7 +174,8 @@
 .homeLink .homeIcon,
 .createButton .createIcon,
 .dropdownButton .signInIcon,
-.profileDropdown .signOutIcon {
+.profileDropdown .signOutIcon,
+.chatsError .errorIcon {
   font-size: 2rem;
   margin-right: 0.75rem;
 }
@@ -289,6 +299,7 @@
     justify-content: center;
   }
 
+  .navbar.hideSidebar .chatsError,
   .navbar.hideSidebar .homeLink,
   .navbar.hideSidebar button:not(.sidebarButton),
   .navbar.hideSidebar a,

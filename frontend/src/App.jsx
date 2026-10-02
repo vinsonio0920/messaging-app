@@ -10,7 +10,7 @@ function App() {
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [user, setUser] = useState(null);
-  const [chats, setChats] = useState(null);
+  const [chats, setChats] = useState([]);
   const [errors, setErrors] = useState([]);
 
   // Checks if the user is signed in
@@ -36,7 +36,7 @@ function App() {
 
     async function fetchChats() {
       try {
-        const url = `${import.meta.env.VITE_SERVER_URL}/messages/${user.id}/error`;
+        const url = `${import.meta.env.VITE_SERVER_URL}/messages/${user.id}`;
 
         const response = await fetch(url);
         const result = await response.json();
@@ -153,6 +153,7 @@ function App() {
             </button>
           </li>
           <li className={styles.messagesParentLi}>
+            {/* Error Handling First! */}
             <ul className={styles.messagesUl}>
               <li>
                 <Link to="/" className={styles.homeLink}>
@@ -164,22 +165,42 @@ function App() {
                   <span className={styles.sidebarText}>Home</span>
                 </Link>
               </li>
-              <li>
-                <Link to="/">
-                  <img
-                    src="https://birdlifedata.blob.core.windows.net/species-images/22697748.jpg"
-                    alt="Profile picture"
-                    width="32"
-                    className={styles.profilePicture}
-                  />
-                  <p className={styles.sidebarText}>Random Kasinski</p>
-                </Link>
-              </li>
-              <li>
-                <p className={`${styles.emptyChatsPara} ${styles.sidebarText}`}>
-                  You have no chats right now.
-                </p>
-              </li>
+              {errors.includes("chats") && (
+                <li className={styles.chatsError}>
+                  <span
+                    className={`material-symbols-outlined ${styles.errorIcon}`}
+                  >
+                    error
+                  </span>
+                  <span className={styles.sidebarText}>
+                    There was an error getting the chats. Please try again
+                    later.
+                  </span>
+                </li>
+              )}
+              {chats.length > 0
+                ? chats.map((chat) => (
+                    <li>
+                      <Link to="/">
+                        <img
+                          src="https://birdlifedata.blob.core.windows.net/species-images/22697748.jpg"
+                          alt="Profile picture"
+                          width="32"
+                          className={styles.profilePicture}
+                        />
+                        <p className={styles.sidebarText}>Random Kasinski</p>
+                      </Link>
+                    </li>
+                  ))
+                : !errors.includes("chats") && (
+                    <li>
+                      <p
+                        className={`${styles.emptyChatsPara} ${styles.sidebarText}`}
+                      >
+                        You have no chats right now.
+                      </p>
+                    </li>
+                  )}
               <li>
                 <button
                   type="button"
