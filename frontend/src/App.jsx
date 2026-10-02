@@ -6,7 +6,8 @@ import { MessageForm } from "./messageForm/MessageForm.jsx";
 
 function App() {
   const [showSidebar, setShowSidebar] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
+  const [showFormOverlay, setShowFormOverlay] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showMessageForm, setShowMessageForm] = useState(false);
   const [user, setUser] = useState(null);
@@ -69,16 +70,17 @@ function App() {
 
   function handleSidebarClick() {
     setShowSidebar(!showSidebar);
-    setShowOverlay(!showOverlay);
+    setShowSidebarOverlay(!showSidebarOverlay);
   }
 
-  function handleOverlayClick() {
-    setShowOverlay(false);
-    if (showMessageForm) {
-      setShowMessageForm(false);
-    } else {
-      setShowSidebar(false);
-    }
+  function handleSidebarOverlayClick() {
+    setShowSidebarOverlay(false);
+    setShowSidebar(false);
+  }
+
+  function handleFormOverlayClick() {
+    setShowMessageForm(false);
+    setShowFormOverlay(false);
   }
 
   function handleProfileDropdownClick() {
@@ -87,7 +89,7 @@ function App() {
 
   function handleAddMessageClick() {
     setShowMessageForm(true);
-    setShowOverlay(true);
+    setShowFormOverlay(true);
   }
 
   async function handleSignOutClick() {
@@ -153,7 +155,6 @@ function App() {
             </button>
           </li>
           <li className={styles.messagesParentLi}>
-            {/* Error Handling First! */}
             <ul className={styles.messagesUl}>
               <li>
                 <Link to="/" className={styles.homeLink}>
@@ -278,8 +279,12 @@ function App() {
         <Outlet />
       </main>
       <div
-        className={`overlay ${showOverlay ? "showOverlay" : ""}`}
-        onClick={handleOverlayClick}
+        className={`overlay ${showSidebarOverlay ? "showOverlay" : ""}`}
+        onClick={handleSidebarOverlayClick}
+      ></div>
+      <div
+        className={`form-overlay ${showFormOverlay ? "showOverlay" : ""}`}
+        onClick={handleFormOverlayClick}
       ></div>
     </div>
   );

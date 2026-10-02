@@ -59,7 +59,8 @@ button:hover {
   cursor: pointer;
 }
 
-.overlay {
+.overlay,
+.form-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -70,11 +71,12 @@ button:hover {
   display: none;
 }
 
-.overlay.showOverlay {
+.overlay.showOverlay,
+.form-overlay.showOverlay {
   display: block;
 }
 
-.messageFormContainer ~ .overlay {
+.messageFormContainer ~ .form-overlay {
   z-index: 9998;
 }
 
