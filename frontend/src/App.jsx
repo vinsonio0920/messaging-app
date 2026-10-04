@@ -180,19 +180,26 @@ function App() {
                 </li>
               )}
               {chats.length > 0
-                ? chats.map((chat) => (
-                    <li>
-                      <Link to="/">
-                        <img
-                          src="https://birdlifedata.blob.core.windows.net/species-images/22697748.jpg"
-                          alt="Profile picture"
-                          width="32"
-                          className={styles.profilePicture}
-                        />
-                        <p className={styles.sidebarText}>Random Kasinski</p>
-                      </Link>
-                    </li>
-                  ))
+                ? chats.map((chat) => {
+                    const userInfo = chat.members.filter(
+                      (member) => member.id !== user.id,
+                    )[0];
+                    return (
+                      <li key={userInfo.id}>
+                        <Link to="/">
+                          <img
+                            src={userInfo.profile}
+                            alt={`${userInfo.username}'s profile picture`}
+                            width="32"
+                            className={styles.profilePicture}
+                          />
+                          <p className={styles.sidebarText}>
+                            {userInfo.username}
+                          </p>
+                        </Link>
+                      </li>
+                    );
+                  })
                 : !errors.includes("chats") && (
                     <li>
                       <p
