@@ -34,6 +34,9 @@ async function findAllChats(userId) {
           },
         },
       },
+      include: {
+        members: true,
+      },
     });
 
     return chats;

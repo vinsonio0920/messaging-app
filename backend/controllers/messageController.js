@@ -17,10 +17,22 @@ async function getAllChats(req, res, next) {
   }
 }
 
+async function getAllMessages(req, res, next) {}
+
 async function createMessage(req, res, next) {
   // we need to add image to supabase first!
   // also make sure that the
   res.send("creating...");
 }
 
-export { createMessage, getAllChats };
+async function updateMessage(req, res, next) {}
+
+async function deleteMessage(req, res, next) {}
+
+export {
+  getAllChats,
+  getAllMessages,
+  createMessage,
+  updateMessage,
+  deleteMessage,
+};
