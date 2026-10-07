@@ -6,13 +6,19 @@ import {
   getAllMessages,
   updateMessage,
 } from "../controllers/messageController.js";
+import { verifyToken } from "../utils.js";
 
 const messageRouter = Router();
 
 messageRouter.get("/:userId", getAllChats);
-messageRouter.get("/:userId/chats/:friendId", getAllMessages);
-messageRouter.post("/:userId/chats/:friendId", createMessage);
-messageRouter.put("/:userId/chats/:friendId", updateMessage);
-messageRouter.delete("/:userId/chats/:friendId", deleteMessage);
+messageRouter.post("/:userId/chats/:chatId", verifyToken, getAllMessages);
+/*
+above is for getting and verifying the messages
+and "/:userId/chats/:chatId" is for getting the chat, maybe...
+
+messageRouter.post("/:userId/chats/:chatId", createMessage);
+messageRouter.put("/:userId/chats/:chatId", updateMessage);
+messageRouter.delete("/:userId/chats/:chatId", deleteMessage);
+*/
 
 export { messageRouter };
