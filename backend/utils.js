@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { CustomForbiddenError } from "./errors/CustomForbiddenError.js";
+import { jwtDecode } from "jwt-decode";
 
 const requiredErr = "is required";
 const lengthErr = (minLength, maxLength) =>
@@ -37,4 +38,17 @@ function verifyToken(req, res, next) {
   }
 }
 
-export { requiredErr, lengthErr, verifyNotSignedin, verifyToken };
+function jwtUserIdMatches(userId) {
+  // make sure that the signed in user's id matches the user in the param (security)
+  const decoded = jwtDecode(req.headers["authorization"].split(" ")[1]);
+
+  return decoded.user.id === Number(userId);
+}
+
+export {
+  requiredErr,
+  lengthErr,
+  verifyNotSignedin,
+  verifyToken,
+  jwtUserIdMatches,
+};

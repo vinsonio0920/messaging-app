@@ -12,13 +12,11 @@ const messageRouter = Router();
 
 messageRouter.get("/:userId", getAllChats);
 messageRouter.post("/:userId/chats/:chatId", verifyToken, getAllMessages);
-/*
-above is for getting and verifying the messages
-and "/:userId/chats/:chatId" is for getting the chat, maybe...
 
-messageRouter.post("/:userId/chats/:chatId", createMessage);
-messageRouter.put("/:userId/chats/:chatId", updateMessage);
-messageRouter.delete("/:userId/chats/:chatId", deleteMessage);
+messageRouter.post("/:userId/chats/:chatId/create", verifyToken, createMessage);
+/*
+messageRouter.put("/:userId/chats/:chatId", verifyToken, updateMessage);
+messageRouter.delete("/:userId/chats/:chatId", verifyToken, deleteMessage);
 */
 
 export { messageRouter };

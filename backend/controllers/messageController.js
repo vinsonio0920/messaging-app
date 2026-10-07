@@ -1,5 +1,5 @@
 import { findAllChats, findAllMessages } from "../db/messageDb.js";
-import { jwtDecode } from "jwt-decode";
+import { jwtUserIdMatches } from "../utils.js";
 
 async function getAllChats(req, res, next) {
   const { userId } = req.params;
@@ -22,9 +22,8 @@ async function getAllMessages(req, res, next) {
   const { userId, chatId } = req.params;
 
   try {
-    // make sure that the signed in user's id matches the user in the param (security)
-    const decoded = jwtDecode(req.headers["authorization"].split(" ")[1]);
-    if (decoded.user.id !== Number(userId))
+    const userIdMatches = jwtUserIdMatches(userId);
+    if (!userIdMatches)
       throw new Error("Signed in user's id doesn't match params user id.");
 
     const messages = await findAllMessages(chatId);
@@ -44,6 +43,9 @@ async function createMessage(req, res, next) {
   const { userId, chatId } = req.params;
 
   try {
+    const userIdMatches = jwtUserIdMatches(userId);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
   } catch (err) {
     next(err);
   }
@@ -55,6 +57,9 @@ async function updateMessage(req, res, next) {
   const { userId, chatId } = req.params;
 
   try {
+    const userIdMatches = jwtUserIdMatches(userId);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
   } catch (err) {
     next(err);
   }
@@ -64,6 +69,9 @@ async function deleteMessage(req, res, next) {
   const { userId, chatId } = req.params;
 
   try {
+    const userIdMatches = jwtUserIdMatches(userId);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
   } catch (err) {
     next(err);
   }
