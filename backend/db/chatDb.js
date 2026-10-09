@@ -1,5 +1,23 @@
 import { prisma } from "../lib/prisma.js";
 
+async function getChatById(chatId) {
+  try {
+    const chat = await prisma.chat.findUnique({
+      where: {
+        id: Number(chatId),
+      },
+      include: {
+        members: true,
+      },
+    });
+
+    return chat;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
 async function createChat(userId, friendId) {
   try {
     const chat = await prisma.chat.create({
@@ -46,4 +64,4 @@ async function findAllChats(userId) {
   }
 }
 
-export { createChat, findAllChats };
+export { getChatById, createChat, findAllChats };

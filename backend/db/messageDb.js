@@ -23,8 +23,8 @@ async function createMessage(message, userId, chatId) {
     const newMessage = await prisma.message.create({
       data: {
         message,
-        senderId: userId,
-        chatId,
+        senderId: Number(userId),
+        chatId: Number(chatId),
       },
     });
 

@@ -1,4 +1,4 @@
-import { findAllChats } from "../db/chatDb.js";
+import { findAllChats, getChatById } from "../db/chatDb.js";
 import { createMessage, findAllMessages } from "../db/messageDb.js";
 import { jwtUserIdMatches } from "../utils.js";
 
@@ -7,6 +7,10 @@ async function getAllChats(req, res, next) {
 
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
+    const userIdMatches = jwtUserIdMatches(userId, jwtToken);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
+
     const chats = await findAllChats(userId, jwtToken);
 
     return res.json({
@@ -45,18 +49,25 @@ async function getAllMessages(req, res, next) {
 }
 
 async function postChatMessage(req, res, next) {
-  const { userId, chatId } = req.params;
+  const { chatId } = req.params;
   // update later to also allow photos (optional)
   // also will have to update the... well, update function as well
   // I'm thinking after CRUD we'll add multer, and then finally implement frontend
-  const { message } = req.body;
-  console.log("A!");
+  const { userId, message } = req.body;
 
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
     const userIdMatches = jwtUserIdMatches(userId, jwtToken);
     if (!userIdMatches)
       throw new Error("Signed in user's id doesn't match params user id.");
+
+    // Make sure that the user is a member of the chat
+    const chat = await getChatById(chatId);
+    const userIsMember = chat.members.find(
+      (member) => member.id === Number(userId),
+    );
+    if (!userIsMember)
+      throw new Error("User does not have access to this chat.");
 
     const newMessage = await createMessage(message, userId, chatId);
 
@@ -117,4 +128,4 @@ async function deleteMessage(req, res, next) {
 }
 */
 
-export { getAllChats, getAllMessages };
+export { getAllChats, getAllMessages, postChatMessage };
