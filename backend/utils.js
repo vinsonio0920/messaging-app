@@ -38,9 +38,9 @@ function verifyToken(req, res, next) {
   }
 }
 
-function jwtUserIdMatches(userId) {
+function jwtUserIdMatches(userId, jwtToken) {
   // make sure that the signed in user's id matches the user in the param (security)
-  const decoded = jwtDecode(req.headers["authorization"].split(" ")[1]);
+  const decoded = jwtDecode(jwtToken);
 
   return decoded.user.id === Number(userId);
 }

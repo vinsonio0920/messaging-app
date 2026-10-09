@@ -37,9 +37,15 @@ function App() {
 
     async function fetchChats() {
       try {
-        const url = `${import.meta.env.VITE_SERVER_URL}/messages/${user.id}`;
+        // also add auth bearer token here later
+        const url = `${import.meta.env.VITE_SERVER_URL}/chats`;
 
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          method: "POST",
+          body: new URLSearchParams({
+            userId: user.id,
+          }),
+        });
         const result = await response.json();
 
         if (result.status === "success") {
@@ -186,7 +192,7 @@ function App() {
                     )[0];
                     return (
                       <li key={userInfo.id}>
-                        <Link to="/">
+                        <Link to="/chats/:chatId">
                           <img
                             src={userInfo.profile}
                             alt={`${userInfo.username}'s profile picture`}

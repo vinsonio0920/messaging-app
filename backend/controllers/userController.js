@@ -1,4 +1,4 @@
-import { createChat } from "../db/messageDb.js";
+import { createChat } from "../db/chatDb.js";
 import {
   createUserFriends,
   findAllUsers,

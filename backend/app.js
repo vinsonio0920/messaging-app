@@ -4,8 +4,8 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import { prisma } from "./lib/prisma.js";
 import passport from "passport";
 import { authorizationRouter } from "./routes/authorizationRouter.js";
-import { messageRouter } from "./routes/messageRouter.js";
 import { userRouter } from "./routes/userRouter.js";
+import { chatRouter } from "./routes/chatRouter.js";
 
 const app = express();
 
@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/", authorizationRouter);
 app.use("/users", userRouter);
-app.use("/messages", messageRouter);
+app.use("/chats", chatRouter);
 
 app.use((err, req, res, next) => {
   console.error(err);
