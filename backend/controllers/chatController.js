@@ -1,6 +1,7 @@
 import { findAllChats, findChatById } from "../db/chatDb.js";
 import {
   createMessage,
+  deleteMessageDb,
   findAllMessages,
   findMessageById,
   updateMessage,
@@ -116,25 +117,38 @@ async function putMessage(req, res, next) {
   }
 }
 
-/*
 async function deleteMessage(req, res, next) {
-  const { userId } = req.params;
-  const { messageId } = req.body;
+  const { messageId } = req.params;
+  const { userId } = req.body;
 
   try {
-    const userIdMatches = jwtUserIdMatches(userId);
+    const jwtToken = req.headers["authorization"].split(" ")[1];
+    const userIdMatches = jwtUserIdMatches(userId, jwtToken);
     if (!userIdMatches)
       throw new Error("Signed in user's id doesn't match params user id.");
 
-    const deletedMessage = await deleteMessage(userId)
+    const findMessage = await findMessageById(messageId);
+    const userIsSender = findMessage.senderId === Number(userId);
+    if (!userIsSender)
+      throw new Error("You are not the sender of this message.");
+
+    const deletedMessage = await deleteMessageDb(messageId);
 
     return res.json({
-
+      apiVersion: "1.0",
+      status: "success",
+      data: deletedMessage,
+      errors: null,
     });
   } catch (err) {
     next(err);
   }
 }
-*/
 
-export { getAllChats, getAllMessages, postChatMessage, putMessage };
+export {
+  getAllChats,
+  getAllMessages,
+  postChatMessage,
+  putMessage,
+  deleteMessage,
+};

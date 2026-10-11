@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  deleteMessage,
   getAllChats,
   getAllMessages,
   postChatMessage,
@@ -14,10 +15,6 @@ chatRouter.post("/", verifyToken, getAllChats);
 chatRouter.post("/:chatId", verifyToken, getAllMessages);
 chatRouter.post("/:chatId/create", verifyToken, postChatMessage);
 chatRouter.put("/messages/:messageId/update", verifyToken, putMessage);
-
-/*
-Not up to date, going to update after refactored
-messageRouter.delete("/:messageId/", verifyToken, deleteMessage);
-*/
+chatRouter.delete("/messages/:messageId/delete", verifyToken, deleteMessage);
 
 export { chatRouter };
