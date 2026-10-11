@@ -3,6 +3,7 @@ import {
   getAllChats,
   getAllMessages,
   postChatMessage,
+  putMessage,
 } from "../controllers/chatController.js";
 import { verifyToken } from "../utils.js";
 
@@ -12,10 +13,10 @@ const chatRouter = Router();
 chatRouter.post("/", verifyToken, getAllChats);
 chatRouter.post("/:chatId", verifyToken, getAllMessages);
 chatRouter.post("/:chatId/create", verifyToken, postChatMessage);
+chatRouter.put("/messages/:messageId/update", verifyToken, putMessage);
 
 /*
 Not up to date, going to update after refactored
-messageRouter.put("/:messageId/", verifyToken, updateMessage);
 messageRouter.delete("/:messageId/", verifyToken, deleteMessage);
 */
 
