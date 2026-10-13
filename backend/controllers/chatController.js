@@ -1,7 +1,7 @@
 import { findAllChats, findChatById } from "../db/chatDb.js";
 import {
   createMessage,
-  deleteMessageDb,
+  deleteMessage,
   findAllMessages,
   findMessageById,
   updateMessage,
@@ -30,7 +30,7 @@ async function getAllChats(req, res, next) {
   }
 }
 
-async function getAllMessages(req, res, next) {
+async function getAllChatMessages(req, res, next) {
   console.log("getting...");
   const { chatId } = req.params;
   const { userId } = req.body;
@@ -58,7 +58,6 @@ async function postChatMessage(req, res, next) {
   const { chatId } = req.params;
   // update later to also allow photos (optional)
   // also will have to update the... well, update function as well
-  // I'm thinking after CRUD we'll add multer, and then finally implement frontend
   const { userId, message } = req.body;
 
   try {
@@ -75,6 +74,8 @@ async function postChatMessage(req, res, next) {
     if (!userIsMember)
       throw new Error("User does not have access to this chat.");
 
+    // must have either a message or an image
+
     const newMessage = await createMessage(message, userId, chatId);
 
     return res.json({
@@ -88,7 +89,7 @@ async function postChatMessage(req, res, next) {
   }
 }
 
-async function putMessage(req, res, next) {
+async function putChatMessage(req, res, next) {
   const { messageId } = req.params;
   const { userId, message } = req.body;
 
@@ -117,7 +118,7 @@ async function putMessage(req, res, next) {
   }
 }
 
-async function deleteMessage(req, res, next) {
+async function deleteChatMessage(req, res, next) {
   const { messageId } = req.params;
   const { userId } = req.body;
 
@@ -132,7 +133,7 @@ async function deleteMessage(req, res, next) {
     if (!userIsSender)
       throw new Error("You are not the sender of this message.");
 
-    const deletedMessage = await deleteMessageDb(messageId);
+    const deletedMessage = await deleteMessage(messageId);
 
     return res.json({
       apiVersion: "1.0",
@@ -147,8 +148,8 @@ async function deleteMessage(req, res, next) {
 
 export {
   getAllChats,
-  getAllMessages,
+  getAllChatMessages,
   postChatMessage,
-  putMessage,
-  deleteMessage,
+  putChatMessage,
+  deleteChatMessage,
 };

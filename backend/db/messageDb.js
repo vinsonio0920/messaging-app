@@ -1,4 +1,3 @@
-import { deleteMessage } from "../controllers/chatController.js";
 import { prisma } from "../lib/prisma.js";
 
 async function findMessageById(messageId) {
@@ -72,7 +71,7 @@ async function updateMessage(messageId, message) {
   }
 }
 
-async function deleteMessageDb(messageId) {
+async function deleteMessage(messageId) {
   try {
     const deletedMessage = await prisma.message.delete({
       where: {
@@ -92,5 +91,5 @@ export {
   findMessageById,
   createMessage,
   updateMessage,
-  deleteMessageDb,
+  deleteMessage,
 };
