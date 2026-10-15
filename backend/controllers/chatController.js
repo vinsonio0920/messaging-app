@@ -6,7 +6,9 @@ import {
   findMessageById,
   updateMessage,
 } from "../db/messageDb.js";
+import { supabase } from "../lib/supabase.js";
 import { jwtUserIdMatches } from "../utils.js";
+import path from "path";
 
 async function getAllChats(req, res, next) {
   const { userId } = req.body;
@@ -31,7 +33,6 @@ async function getAllChats(req, res, next) {
 }
 
 async function getAllChatMessages(req, res, next) {
-  console.log("getting...");
   const { chatId } = req.params;
   const { userId } = req.body;
 
@@ -58,7 +59,10 @@ async function postChatMessage(req, res, next) {
   const { chatId } = req.params;
   // update later to also allow photos (optional)
   // also will have to update the... well, update function as well
+  // and also the delete...
   const { userId, message } = req.body;
+  const image = req.file;
+  let imageUrl = undefined;
 
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
@@ -75,8 +79,30 @@ async function postChatMessage(req, res, next) {
       throw new Error("User does not have access to this chat.");
 
     // must have either a message or an image
+    if (!message && !image)
+      throw new Error("A message or an image is required to post.");
 
-    const newMessage = await createMessage(message, userId, chatId);
+    if (image) {
+      // upload image to supabase and get the image url
+      // filePath is the name given to the file for supabase (chatId -> image file)
+      const filePath = `${chatId}/${crypto.randomUUID()}${path.extname(image.originalname)}`;
+      const { data: imageData, error: imageError } = await supabase.storage
+        .from("Message Images")
+        .upload(filePath, image.buffer, {
+          contentType: image.mimetype,
+        });
+
+      if (imageError) throw new Error(imageError.message);
+
+      // get public URL after upload
+      const { data: urlData } = supabase.storage
+        .from("Message Images")
+        .getPublicUrl(filePath);
+
+      imageUrl = urlData.publicUrl;
+    }
+
+    const newMessage = await createMessage(message, userId, chatId, imageUrl);
 
     return res.json({
       apiVersion: "1.0",

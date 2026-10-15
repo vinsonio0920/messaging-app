@@ -36,11 +36,12 @@ async function findAllMessages(chatId) {
   }
 }
 
-async function createMessage(message, userId, chatId) {
+async function createMessage(message, userId, chatId, imageUrl) {
   try {
     const newMessage = await prisma.message.create({
       data: {
         message,
+        image: imageUrl,
         senderId: Number(userId),
         chatId: Number(chatId),
       },

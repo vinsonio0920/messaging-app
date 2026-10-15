@@ -16,7 +16,12 @@ const chatRouter = Router();
 // createChat in userController.js, might refactor in the future.
 chatRouter.post("/", verifyToken, getAllChats);
 chatRouter.post("/:chatId", verifyToken, getAllChatMessages);
-chatRouter.post("/:chatId/create", verifyToken, upload.single("image"), postChatMessage);
+chatRouter.post(
+  "/:chatId/create",
+  verifyToken,
+  upload.single("image"),
+  postChatMessage,
+);
 chatRouter.put("/messages/:messageId/update", verifyToken, putChatMessage);
 chatRouter.delete(
   "/messages/:messageId/delete",
