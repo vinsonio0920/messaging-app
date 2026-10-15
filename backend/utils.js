@@ -45,10 +45,23 @@ function jwtUserIdMatches(userId, jwtToken) {
   return decoded.user.id === Number(userId);
 }
 
+function getFilePathFromPublicUrl(publicUrl) {
+  if (!publicUrl?.includes("/object/public/")) return null;
+
+  const path = publicUrl
+    // remove the first part of the url up to the beginning of the file path
+    .replace(/^.*\/object\/public\/[^/]+\//, "")
+    // omit any possible queries
+    .split("?")[0];
+
+  return decodeURIComponent(path);
+}
+
 export {
   requiredErr,
   lengthErr,
   verifyNotSignedin,
   verifyToken,
   jwtUserIdMatches,
+  getFilePathFromPublicUrl,
 };

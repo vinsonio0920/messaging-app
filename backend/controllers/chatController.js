@@ -7,7 +7,7 @@ import {
   updateMessage,
 } from "../db/messageDb.js";
 import { supabase } from "../lib/supabase.js";
-import { jwtUserIdMatches } from "../utils.js";
+import { getFilePathFromPublicUrl, jwtUserIdMatches } from "../utils.js";
 import path from "path";
 
 async function getAllChats(req, res, next) {
@@ -57,12 +57,9 @@ async function getAllChatMessages(req, res, next) {
 
 async function postChatMessage(req, res, next) {
   const { chatId } = req.params;
-  // update later to also allow photos (optional)
-  // also will have to update the... well, update function as well
-  // and also the delete...
   const { userId, message } = req.body;
   const image = req.file;
-  let imageUrl = undefined;
+  let imageUrl = null;
 
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
@@ -116,8 +113,13 @@ async function postChatMessage(req, res, next) {
 }
 
 async function putChatMessage(req, res, next) {
-  const { messageId } = req.params;
+  const { chatId, messageId } = req.params;
   const { userId, message } = req.body;
+  const image = req.file;
+  let imageUrl = null;
+
+  // tomorrow finish these and maybe start on the frontend (optional)!
+  // and also the delete... (simply delete the image url!)
 
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
@@ -131,7 +133,59 @@ async function putChatMessage(req, res, next) {
     if (!userIsSender)
       throw new Error("You are not the sender of this message.");
 
-    const updatedMessage = await updateMessage(messageId, message);
+    // must have either a message or an image
+    if (!message && !image)
+      throw new Error("A message or an image is required to post.");
+
+    // replace image if it exists
+    if (image) {
+      // first upload image (unique UUID so no need for upsert)
+      const filePath = `${chatId}/${crypto.randomUUID()}${path.extname(image.originalname)}`;
+      const { data: imageData, error: imageError } = await supabase.storage
+        .from("Message Images")
+        .upload(filePath, image.buffer, {
+          contentType: image.mimetype,
+        });
+
+      if (imageError) throw new Error(imageError.message);
+
+      // delete previous image if applicable
+      const previousFilePath = getFilePathFromPublicUrl(findMessage.image);
+      if (previousFilePath && findMessage.image) {
+        const { data: removeData, error: removeError } = await supabase.storage
+          .from("Message Images")
+          .remove([previousFilePath]);
+
+        if (removeError) throw new Error(removeError.message);
+        if (!removeData || removeData.length === 0)
+          throw new Error(
+            "File was not deleted (RLS policy or previousFilePath most likely).",
+          );
+      }
+
+      // get the publicUrl after preparations are complete
+      const { data: urlData } = supabase.storage
+        .from("Message Images")
+        .getPublicUrl(filePath);
+
+      imageUrl = urlData.publicUrl;
+    } else {
+      // if no image this time, simply delete previous image
+      const previousFilePath = getFilePathFromPublicUrl(findMessage.image);
+      if (previousFilePath && findMessage.image) {
+        const { data: removeData, error: removeError } = await supabase.storage
+          .from("Message Images")
+          .remove([previousFilePath]);
+
+        if (removeError) throw new Error(removeError.message);
+        if (!removeData || removeData.length === 0)
+          throw new Error(
+            "File was not deleted (RLS policy or previousFilePath most likely).",
+          );
+      }
+    }
+
+    const updatedMessage = await updateMessage(messageId, message, imageUrl);
 
     return res.json({
       apiVersion: "1.0",

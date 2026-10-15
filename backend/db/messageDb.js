@@ -54,7 +54,7 @@ async function createMessage(message, userId, chatId, imageUrl) {
   }
 }
 
-async function updateMessage(messageId, message) {
+async function updateMessage(messageId, message, imageUrl) {
   try {
     const updatedMessage = await prisma.message.update({
       where: {
@@ -62,6 +62,7 @@ async function updateMessage(messageId, message) {
       },
       data: {
         message,
+        image: imageUrl,
       },
     });
 

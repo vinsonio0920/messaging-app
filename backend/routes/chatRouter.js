@@ -22,9 +22,14 @@ chatRouter.post(
   upload.single("image"),
   postChatMessage,
 );
-chatRouter.put("/messages/:messageId/update", verifyToken, putChatMessage);
+chatRouter.put(
+  "/:chatId/messages/:messageId/update",
+  verifyToken,
+  upload.single("image"),
+  putChatMessage,
+);
 chatRouter.delete(
-  "/messages/:messageId/delete",
+  "/:chatId/messages/:messageId/delete",
   verifyToken,
   deleteChatMessage,
 );
