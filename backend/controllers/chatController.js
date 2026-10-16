@@ -118,9 +118,6 @@ async function putChatMessage(req, res, next) {
   const image = req.file;
   let imageUrl = null;
 
-  // tomorrow finish these and maybe start on the frontend (optional)!
-  // and also the delete... (simply delete the image url!)
-
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
     const userIdMatches = jwtUserIdMatches(userId, jwtToken);
@@ -129,6 +126,10 @@ async function putChatMessage(req, res, next) {
 
     // make sure that the message belongs to the user
     const findMessage = await findMessageById(messageId);
+    if (!findMessage)
+      throw new Error(
+        "Cannot find message. It either doesn't exist or was SELECTed incorrectly.",
+      );
     const userIsSender = findMessage.senderId === Number(userId);
     if (!userIsSender)
       throw new Error("You are not the sender of this message.");
@@ -202,6 +203,9 @@ async function deleteChatMessage(req, res, next) {
   const { messageId } = req.params;
   const { userId } = req.body;
 
+  // tomorrow finish these and maybe start on the frontend (optional)!
+  // and also the delete... (simply delete the image url!)
+
   try {
     const jwtToken = req.headers["authorization"].split(" ")[1];
     const userIdMatches = jwtUserIdMatches(userId, jwtToken);
@@ -209,9 +213,28 @@ async function deleteChatMessage(req, res, next) {
       throw new Error("Signed in user's id doesn't match params user id.");
 
     const findMessage = await findMessageById(messageId);
+    if (!findMessage)
+      throw new Error(
+        "Cannot find message. It either doesn't exist or was SELECTed incorrectly.",
+      );
     const userIsSender = findMessage.senderId === Number(userId);
     if (!userIsSender)
       throw new Error("You are not the sender of this message.");
+
+    // delete the image on supabase as well (do it first in case of error)
+    const previousFilePath = getFilePathFromPublicUrl(findMessage.image);
+    if (previousFilePath && findMessage.image) {
+      const { data: removeData, error: removeError } = await supabase.storage
+        .from("Message Images")
+        .remove([previousFilePath]);
+
+      if (removeError) throw new Error(removeError.message);
+      if (!removeData || removeData.length === 0) {
+        throw new Error(
+          "File was not deleted (RLS policy or previousFilePath most likely).",
+        );
+      }
+    }
 
     const deletedMessage = await deleteMessage(messageId);
 
