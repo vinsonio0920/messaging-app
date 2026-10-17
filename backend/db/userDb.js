@@ -119,6 +119,24 @@ async function makeUserFriends(useFriends1Id, userFriends2Id) {
   }
 }
 
+async function updateUser(userId, profileUrl) {
+  try {
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: Number(userId),
+      },
+      data: {
+        profile: profileUrl,
+      },
+    });
+
+    return updatedUser;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
 export {
   findAllUsers,
   findUserFriends,
@@ -126,4 +144,5 @@ export {
   findUserFriendById,
   createUserFriends,
   makeUserFriends,
+  updateUser,
 };

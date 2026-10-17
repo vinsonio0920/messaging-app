@@ -1,4 +1,3 @@
-import multer from "multer";
 import { Router } from "express";
 import {
   deleteChatMessage,
@@ -8,8 +7,7 @@ import {
   putChatMessage,
 } from "../controllers/chatController.js";
 import { verifyToken } from "../utils.js";
-
-const upload = multer();
+import { upload } from "../lib/multer.js";
 
 const chatRouter = Router();
 
