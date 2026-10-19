@@ -42,6 +42,9 @@ function App() {
 
         const response = await fetch(url, {
           method: "POST",
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+          },
           body: new URLSearchParams({
             userId: user.id,
           }),
@@ -192,7 +195,7 @@ function App() {
                     )[0];
                     return (
                       <li key={userInfo.id}>
-                        <Link to="/chats/:chatId">
+                        <Link to={`/chats/${userInfo.id}`}>
                           <img
                             src={userInfo.profile}
                             alt={`${userInfo.username}'s profile picture`}
@@ -289,7 +292,7 @@ function App() {
         </ul>
       </nav>
       <main className={styles.mainContent}>
-        <Outlet />
+        <Outlet context={user} />
       </main>
       <div
         className={`overlay ${showSidebarOverlay ? "showOverlay" : ""}`}

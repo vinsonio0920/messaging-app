@@ -1,5 +1,6 @@
 import { signInAction, signUpAction } from "./actions.js";
 import { App } from "./App.jsx";
+import { Chat } from "./chat/Chat.jsx";
 import { ErrorPage } from "./errorPage/errorPage.jsx";
 import { Homepage } from "./homepage/Homepage.jsx";
 import { SignIn } from "./signIn/SignIn.jsx";
@@ -14,6 +15,10 @@ const routes = [
       {
         index: true,
         element: <Homepage />,
+      },
+      {
+        path: "/chats/:chatId",
+        element: <Chat />,
       },
     ],
   },
