@@ -25,7 +25,12 @@ async function findAllMessages(chatId) {
         id: Number(chatId),
       },
       include: {
-        messages: true,
+        members: true,
+        messages: {
+          orderBy: {
+            date: "desc",
+          },
+        },
       },
     });
 

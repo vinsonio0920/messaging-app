@@ -195,7 +195,7 @@ function App() {
                     )[0];
                     return (
                       <li key={userInfo.id}>
-                        <Link to={`/chats/${userInfo.id}`}>
+                        <Link to={`/chats/${chat.id}`}>
                           <img
                             src={userInfo.profile}
                             alt={`${userInfo.username}'s profile picture`}
