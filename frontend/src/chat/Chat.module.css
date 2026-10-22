@@ -1,0 +1,95 @@
+.chatHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #f0f0f0;
+  padding: 0.25rem 1rem;
+}
+
+.profileInfo {
+  display: flex;
+  align-items: center;
+}
+
+.profilePicture {
+  width: 2.5rem;
+  max-height: 2.5rem;
+  display: block;
+  background-color: rgb(238, 238, 238);
+  border: 1px solid #e8e8e8;
+  border-radius: 50%;
+  margin-right: 0.75rem;
+}
+
+.username {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.chatStartDate {
+  color: #626262;
+}
+
+.messagesUl {
+  padding: 1.25rem 2rem;
+}
+
+.messageLi {
+  display: flex;
+  margin-bottom: 1.5rem;
+}
+
+.messageLi .profilePicture {
+  max-height: 2.5rem;
+}
+
+.messageRight > * {
+  margin-bottom: 0.5rem;
+}
+
+.messageMetadata,
+.messageContent {
+  max-width: 50ch;
+}
+
+.messageMetadata {
+  display: flex;
+  align-items: center;
+  color: #3b3b3b;
+}
+
+.messageMetadata .username {
+  font-size: 1rem;
+  margin: 0 1.5rem 0 0;
+}
+
+.messageContent {
+  background-color: #f1f0f0;
+  border-radius: 10px;
+  width: fit-content;
+  padding: 0.5rem 0.5rem;
+}
+
+/* make padding 0.5 if only image */
+.messageContent:not(:has(p)) {
+  padding: 0;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+}
+
+.messageContent {
+  border-top-left-radius: 0;
+}
+
+.messageContent p {
+  margin: 0 0.5rem;
+}
+
+.messageContent:has(.messageImage) p {
+  margin-bottom: 0.5rem;
+}
+
+.messageImage {
+  display: block;
+  border-radius: 10px;
+  max-width: 100%;
+}

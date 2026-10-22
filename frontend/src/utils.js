@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 function compareUsersList(friends) {
   return function compare(user1, user2) {
     const user1Friend =
@@ -47,4 +49,28 @@ function sortPendingAcceptance(friends, currentUser) {
   };
 }
 
-export { compareUsersList, sortPendingAcceptance };
+function formatChatDate(date) {
+  return format(date, "MMMM do, yyyy");
+}
+
+function formatMessageDate(date) {
+  const currentDate = new Date();
+  const messageDate = new Date(date);
+  // set to the beginning of the day
+  currentDate.setHours(0, 0, 0, 0);
+  const isToday = currentDate < messageDate;
+
+  if (isToday) {
+    // do a simple hour and minute for time
+    return format(date, "hh:mm aa");
+  } else {
+    return format(date, "MMM do hh:mm aa");
+  }
+}
+
+export {
+  compareUsersList,
+  sortPendingAcceptance,
+  formatChatDate,
+  formatMessageDate,
+};
