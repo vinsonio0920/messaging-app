@@ -3,8 +3,10 @@ import { useOutletContext, useParams } from "react-router";
 import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
 
-const Message = ({ message, members, index, array, otherUser }) => {
+const Message = ({ message, members, index, array, user, otherUser }) => {
   const previousMessage = array[index - 1];
+  // checks if the message belongs the user (person using the website)
+  const isUsersMessage = message.senderId === user.id;
   let groupMessage = false;
 
   if (previousMessage) {
@@ -19,7 +21,9 @@ const Message = ({ message, members, index, array, otherUser }) => {
     // If messages are posted within 10 minutes of each other, allow them to be grouped
     // This will be achieved through styling in CSS
     return (
-      <li className={`${styles.messageLi} ${styles.groupedMessage}`}>
+      <li
+        className={`${styles.messageLi} ${styles.groupedMessage} ${isUsersMessage ? styles.isUsersMessage : ""}`}
+      >
         <img
           src={
             members.find((member) => member.id === message.senderId)?.profile
@@ -53,7 +57,9 @@ const Message = ({ message, members, index, array, otherUser }) => {
     );
   } else {
     return (
-      <li className={styles.messageLi}>
+      <li
+        className={`${styles.messageLi} ${isUsersMessage ? styles.isUsersMessage : ""}`}
+      >
         <img
           src={
             members.find((member) => member.id === message.senderId)?.profile
@@ -86,9 +92,6 @@ const Message = ({ message, members, index, array, otherUser }) => {
       </li>
     );
   }
-
-  // we'll simply hide the other elements while still being accessible!
-  // maybe also a useRef... but all that will need some wifi for research so I'll rest for now.
 };
 
 // make sure to domPurify user messages!
@@ -159,6 +162,7 @@ const Chat = () => {
             index={index}
             array={array}
             members={members}
+            user={user}
             otherUser={otherUser}
           />
         ))}

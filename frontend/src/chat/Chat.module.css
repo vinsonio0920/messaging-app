@@ -71,7 +71,7 @@
 }
 
 .messageContent {
-  background-color: #f1f0f0;
+  background-color: #f2f4f5;
   border-radius: 10px;
   width: fit-content;
   padding: 0.6rem 0.5rem;
@@ -97,4 +97,34 @@
   display: block;
   border-radius: 10px;
   max-width: 100%;
+}
+
+/* User's messages */
+
+.isUsersMessage {
+  flex-direction: row-reverse;
+}
+
+.isUsersMessage.groupedMessage {
+  /* left margin is image width + margin */
+  margin: -1.5rem calc(2.5rem + 0.75rem) 1.5rem 0;
+}
+
+.isUsersMessage .profilePicture {
+  margin: 0 0 0 0.75rem;
+}
+
+.isUsersMessage .messageMetadata {
+  flex-direction: row-reverse;
+}
+
+.isUsersMessage .messageMetadata .username {
+  margin: 0 0 0 1.5rem;
+}
+
+.isUsersMessage .messageContent {
+  color: #fff;
+  background-color: #305ac5;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 0;
 }
