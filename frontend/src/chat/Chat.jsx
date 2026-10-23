@@ -3,43 +3,92 @@ import { useOutletContext, useParams } from "react-router";
 import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
 
-const Message = ({ message, members, otherUser }) => {
-  // If messages are posted within 10 minutes of each other, allow them to be grouped
-  // Also show the latest time for the grouped messages
+const Message = ({ message, members, index, array, otherUser }) => {
+  const previousMessage = array[index - 1];
+  let groupMessage = false;
+
+  if (previousMessage) {
+    const timeDifference =
+      new Date(message.date) - new Date(previousMessage.date);
+    const timeThreshold = 1000 * 60 * 10; // 10 minute
+
+    if (timeDifference < timeThreshold) groupMessage = true;
+  }
+
+  if (groupMessage) {
+    // If messages are posted within 10 minutes of each other, allow them to be grouped
+    // This will be achieved through styling in CSS
+    return (
+      <li className={`${styles.messageLi} ${styles.groupedMessage}`}>
+        <img
+          src={
+            members.find((member) => member.id === message.senderId)?.profile
+          }
+          alt={`${members.find((member) => member.id === message.senderId)?.username}'s profile picture`}
+          width="32"
+          className={`${styles.profilePicture} visually-hidden`}
+        />
+        <div className={styles.messageRight}>
+          <div className={`${styles.messageMetadata} visually-hidden`}>
+            <p className={styles.username}>
+              {message.senderId === otherUser.id ? otherUser.username : "You"}
+            </p>
+            <span className={styles.messageDate}>
+              {formatMessageDate(message.date)}
+            </span>
+          </div>
+          <div className={styles.messageContent}>
+            {message.message && <p>{message.message}</p>}
+            {message.image && (
+              <img
+                src={message.image}
+                alt="Image file"
+                width="150"
+                className={styles.messageImage}
+              />
+            )}
+          </div>
+        </div>
+      </li>
+    );
+  } else {
+    return (
+      <li className={styles.messageLi}>
+        <img
+          src={
+            members.find((member) => member.id === message.senderId)?.profile
+          }
+          alt={`${members.find((member) => member.id === message.senderId)?.username}'s profile picture`}
+          width="32"
+          className={styles.profilePicture}
+        />
+        <div className={styles.messageRight}>
+          <div className={styles.messageMetadata}>
+            <p className={styles.username}>
+              {message.senderId === otherUser.id ? otherUser.username : "You"}
+            </p>
+            <span className={styles.messageDate}>
+              {formatMessageDate(message.date)}
+            </span>
+          </div>
+          <div className={styles.messageContent}>
+            {message.message && <p>{message.message}</p>}
+            {message.image && (
+              <img
+                src={message.image}
+                alt="Image file"
+                width="150"
+                className={styles.messageImage}
+              />
+            )}
+          </div>
+        </div>
+      </li>
+    );
+  }
 
   // we'll simply hide the other elements while still being accessible!
   // maybe also a useRef... but all that will need some wifi for research so I'll rest for now.
-  return (
-    <li className={styles.messageLi}>
-      <img
-        src={members.find((member) => member.id === message.senderId)?.profile}
-        alt={`${members.find((member) => member.id === message.senderId)?.username}'s profile picture`}
-        width="32"
-        className={styles.profilePicture}
-      />
-      <div className={styles.messageRight}>
-        <div className={styles.messageMetadata}>
-          <p className={styles.username}>
-            {message.senderId === otherUser.id ? otherUser.username : "You"}
-          </p>
-          <span className={styles.messageDate}>
-            {formatMessageDate(message.date)}
-          </span>
-        </div>
-        <div className={styles.messageContent}>
-          {message.message && <p>{message.message}</p>}
-          {message.image && (
-            <img
-              src={message.image}
-              alt="Image file"
-              width="150"
-              className={styles.messageImage}
-            />
-          )}
-        </div>
-      </div>
-    </li>
-  );
 };
 
 // make sure to domPurify user messages!
@@ -53,8 +102,6 @@ const Chat = () => {
   const messages = chatData?.messages;
   const members = chatData?.members;
   const otherUser = members?.find((member) => member.id !== user.id);
-  // for messages, make them continue if they are posted within 10 minutes of each other
-  // also test text messages!
 
   useEffect(() => {
     if (!user) return;
@@ -105,10 +152,12 @@ const Chat = () => {
         </p>
       </header>
       <ul className={styles.messagesUl}>
-        {messages?.map((message) => (
+        {messages?.map((message, index, array) => (
           <Message
             key={message.id}
             message={message}
+            index={index}
+            array={array}
             members={members}
             otherUser={otherUser}
           />
@@ -118,7 +167,9 @@ const Chat = () => {
         <button type="button" aria-label="Add image">
           <span className="material-symbols-outlined">image</span>
         </button>
-        <label htmlFor="message">Write a message</label>
+        <label htmlFor="message" className="visually-hidden">
+          Write a message
+        </label>
         <input
           type="text"
           id="message"

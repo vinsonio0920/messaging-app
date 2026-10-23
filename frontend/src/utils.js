@@ -60,9 +60,17 @@ function formatMessageDate(date) {
   currentDate.setHours(0, 0, 0, 0);
   const isToday = currentDate < messageDate;
 
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(0, 0, 0, 0);
+  const isYesterday = yesterday < messageDate;
+
   if (isToday) {
     // do a simple hour and minute for time
     return format(date, "hh:mm aa");
+  } else if (isYesterday) {
+    // check back tomorrow
+    return `Yesterday ${format(date, "hh:mm aa")}`;
   } else {
     return format(date, "MMM do hh:mm aa");
   }
