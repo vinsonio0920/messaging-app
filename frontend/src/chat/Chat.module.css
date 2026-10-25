@@ -3,6 +3,7 @@
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #f0f0f0;
+  height: 4.1rem;
   padding: 0.25rem 1rem;
 }
 
@@ -15,7 +16,7 @@
   width: 2.5rem;
   max-height: 2.5rem;
   display: block;
-  background-color: rgb(238, 238, 238);
+  background-color: #eeeeee;
   border: 1px solid #e8e8e8;
   border-radius: 50%;
   margin-right: 0.75rem;
@@ -30,9 +31,12 @@
   color: #626262;
 }
 
+/* Messages */
+
 .messagesUl {
   padding: 1.25rem 2rem;
-  max-height: 100%;
+  /* vh - main content margin - chatHeader height - messageForm height */
+  max-height: calc(100vh - 2.5rem - 4.1rem);
   overflow: auto;
 }
 
@@ -70,23 +74,16 @@
   margin: 0 1.5rem 0 0;
 }
 
-.messageContent {
+.messageContent p {
   background-color: #f2f4f5;
   border-radius: 10px;
-  width: fit-content;
-  padding: 0.6rem 0.5rem;
-}
-
-.messageContent:not(:has(p)) {
-  padding: 0.5rem;
-}
-
-.messageContent {
   border-top-left-radius: 0;
+  width: fit-content;
+  padding: 0.75rem;
 }
 
 .messageContent p {
-  margin: 0 0.5rem;
+  margin: 0;
 }
 
 .messageContent:has(.messageImage) p {
@@ -96,9 +93,13 @@
 .messageImage {
   display: block;
   border-radius: 10px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 20rem;
+  max-height: 15rem;
+  box-shadow:
+    rgba(0, 0, 0, 0.05) 0px 0px 5px 0px,
+    rgba(0, 0, 0, 0.05) 0px 0px 1px 0px;
 }
-
 /* User's messages */
 
 .isUsersMessage {
@@ -122,9 +123,94 @@
   margin: 0 0 0 1.5rem;
 }
 
-.isUsersMessage .messageContent {
+.isUsersMessage .messageContent p {
   color: #fff;
   background-color: #305ac5;
   border-top-left-radius: 10px;
   border-top-right-radius: 0;
+}
+
+.isUsersMessage .messageImage {
+  margin-left: auto;
+}
+
+/* Message Form */
+.messageFormContainer {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9;
+
+  width: 80%;
+  max-width: 50rem;
+}
+
+.messageForm {
+  display: flex;
+  background-color: #fff;
+  border: 1px solid rgb(200, 200, 200);
+  border-radius: 999px;
+  width: 100%;
+  height: 3.5rem;
+  margin: 0;
+  overflow: clip;
+}
+
+.messageForm:has(.textInput:focus) {
+  border: none;
+  outline: 2px solid #3f72f7;
+}
+
+.messageForm button {
+  display: block;
+  border: none;
+  border-radius: 999px !important;
+  width: 4rem !important;
+}
+
+.messageForm button span {
+  font-size: 1.75rem;
+}
+
+.messageForm .imageButton {
+  background-color: transparent;
+}
+
+.messageForm .imageButton:hover {
+  background-color: #eaeaea;
+}
+
+.messageForm .imageButton:active {
+  background-color: #e3e3e3;
+}
+
+.messageForm .textInput {
+  border: none;
+  padding: 0.5rem;
+}
+
+.messageForm .textInput:focus {
+  outline: none;
+}
+
+.messageForm .submitButton {
+  background-color: #3f72f7;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.messageForm .submitButton:hover {
+  background-color: #4d7df8;
+}
+
+.messageForm .submitButton:active {
+  background-color: #3f72f7;
+}
+
+.messageForm .submitButton span {
+  font-variation-settings: "wght" 300;
+  transform: rotate(-20deg);
+  margin-left: 0.25rem;
 }

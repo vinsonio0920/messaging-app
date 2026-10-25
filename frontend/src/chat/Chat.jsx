@@ -167,24 +167,35 @@ const Chat = () => {
           />
         ))}
       </ul>
-      <form>
-        <button type="button" aria-label="Add image">
-          <span className="material-symbols-outlined">image</span>
-        </button>
-        <label htmlFor="message" className="visually-hidden">
-          Write a message
-        </label>
-        <input
-          type="text"
-          id="message"
-          name="message"
-          placeholder="Write a message"
-          required
-        />
-        <button type="submit" aria-label="Send message">
-          <span className="material-symbols-outlined">send</span>
-        </button>
-      </form>
+      <div className={styles.messageFormContainer}>
+        <form method="POST" className={styles.messageForm}>
+          <button
+            type="button"
+            aria-label="Add image"
+            className={styles.imageButton}
+          >
+            <span className="material-symbols-outlined">image</span>
+          </button>
+          <label htmlFor="message" className="visually-hidden">
+            Write a message
+          </label>
+          <input
+            type="text"
+            id="message"
+            name="message"
+            placeholder="Write a message"
+            required
+            className={styles.textInput}
+          />
+          <button
+            type="submit"
+            className={styles.submitButton}
+            aria-label="Send message"
+          >
+            <span className="material-symbols-outlined">send</span>
+          </button>
+        </form>
+      </div>
     </>
   );
 };

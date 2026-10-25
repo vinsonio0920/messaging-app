@@ -275,6 +275,7 @@
 /* main content */
 
 .mainContent {
+  position: relative;
   flex: 1;
   border-radius: 10px;
   background-color: #fff;
