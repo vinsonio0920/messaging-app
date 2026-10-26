@@ -1,10 +1,15 @@
+html:has(.chatHeader) {
+  overflow: clip;
+}
+
 .chatHeader {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-bottom: 1px solid #f0f0f0;
   height: 4.1rem;
-  padding: 0.25rem 1rem;
+  padding: 0.5rem 1rem;
 }
 
 .profileInfo {
@@ -28,14 +33,19 @@
 }
 
 .chatStartDate {
+  display: none;
+  position: absolute;
+  bottom: -0.5rem;
+  /* profile picture width + padding + margin */
+  left: calc(2.5rem + 1rem + 0.75rem);
   color: #626262;
 }
 
 /* Messages */
 
 .messagesUl {
-  padding: 1.25rem 2rem;
-  /* vh - main content margin - chatHeader height - messageForm height */
+  padding: 1.25rem clamp(1rem, 4vw, 2rem) 6.25rem clamp(1rem, 4vw, 2rem);
+  /* vh - main content margin - chatHeader height  */
   max-height: calc(100vh - 2.5rem - 4.1rem);
   overflow: auto;
 }
@@ -64,14 +74,23 @@
 }
 
 .messageMetadata {
+  position: relative;
   display: flex;
-  align-items: center;
   color: #3b3b3b;
+  height: 3rem;
 }
 
 .messageMetadata .username {
+  position: relative;
+  bottom: 0.25rem;
   font-size: 1rem;
   margin: 0 1.5rem 0 0;
+}
+
+.messageMetadata .messageDate {
+  position: absolute;
+  bottom: 0.2rem;
+  min-width: 12.5rem;
 }
 
 .messageContent p {
@@ -80,10 +99,8 @@
   border-top-left-radius: 0;
   width: fit-content;
   padding: 0.75rem;
-}
-
-.messageContent p {
-  margin: 0;
+  /* profile picture width + margin */
+  margin: 0 0 0 calc(-2.5rem - 0.75rem);
 }
 
 .messageContent:has(.messageImage) p {
@@ -99,7 +116,10 @@
   box-shadow:
     rgba(0, 0, 0, 0.05) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.05) 0px 0px 1px 0px;
+  /* profile picture width + margin */
+  margin: 0 0 0 calc(-2.5rem - 0.75rem);
 }
+
 /* User's messages */
 
 .isUsersMessage {
@@ -123,6 +143,15 @@
   margin: 0 0 0 1.5rem;
 }
 
+.isUsersMessage .messageMetadata .messageDate {
+  text-align: end;
+}
+
+.isUsersMessage p {
+  /* profile picture width + margin */
+  margin: 0 calc(-2.5rem - 0.75rem) 0 0;
+}
+
 .isUsersMessage .messageContent p {
   color: #fff;
   background-color: #305ac5;
@@ -131,7 +160,8 @@
 }
 
 .isUsersMessage .messageImage {
-  margin-left: auto;
+  /* profile picture width + margin */
+  margin: 0 calc(-2.5rem - 0.75rem) 0 auto;
 }
 
 /* Message Form */
@@ -166,7 +196,8 @@
   display: block;
   border: none;
   border-radius: 999px !important;
-  width: 4rem !important;
+  min-width: 3.375rem;
+  width: 3.375rem !important;
 }
 
 .messageForm button span {
@@ -213,4 +244,68 @@
   font-variation-settings: "wght" 300;
   transform: rotate(-20deg);
   margin-left: 0.25rem;
+}
+
+@media (min-width: 400px) {
+  .chatHeader {
+    height: 4.5rem;
+  }
+
+  .messagesUl {
+    max-height: calc(100vh - 2.5rem - 4.1rem);
+  }
+
+  .chatStartDate {
+    display: block;
+  }
+
+  .username {
+    position: relative;
+    bottom: 0.25rem;
+    margin-top: 0;
+  }
+
+  .messageMetadata {
+    align-items: center;
+    height: auto;
+  }
+
+  .messageMetadata .username {
+    position: static;
+  }
+
+  .messageMetadata .messageDate {
+    position: static;
+    min-width: auto;
+  }
+
+  .messageContent p,
+  .isUsersMessage p {
+    margin: 0;
+  }
+
+  .messageImage {
+    margin: 0 0 0 auto !important;
+  }
+}
+
+@media (min-width: 500px) {
+  .messagesUl {
+    padding: 1.25rem clamp(1rem, 4vw, 2rem) 4rem clamp(1rem, 4vw, 2rem);
+  }
+}
+
+@media (min-width: 700px) {
+  .chatHeader {
+    position: static;
+  }
+
+  .username {
+    position: static;
+    margin: 1rem 0;
+  }
+
+  .chatStartDate {
+    position: static;
+  }
 }
