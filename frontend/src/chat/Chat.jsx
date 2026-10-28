@@ -101,6 +101,7 @@ const Chat = () => {
   const { chatId } = useParams();
   const [chatData, setChatData] = useState(null);
   const [errors, setErrors] = useState([]);
+  const [textValue, setTextValue] = useState("");
 
   const messages = chatData?.messages;
   const members = chatData?.members;
@@ -138,6 +139,10 @@ const Chat = () => {
     fetchMessages();
   }, [chatId, user]);
 
+  function handleTextInput(event) {
+    setTextValue(event.target.value);
+  }
+
   return (
     <>
       <header className={styles.chatHeader}>
@@ -167,8 +172,25 @@ const Chat = () => {
           />
         ))}
       </ul>
-      <div className={styles.messageFormContainer}>
-        <form method="POST" className={styles.messageForm}>
+      <form method="POST" className={styles.messageForm}>
+        <div>
+          <label htmlFor="message" className="visually-hidden">
+            Write a message
+          </label>
+          <div className={styles.growWrap}>
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Write a message"
+              required
+              className={styles.textInput}
+              onInput={handleTextInput}
+              value={textValue}
+              data-replicated-value={textValue}
+            ></textarea>
+          </div>
+        </div>
+        <div className={styles.messageButtons}>
           <button
             type="button"
             aria-label="Add image"
@@ -176,26 +198,15 @@ const Chat = () => {
           >
             <span className="material-symbols-outlined">image</span>
           </button>
-          <label htmlFor="message" className="visually-hidden">
-            Write a message
-          </label>
-          <input
-            type="text"
-            id="message"
-            name="message"
-            placeholder="Write a message"
-            required
-            className={styles.textInput}
-          />
           <button
             type="submit"
             className={styles.submitButton}
             aria-label="Send message"
           >
-            <span className="material-symbols-outlined">send</span>
+            <span className="material-symbols-outlined">send</span> Send
           </button>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };
