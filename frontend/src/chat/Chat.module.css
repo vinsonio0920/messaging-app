@@ -46,7 +46,7 @@ html:has(.chatHeader) {
 .messagesUl {
   padding: 1.25rem clamp(1rem, 4vw, 2rem) 10rem clamp(1rem, 4vw, 2rem);
   /* vh - main content margin - chatHeader height  */
-  max-height: calc(100vh - 2.5rem - 4.1rem);
+  max-height: calc(100vh - 2.5rem - 4.5rem);
   overflow: auto;
 }
 

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useOutletContext, useParams } from "react-router";
 import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
@@ -102,10 +102,19 @@ const Chat = () => {
   const [chatData, setChatData] = useState(null);
   const [errors, setErrors] = useState([]);
   const [textValue, setTextValue] = useState("");
+  const [ulPaddingBottom, setUlPaddingBottom] = useState(0);
+  const messageFormRef = useRef(null);
+  const messagesRef = useRef(null);
 
   const messages = chatData?.messages;
   const members = chatData?.members;
   const otherUser = members?.find((member) => member.id !== user.id);
+
+  function scrollToBottom(behavior = "smooth") {
+    const element = messagesRef.current;
+    if (!element) return;
+    element.scrollTo({ top: element.scrollHeight, behavior });
+  }
 
   useEffect(() => {
     if (!user) return;
@@ -139,6 +148,19 @@ const Chat = () => {
     fetchMessages();
   }, [chatId, user]);
 
+  useEffect(() => {
+    // auto scroll to bottom (newest and message form)
+    scrollToBottom("auto");
+  }, []);
+
+  useLayoutEffect(() => {
+    // When the message text is updated, get the updated height
+    // If it has a new line then it will add extra padding to the bottom
+    // to accommodate the message form and show all messages
+    setUlPaddingBottom(messageFormRef.current.clientHeight);
+    scrollToBottom();
+  }, [textValue, messages?.length]);
+
   function handleTextInput(event) {
     setTextValue(event.target.value);
   }
@@ -159,7 +181,11 @@ const Chat = () => {
           Chatting since {chatData && formatChatDate(chatData.date)}
         </p>
       </header>
-      <ul className={styles.messagesUl}>
+      <ul
+        className={styles.messagesUl}
+        style={{ paddingBottom: `${ulPaddingBottom + 32}px` }}
+        ref={messagesRef}
+      >
         {messages?.map((message, index, array) => (
           <Message
             key={message.id}
@@ -172,7 +198,7 @@ const Chat = () => {
           />
         ))}
       </ul>
-      <form method="POST" className={styles.messageForm}>
+      <form method="POST" className={styles.messageForm} ref={messageFormRef}>
         <div>
           <label htmlFor="message" className="visually-hidden">
             Write a message
