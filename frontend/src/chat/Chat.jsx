@@ -165,6 +165,14 @@ const Chat = () => {
     setTextValue(event.target.value);
   }
 
+  if (errors.includes("messages")) {
+    return (
+      <div className={styles.messagesErrorContainer}>
+        <p>There was an error getting the chat. Please try again later.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <header className={styles.chatHeader}>

@@ -338,6 +338,23 @@ html:has(.chatHeader) {
   }
 }
 
+/* errors */
+
+.messagesErrorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  padding: 1rem;
+}
+
+.messagesErrorContainer p {
+  color: #ff0000;
+  width: 90%;
+  margin-bottom: 3rem;
+}
+
 @media (min-width: 500px) {
   .messagesUl {
     padding: 1.25rem clamp(1rem, 4vw, 2rem) 8rem clamp(1rem, 4vw, 2rem);
