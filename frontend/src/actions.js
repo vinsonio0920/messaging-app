@@ -68,4 +68,25 @@ const signInAction = async ({ request }) => {
   }
 };
 
-export { signUpAction, signInAction };
+const chatAction = async ({ request }) => {
+  const formData = Object.fromEntries(await request.formData());
+  const url = `${import.meta.env.VITE_SERVER_URL}/chats/${formData.chatId}/create`;
+
+  try {
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+      },
+      body: new URLSearchParams(formData),
+    });
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export { signUpAction, signInAction, chatAction };

@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { useOutletContext, useParams } from "react-router";
+import { useFetcher, useOutletContext, useParams } from "react-router";
 import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
 
@@ -98,6 +98,7 @@ const Message = ({ message, members, index, array, user, otherUser }) => {
 // also sort messages by date desc!
 const Chat = () => {
   const user = useOutletContext();
+  const fetcher = useFetcher();
   const { chatId } = useParams();
   const [chatData, setChatData] = useState(null);
   const [errors, setErrors] = useState([]);
@@ -146,7 +147,7 @@ const Chat = () => {
     }
 
     fetchMessages();
-  }, [chatId, user]);
+  }, [chatId, user, fetcher.data]);
 
   useEffect(() => {
     // auto scroll to bottom (newest and message form)
@@ -158,8 +159,11 @@ const Chat = () => {
     // If it has a new line then it will add extra padding to the bottom
     // to accommodate the message form and show all messages
     setUlPaddingBottom(messageFormRef.current.clientHeight);
+  }, [textValue]);
+
+  useLayoutEffect(() => {
     scrollToBottom();
-  }, [textValue, messages?.length]);
+  }, [messages?.length]);
 
   function handleTextInput(event) {
     setTextValue(event.target.value);
@@ -206,7 +210,11 @@ const Chat = () => {
           />
         ))}
       </ul>
-      <form method="POST" className={styles.messageForm} ref={messageFormRef}>
+      <fetcher.Form
+        method="POST"
+        className={styles.messageForm}
+        ref={messageFormRef}
+      >
         <div>
           <label htmlFor="message" className="visually-hidden">
             Write a message
@@ -224,6 +232,15 @@ const Chat = () => {
             ></textarea>
           </div>
         </div>
+        <div>
+          <input type="hidden" id="chatId" name="chatId" value={chatId} />
+          <input
+            type="hidden"
+            id="userId"
+            name="userId"
+            value={`${user?.id}`}
+          />
+        </div>
         <div className={styles.messageButtons}>
           <button
             type="button"
@@ -240,7 +257,7 @@ const Chat = () => {
             <span className="material-symbols-outlined">send</span> Send
           </button>
         </div>
-      </form>
+      </fetcher.Form>
     </>
   );
 };

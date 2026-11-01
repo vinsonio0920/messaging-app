@@ -147,6 +147,11 @@ html:has(.chatHeader) {
   text-align: end;
 }
 
+.isUsersMessage:not(.groupedMessage) .messageContent {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .isUsersMessage p {
   /* profile picture width + margin */
   margin: 0 calc(-2.5rem - 0.75rem) 0 0;

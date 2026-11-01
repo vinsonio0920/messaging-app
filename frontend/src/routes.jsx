@@ -1,4 +1,4 @@
-import { signInAction, signUpAction } from "./actions.js";
+import { chatAction, signInAction, signUpAction } from "./actions.js";
 import { App } from "./App.jsx";
 import { Chat } from "./chat/Chat.jsx";
 import { ErrorPage } from "./errorPage/errorPage.jsx";
@@ -19,6 +19,7 @@ const routes = [
       {
         path: "/chats/:chatId",
         element: <Chat />,
+        action: chatAction,
       },
     ],
   },
