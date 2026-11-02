@@ -104,12 +104,21 @@ const Chat = () => {
   const [errors, setErrors] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [ulPaddingBottom, setUlPaddingBottom] = useState(0);
+  const [image, setImage] = useState(null);
   const messageFormRef = useRef(null);
   const messagesRef = useRef(null);
 
   const messages = chatData?.messages;
   const members = chatData?.members;
   const otherUser = members?.find((member) => member.id !== user.id);
+  let formError = null;
+  if (errors.includes("fileType")) {
+    formError = "Only image files are accepted";
+  } else if (errors.includes("fileSize")) {
+    formError = "File must not exceed 2 MB";
+  } else if (errors.includes("reader")) {
+    formError = "There was an error reading the file. Please try again later.";
+  }
 
   function scrollToBottom(behavior = "smooth") {
     const element = messagesRef.current;
@@ -152,14 +161,14 @@ const Chat = () => {
   useEffect(() => {
     // auto scroll to bottom (newest and message form)
     scrollToBottom("auto");
-  }, []);
+  }, [chatData]);
 
   useLayoutEffect(() => {
     // When the message text is updated, get the updated height
     // If it has a new line then it will add extra padding to the bottom
     // to accommodate the message form and show all messages
     setUlPaddingBottom(messageFormRef.current.clientHeight);
-  }, [textValue]);
+  }, [textValue, image]);
 
   useLayoutEffect(() => {
     scrollToBottom();
@@ -167,6 +176,25 @@ const Chat = () => {
 
   function handleTextInput(event) {
     setTextValue(event.target.value);
+  }
+
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+
+    if (!file.type.startsWith("image"))
+      return setErrors((prevState) => [...prevState, "fileType"]);
+    if (file.size > 2097152)
+      return setErrors((prevState) => [...prevState, "fileSize"]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+    reader.onerror = () => {
+      setErrors((prevState) => [...prevState, "reader"]);
+    };
+
+    reader.readAsDataURL(file);
   }
 
   if (errors.includes("messages")) {
@@ -242,13 +270,31 @@ const Chat = () => {
           />
         </div>
         <div className={styles.messageButtons}>
-          <button
-            type="button"
-            aria-label="Add image"
-            className={styles.imageButton}
-          >
-            <span className="material-symbols-outlined">image</span>
-          </button>
+          <div>
+            <label
+              htmlFor="image"
+              aria-label="Add image"
+              className={styles.imageLabel}
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt="Attached image"
+                  className={styles.formImage}
+                />
+              ) : (
+                <span className="material-symbols-outlined">image</span>
+              )}
+            </label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className={styles.imageInput}
+            />
+          </div>
           <button
             type="submit"
             className={styles.submitButton}
@@ -256,6 +302,9 @@ const Chat = () => {
           >
             <span className="material-symbols-outlined">send</span> Send
           </button>
+        </div>
+        <div className={styles.formErrorContainer}>
+          {formError && <p className={styles.error}>{formError}</p>}
         </div>
       </fetcher.Form>
     </>

@@ -257,19 +257,62 @@ html:has(.chatHeader) {
   font-size: 1.5rem;
 }
 
-.messageForm .imageButton {
+.messageForm .imageLabel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: transparent;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 10px;
 }
 
-.messageForm .imageButton:hover {
+.messageForm .imageLabel:hover {
+  cursor: pointer;
   background-color: #eaeaea;
 }
 
-.messageForm .imageButton:active {
+.messageForm .imageLabel:active {
   background-color: #e3e3e3;
+}
+
+.messageForm .imageLabel:has(.formImage) {
+  width: 5rem;
+  height: 5rem;
+}
+
+.messageForm .formImage {
+  display: block;
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+  border: 1px solid #ededed;
+}
+
+.messageForm .imageLabel:has(.formImage):hover:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  width: 100%;
+  height: 100%;
+}
+
+.messageForm .imageLabel:has(.formImage):active:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.15);
+  width: 100%;
+  height: 100%;
+}
+
+.messageForm .imageInput {
+  display: none;
 }
 
 .messageForm .submitButton {
@@ -358,6 +401,12 @@ html:has(.chatHeader) {
   color: #ff0000;
   width: 90%;
   margin-bottom: 3rem;
+}
+
+.formErrorContainer p {
+  color: #ff0000;
+  margin: 0.25rem 0;
+  height: fit-content;
 }
 
 @media (min-width: 500px) {
