@@ -105,6 +105,7 @@ const Chat = () => {
   const [textValue, setTextValue] = useState("");
   const [ulPaddingBottom, setUlPaddingBottom] = useState(0);
   const [image, setImage] = useState(null);
+  const [imageKey, setImageKey] = useState(crypto.randomUUID());
   const messageFormRef = useRef(null);
   const messagesRef = useRef(null);
 
@@ -112,12 +113,20 @@ const Chat = () => {
   const members = chatData?.members;
   const otherUser = members?.find((member) => member.id !== user.id);
   let formError = null;
+  let disableSend = true;
+
   if (errors.includes("fileType")) {
     formError = "Only image files are accepted";
   } else if (errors.includes("fileSize")) {
     formError = "File must not exceed 2 MB";
   } else if (errors.includes("reader")) {
-    formError = "There was an error reading the file. Please try again later.";
+    formError = "There was an error reading the file. Please try again later";
+  } else if (fetcher.data?.status === "error") {
+    formError = fetcher.data.errors[0].message;
+  }
+
+  if (image || textValue.length > 0) {
+    disableSend = false;
   }
 
   function scrollToBottom(behavior = "smooth") {
@@ -197,6 +206,12 @@ const Chat = () => {
     reader.readAsDataURL(file);
   }
 
+  function handleImageRemoveClick() {
+    // update the file input's key so that it will force a re-render and reset the input
+    setImageKey(crypto.randomUUID());
+    setImage(null);
+  }
+
   if (errors.includes("messages")) {
     return (
       <div className={styles.messagesErrorContainer}>
@@ -242,6 +257,8 @@ const Chat = () => {
         method="POST"
         className={styles.messageForm}
         ref={messageFormRef}
+        encType="multipart/form-data"
+        noValidate
       >
         <div>
           <label htmlFor="message" className="visually-hidden">
@@ -271,21 +288,33 @@ const Chat = () => {
         </div>
         <div className={styles.messageButtons}>
           <div>
-            <label
-              htmlFor="image"
-              aria-label="Add image"
-              className={styles.imageLabel}
-            >
-              {image ? (
-                <img
-                  src={image}
-                  alt="Attached image"
-                  className={styles.formImage}
-                />
-              ) : (
-                <span className="material-symbols-outlined">image</span>
+            <div className={styles.imageContainer}>
+              <label
+                htmlFor="image"
+                aria-label="Add image"
+                className={styles.imageLabel}
+              >
+                {image ? (
+                  <img
+                    src={image}
+                    alt="Attached image"
+                    className={styles.formImage}
+                  />
+                ) : (
+                  <span className="material-symbols-outlined">image</span>
+                )}
+              </label>
+              {image && (
+                <button
+                  type="button"
+                  className={styles.imageRemove}
+                  aria-label="Remove image"
+                  onClick={handleImageRemoveClick}
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
               )}
-            </label>
+            </div>
             <input
               type="file"
               id="image"
@@ -293,12 +322,14 @@ const Chat = () => {
               accept="image/*"
               onChange={handleImageChange}
               className={styles.imageInput}
+              key={imageKey}
             />
           </div>
           <button
             type="submit"
             className={styles.submitButton}
             aria-label="Send message"
+            disabled={disableSend}
           >
             <span className="material-symbols-outlined">send</span> Send
           </button>

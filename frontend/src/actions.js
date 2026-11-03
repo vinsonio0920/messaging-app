@@ -69,8 +69,12 @@ const signInAction = async ({ request }) => {
 };
 
 const chatAction = async ({ request }) => {
-  const formData = Object.fromEntries(await request.formData());
-  const url = `${import.meta.env.VITE_SERVER_URL}/chats/${formData.chatId}/create`;
+  const formData = await request.formData();
+  const formDataObject = Object.fromEntries(formData);
+  console.log("b");
+  const url = `${import.meta.env.VITE_SERVER_URL}/chats/${formDataObject.chatId}/create`;
+
+  console.log(formData);
 
   try {
     const response = await fetch(url, {
@@ -78,7 +82,7 @@ const chatAction = async ({ request }) => {
       headers: {
         Authorization: "Bearer " + localStorage.getItem("jwtToken"),
       },
-      body: new URLSearchParams(formData),
+      body: formData,
     });
 
     const result = await response.json();
