@@ -71,10 +71,7 @@ const signInAction = async ({ request }) => {
 const chatAction = async ({ request }) => {
   const formData = await request.formData();
   const formDataObject = Object.fromEntries(formData);
-  console.log("b");
   const url = `${import.meta.env.VITE_SERVER_URL}/chats/${formDataObject.chatId}/create`;
-
-  console.log(formData);
 
   try {
     const response = await fetch(url, {

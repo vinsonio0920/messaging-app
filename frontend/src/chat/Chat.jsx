@@ -3,6 +3,157 @@ import { useFetcher, useOutletContext, useParams } from "react-router";
 import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
 
+const MessageForm = ({
+  fetcher,
+  messageFormRef,
+  errors,
+  setErrors,
+  setUlPaddingBottom,
+  chatId,
+  user,
+}) => {
+  const [textValue, setTextValue] = useState("");
+  const [image, setImage] = useState(null);
+  const [imageKey, setImageKey] = useState(crypto.randomUUID());
+
+  let formError = null;
+  let disableSend = true;
+
+  if (errors.includes("fileType")) {
+    formError = "Only image files are accepted";
+  } else if (errors.includes("fileSize")) {
+    formError = "File must not exceed 2 MB";
+  } else if (errors.includes("reader")) {
+    formError = "There was an error reading the file. Please try again later";
+  } else if (fetcher.data?.status === "error") {
+    formError = fetcher.data.errors[0].message;
+  }
+
+  if (image || textValue.length > 0) {
+    disableSend = false;
+  }
+
+  useLayoutEffect(() => {
+    // When the message text is updated, get the updated height
+    // If it has a new line then it will add extra padding to the bottom
+    // to accommodate the message form and show all messages
+    setUlPaddingBottom(messageFormRef.current.clientHeight);
+  }, [textValue, image, messageFormRef, setUlPaddingBottom]);
+
+  function handleTextInput(event) {
+    setTextValue(event.target.value);
+  }
+
+  function handleImageChange(event) {
+    const file = event.target.files[0];
+
+    if (!file.type.startsWith("image"))
+      return setErrors((prevState) => [...prevState, "fileType"]);
+    if (file.size > 2097152)
+      return setErrors((prevState) => [...prevState, "fileSize"]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setImage(e.target.result);
+    };
+    reader.onerror = () => {
+      setErrors((prevState) => [...prevState, "reader"]);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function handleImageRemoveClick() {
+    // update the file input's key so that it will force a re-render and reset the input
+    setImageKey(crypto.randomUUID());
+    setImage(null);
+  }
+
+  return (
+    <fetcher.Form
+      method="POST"
+      className={styles.messageForm}
+      ref={messageFormRef}
+      encType="multipart/form-data"
+      noValidate
+    >
+      <div>
+        <label htmlFor="message" className="visually-hidden">
+          Write a message
+        </label>
+        <div className={styles.growWrap}>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Write a message"
+            required
+            className={styles.textInput}
+            onInput={handleTextInput}
+            value={textValue}
+            data-replicated-value={textValue}
+            autoFocus
+          ></textarea>
+        </div>
+      </div>
+      <div>
+        <input type="hidden" id="chatId" name="chatId" value={chatId} />
+        <input type="hidden" id="userId" name="userId" value={`${user?.id}`} />
+      </div>
+      <div className={styles.messageButtons}>
+        <div>
+          <div className={styles.imageContainer}>
+            <label
+              htmlFor="image"
+              aria-label="Add image"
+              className={styles.imageLabel}
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt="Attached image"
+                  className={styles.formImage}
+                />
+              ) : (
+                <span className="material-symbols-outlined">image</span>
+              )}
+            </label>
+            {image && (
+              <button
+                type="button"
+                className={styles.imageRemove}
+                aria-label="Remove image"
+                onClick={handleImageRemoveClick}
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            )}
+          </div>
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            className={styles.imageInput}
+            key={imageKey}
+          />
+        </div>
+        <button
+          type="submit"
+          className={styles.submitButton}
+          aria-label="Send message"
+          disabled={disableSend}
+        >
+          <span className="material-symbols-outlined">send</span> Send
+        </button>
+      </div>
+      <div className={styles.formErrorContainer}>
+        {formError && <p className={styles.error}>{formError}</p>}
+      </div>
+    </fetcher.Form>
+  );
+};
+
 const Message = ({ message, members, index, array, user, otherUser }) => {
   const previousMessage = array[index - 1];
   // checks if the message belongs the user (person using the website)
@@ -102,32 +253,13 @@ const Chat = () => {
   const { chatId } = useParams();
   const [chatData, setChatData] = useState(null);
   const [errors, setErrors] = useState([]);
-  const [textValue, setTextValue] = useState("");
   const [ulPaddingBottom, setUlPaddingBottom] = useState(0);
-  const [image, setImage] = useState(null);
-  const [imageKey, setImageKey] = useState(crypto.randomUUID());
   const messageFormRef = useRef(null);
   const messagesRef = useRef(null);
 
   const messages = chatData?.messages;
   const members = chatData?.members;
   const otherUser = members?.find((member) => member.id !== user.id);
-  let formError = null;
-  let disableSend = true;
-
-  if (errors.includes("fileType")) {
-    formError = "Only image files are accepted";
-  } else if (errors.includes("fileSize")) {
-    formError = "File must not exceed 2 MB";
-  } else if (errors.includes("reader")) {
-    formError = "There was an error reading the file. Please try again later";
-  } else if (fetcher.data?.status === "error") {
-    formError = fetcher.data.errors[0].message;
-  }
-
-  if (image || textValue.length > 0) {
-    disableSend = false;
-  }
 
   function scrollToBottom(behavior = "smooth") {
     const element = messagesRef.current;
@@ -173,44 +305,8 @@ const Chat = () => {
   }, [chatData]);
 
   useLayoutEffect(() => {
-    // When the message text is updated, get the updated height
-    // If it has a new line then it will add extra padding to the bottom
-    // to accommodate the message form and show all messages
-    setUlPaddingBottom(messageFormRef.current.clientHeight);
-  }, [textValue, image]);
-
-  useLayoutEffect(() => {
     scrollToBottom();
   }, [messages?.length]);
-
-  function handleTextInput(event) {
-    setTextValue(event.target.value);
-  }
-
-  function handleImageChange(event) {
-    const file = event.target.files[0];
-
-    if (!file.type.startsWith("image"))
-      return setErrors((prevState) => [...prevState, "fileType"]);
-    if (file.size > 2097152)
-      return setErrors((prevState) => [...prevState, "fileSize"]);
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      setImage(e.target.result);
-    };
-    reader.onerror = () => {
-      setErrors((prevState) => [...prevState, "reader"]);
-    };
-
-    reader.readAsDataURL(file);
-  }
-
-  function handleImageRemoveClick() {
-    // update the file input's key so that it will force a re-render and reset the input
-    setImageKey(crypto.randomUUID());
-    setImage(null);
-  }
 
   if (errors.includes("messages")) {
     return (
@@ -253,91 +349,16 @@ const Chat = () => {
           />
         ))}
       </ul>
-      <fetcher.Form
-        method="POST"
-        className={styles.messageForm}
-        ref={messageFormRef}
-        encType="multipart/form-data"
-        noValidate
-      >
-        <div>
-          <label htmlFor="message" className="visually-hidden">
-            Write a message
-          </label>
-          <div className={styles.growWrap}>
-            <textarea
-              id="message"
-              name="message"
-              placeholder="Write a message"
-              required
-              className={styles.textInput}
-              onInput={handleTextInput}
-              value={textValue}
-              data-replicated-value={textValue}
-            ></textarea>
-          </div>
-        </div>
-        <div>
-          <input type="hidden" id="chatId" name="chatId" value={chatId} />
-          <input
-            type="hidden"
-            id="userId"
-            name="userId"
-            value={`${user?.id}`}
-          />
-        </div>
-        <div className={styles.messageButtons}>
-          <div>
-            <div className={styles.imageContainer}>
-              <label
-                htmlFor="image"
-                aria-label="Add image"
-                className={styles.imageLabel}
-              >
-                {image ? (
-                  <img
-                    src={image}
-                    alt="Attached image"
-                    className={styles.formImage}
-                  />
-                ) : (
-                  <span className="material-symbols-outlined">image</span>
-                )}
-              </label>
-              {image && (
-                <button
-                  type="button"
-                  className={styles.imageRemove}
-                  aria-label="Remove image"
-                  onClick={handleImageRemoveClick}
-                >
-                  <span className="material-symbols-outlined">close</span>
-                </button>
-              )}
-            </div>
-            <input
-              type="file"
-              id="image"
-              name="image"
-              accept="image/*"
-              onChange={handleImageChange}
-              className={styles.imageInput}
-              key={imageKey}
-            />
-          </div>
-          <button
-            type="submit"
-            className={styles.submitButton}
-            aria-label="Send message"
-            disabled={disableSend}
-          >
-            <span className="material-symbols-outlined">send</span> Send
-          </button>
-        </div>
-        <div className={styles.formErrorContainer}>
-          {formError && <p className={styles.error}>{formError}</p>}
-        </div>
-      </fetcher.Form>
+      <MessageForm
+        key={fetcher.data?.data?.id ?? "initial"}
+        fetcher={fetcher}
+        messageFormRef={messageFormRef}
+        errors={errors}
+        setErrors={setErrors}
+        setUlPaddingBottom={setUlPaddingBottom}
+        chatId={chatId}
+        user={user}
+      />
     </>
   );
 };
