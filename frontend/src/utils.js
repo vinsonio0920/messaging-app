@@ -76,9 +76,17 @@ function formatMessageDate(date) {
   }
 }
 
+async function base64ToFile(dataUrl, filename = "upload") {
+  const blob = await (await fetch(dataUrl)).blob();
+  const ext = blob.type.split("/")[1] || "png";
+
+  return new File([blob], `${filename}.${ext}`, { type: blob.type });
+}
+
 export {
   compareUsersList,
   sortPendingAcceptance,
   formatChatDate,
   formatMessageDate,
+  base64ToFile,
 };

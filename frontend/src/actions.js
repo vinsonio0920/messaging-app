@@ -1,4 +1,5 @@
 import { redirect } from "react-router";
+import { base64ToFile } from "./utils";
 
 const signUpAction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
@@ -70,8 +71,16 @@ const signInAction = async ({ request }) => {
 
 const chatAction = async ({ request }) => {
   const formData = await request.formData();
-  const formDataObject = Object.fromEntries(formData);
-  const url = `${import.meta.env.VITE_SERVER_URL}/chats/${formDataObject.chatId}/create`;
+  const chatId = formData.get("chatId");
+  const url = `${import.meta.env.VITE_SERVER_URL}/chats/${chatId}/create`;
+
+  // turn base64 image to file
+  const base64Image = formData.get("image");
+  if (typeof base64Image === "string" && base64Image.startsWith("data:")) {
+    formData.set("image", await base64ToFile(base64Image));
+  }
+  // remove unnecessary imageInput field
+  formData.delete("imageInput");
 
   try {
     const response = await fetch(url, {

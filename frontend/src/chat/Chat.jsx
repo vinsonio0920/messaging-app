@@ -12,9 +12,26 @@ const MessageForm = ({
   chatId,
   user,
 }) => {
-  const [textValue, setTextValue] = useState("");
-  const [image, setImage] = useState(null);
+  const [textValue, setTextValue] = useState(
+    localStorage.getItem(`formTextValue${chatId}`) ?? "",
+  );
+  const [image, setImage] = useState(
+    localStorage.getItem(`formImage${chatId}`) ?? null,
+  );
   const [imageKey, setImageKey] = useState(crypto.randomUUID());
+  const [prevData, setPrevData] = useState(null);
+
+  // Reset the form on a successful submit
+  if (fetcher.data !== prevData) {
+    setPrevData(fetcher.data);
+    if (fetcher.data?.data) {
+      setTextValue("");
+      setImageKey(crypto.randomUUID());
+      setImage(null);
+      localStorage.removeItem(`formTextValue${chatId}`);
+      localStorage.removeItem(`formImage${chatId}`);
+    }
+  }
 
   let formError = null;
   let disableSend = true;
@@ -41,6 +58,7 @@ const MessageForm = ({
   }, [textValue, image, messageFormRef, setUlPaddingBottom]);
 
   function handleTextInput(event) {
+    localStorage.setItem(`formTextValue${chatId}`, event.target.value);
     setTextValue(event.target.value);
   }
 
@@ -54,6 +72,7 @@ const MessageForm = ({
 
     const reader = new FileReader();
     reader.onload = (e) => {
+      localStorage.setItem(`formImage${chatId}`, e.target.result);
       setImage(e.target.result);
     };
     reader.onerror = () => {
@@ -65,6 +84,7 @@ const MessageForm = ({
 
   function handleImageRemoveClick() {
     // update the file input's key so that it will force a re-render and reset the input
+    localStorage.removeItem(`formImage${chatId}`);
     setImageKey(crypto.randomUUID());
     setImage(null);
   }
@@ -98,12 +118,13 @@ const MessageForm = ({
       <div>
         <input type="hidden" id="chatId" name="chatId" value={chatId} />
         <input type="hidden" id="userId" name="userId" value={`${user?.id}`} />
+        <input type="hidden" id="image" name="image" value={image ?? ""} />
       </div>
       <div className={styles.messageButtons}>
         <div>
           <div className={styles.imageContainer}>
             <label
-              htmlFor="image"
+              htmlFor="imageInput"
               aria-label="Add image"
               className={styles.imageLabel}
             >
@@ -130,8 +151,8 @@ const MessageForm = ({
           </div>
           <input
             type="file"
-            id="image"
-            name="image"
+            id="imageInput"
+            name="imageInput"
             accept="image/*"
             onChange={handleImageChange}
             className={styles.imageInput}
@@ -350,7 +371,7 @@ const Chat = () => {
         ))}
       </ul>
       <MessageForm
-        key={fetcher.data?.data?.id ?? "initial"}
+        key={`${fetcher.data?.data?.id}${chatId}`}
         fetcher={fetcher}
         messageFormRef={messageFormRef}
         errors={errors}
