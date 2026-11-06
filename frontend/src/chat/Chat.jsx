@@ -22,6 +22,7 @@ const MessageForm = ({
   const [prevData, setPrevData] = useState(null);
 
   // Reset the form on a successful submit
+  // This works because fetcher.data persists between renders!
   if (fetcher.data !== prevData) {
     setPrevData(fetcher.data);
     if (fetcher.data?.data) {
@@ -205,24 +206,34 @@ const Message = ({ message, members, index, array, user, otherUser }) => {
           className={`${styles.profilePicture} visually-hidden`}
         />
         <div className={styles.messageRight}>
-          <div className={`${styles.messageMetadata} visually-hidden`}>
-            <p className={styles.username}>
-              {message.senderId === otherUser.id ? otherUser.username : "You"}
-            </p>
-            <span className={styles.messageDate}>
-              {formatMessageDate(message.date)}
-            </span>
-          </div>
-          <div className={styles.messageContent}>
-            {message.message && <p>{message.message}</p>}
-            {message.image && (
-              <img
-                src={message.image}
-                alt="Image file"
-                width="150"
-                className={styles.messageImage}
-              />
-            )}
+          <div>
+            <div>
+              <div className={`${styles.messageMetadata} visually-hidden`}>
+                <p className={styles.username}>
+                  {message.senderId === otherUser.id
+                    ? otherUser.username
+                    : "You"}
+                </p>
+                <span className={styles.messageDate}>
+                  {formatMessageDate(message.date)}
+                </span>
+              </div>
+              <div className={styles.messageContent}>
+                <div>
+                  {message.message && (
+                    <p className={styles.messageText}>{message.message}</p>
+                  )}
+                  {message.image && (
+                    <img
+                      src={message.image}
+                      alt="Image file"
+                      width="150"
+                      className={styles.messageImage}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </li>
@@ -241,24 +252,34 @@ const Message = ({ message, members, index, array, user, otherUser }) => {
           className={styles.profilePicture}
         />
         <div className={styles.messageRight}>
-          <div className={styles.messageMetadata}>
-            <p className={styles.username}>
-              {message.senderId === otherUser.id ? otherUser.username : "You"}
-            </p>
-            <span className={styles.messageDate}>
-              {formatMessageDate(message.date)}
-            </span>
-          </div>
-          <div className={styles.messageContent}>
-            {message.message && <p>{message.message}</p>}
-            {message.image && (
-              <img
-                src={message.image}
-                alt="Image file"
-                width="150"
-                className={styles.messageImage}
-              />
-            )}
+          <div>
+            <div>
+              <div className={styles.messageMetadata}>
+                <p className={styles.username}>
+                  {message.senderId === otherUser.id
+                    ? otherUser.username
+                    : "You"}
+                </p>
+                <span className={styles.messageDate}>
+                  {formatMessageDate(message.date)}
+                </span>
+              </div>
+              <div className={styles.messageContent}>
+                <div>
+                  {message.message && (
+                    <p className={styles.messageText}>{message.message}</p>
+                  )}
+                  {message.image && (
+                    <img
+                      src={message.image}
+                      alt="Image file"
+                      width="150"
+                      className={styles.messageImage}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </li>

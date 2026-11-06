@@ -61,7 +61,12 @@ html:has(.chatHeader) {
 }
 
 .messageLi .profilePicture {
+  flex-grow: 0;
   max-height: 2.5rem;
+}
+
+.messageRight {
+  width: 100%;
 }
 
 .messageRight > * {
@@ -78,6 +83,7 @@ html:has(.chatHeader) {
   display: flex;
   color: #3b3b3b;
   height: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 .messageMetadata .username {
@@ -93,6 +99,11 @@ html:has(.chatHeader) {
   min-width: 12.5rem;
 }
 
+.messageContent,
+.messageContent > div {
+  width: 100%;
+}
+
 .messageContent p {
   background-color: #f2f4f5;
   border-radius: 10px;
@@ -103,6 +114,12 @@ html:has(.chatHeader) {
   margin: 0 0 0 calc(-2.5rem - 0.75rem);
 }
 
+/* Give empty paragraphs a line height too */
+.messageContent p::after {
+  content: "\200B";
+  visibility: hidden;
+}
+
 .messageContent:has(.messageImage) p {
   margin-bottom: 0.5rem;
 }
@@ -110,14 +127,14 @@ html:has(.chatHeader) {
 .messageImage {
   display: block;
   border-radius: 10px;
-  width: fit-content;
-  max-width: 18rem;
+  width: auto !important;
+  width: 100%;
+  max-width: 20rem;
   max-height: 15rem;
   box-shadow:
     rgba(0, 0, 0, 0.05) 0px 0px 5px 0px,
     rgba(0, 0, 0, 0.05) 0px 0px 1px 0px;
-  /* profile picture width + margin */
-  margin: 0 0 0 calc(-2.5rem - 0.75rem);
+  margin-left: -3.25rem;
 }
 
 /* User's messages */
@@ -155,6 +172,10 @@ html:has(.chatHeader) {
 .isUsersMessage p {
   /* profile picture width + margin */
   margin: 0 calc(-2.5rem - 0.75rem) 0 0;
+}
+
+.isUsersMessage .messageText {
+  margin-left: auto !important;
 }
 
 .isUsersMessage .messageContent p {
@@ -407,6 +428,11 @@ html:has(.chatHeader) {
     margin-top: 0;
   }
 
+  .isUsersMessage .messageRight > div {
+    display: flex;
+    justify-content: flex-end;
+  }
+
   .messageMetadata {
     align-items: center;
     height: auto;
@@ -427,6 +453,10 @@ html:has(.chatHeader) {
   }
 
   .messageImage {
+    margin: 0;
+  }
+
+  .isUsersMessage .messageImage {
     margin: 0 0 0 auto !important;
   }
 }
