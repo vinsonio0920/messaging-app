@@ -101,6 +101,11 @@ function App() {
     setShowFormOverlay(true);
   }
 
+  function handleSidebarLiClick() {
+    setShowSidebarOverlay(false);
+    setShowSidebar(false);
+  }
+
   async function handleSignOutClick() {
     const url = `${import.meta.env.VITE_SERVER_URL}/sign-out`;
 
@@ -143,7 +148,11 @@ function App() {
       >
         <ul>
           <li className={styles.logoLi}>
-            <Link to="/" className={styles.logoLink}>
+            <Link
+              to="/"
+              className={styles.logoLink}
+              onClick={handleSidebarLiClick}
+            >
               <img src={logoSvg} width="40" height="40" alt="Logo" />
               <span className={styles.sidebarText}>Message</span>
             </Link>
@@ -165,7 +174,7 @@ function App() {
           </li>
           <li className={styles.messagesParentLi}>
             <ul className={styles.messagesUl}>
-              <li>
+              <li onClick={handleSidebarLiClick}>
                 <Link to="/" className={styles.homeLink}>
                   <span
                     className={`material-symbols-outlined ${styles.homeIcon}`}
@@ -194,7 +203,7 @@ function App() {
                       (member) => member.id !== user.id,
                     )[0];
                     return (
-                      <li key={userInfo.id}>
+                      <li key={userInfo.id} onClick={handleSidebarLiClick}>
                         <Link to={`/chats/${chat.id}`}>
                           <img
                             src={userInfo.profile}

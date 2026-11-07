@@ -19,6 +19,7 @@ html:has(.chatHeader) {
 
 .profilePicture {
   width: 2.5rem;
+  height: 2.5rem;
   max-height: 2.5rem;
   display: block;
   background-color: #eeeeee;

@@ -202,7 +202,7 @@
 }
 
 .navbar.showSidebar .profileLi img {
-  width: calc(40px + 0.5rem);
+  padding: 0;
 }
 
 .profileContainer {
