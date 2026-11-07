@@ -115,9 +115,13 @@ html:has(.chatHeader) {
 }
 
 /* Give empty paragraphs a line height too */
-.messageContent p::after {
+.messageContent span::after {
   content: "\200B";
   visibility: hidden;
+}
+
+.messageContent span {
+  display: block;
 }
 
 .messageContent:has(.messageImage) p {

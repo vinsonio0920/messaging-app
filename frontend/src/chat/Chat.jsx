@@ -1,7 +1,8 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useFetcher, useOutletContext, useParams } from "react-router";
-import styles from "./Chat.module.css";
 import { formatChatDate, formatMessageDate } from "../utils";
+import DOMPurify from "dompurify";
+import styles from "./Chat.module.css";
 
 const MessageForm = ({
   fetcher,
@@ -63,6 +64,19 @@ const MessageForm = ({
     setTextValue(event.target.value);
   }
 
+  function handleTextKeyDown(event) {
+    if (event.shiftKey && event.code === "Enter") {
+      // simply return as it's a newline
+      return;
+    } else if (event.code === "Enter") {
+      event.preventDefault();
+      const formData = new FormData(messageFormRef.current);
+      console.log(formData);
+      formData.set("message", textValue);
+      fetcher.submit(formData, { method: "POST" });
+    }
+  }
+
   function handleImageChange(event) {
     const file = event.target.files[0];
 
@@ -110,6 +124,7 @@ const MessageForm = ({
             required
             className={styles.textInput}
             onInput={handleTextInput}
+            onKeyDown={handleTextKeyDown}
             value={textValue}
             data-replicated-value={textValue}
             autoFocus
@@ -221,7 +236,12 @@ const Message = ({ message, members, index, array, user, otherUser }) => {
               <div className={styles.messageContent}>
                 <div>
                   {message.message && (
-                    <p className={styles.messageText}>{message.message}</p>
+                    <p className={styles.messageText}>
+                      {/* split the messages by newlines, then map them out */}
+                      {message.message.split("\r\n").map((text, index) => (
+                        <span key={index}>{DOMPurify.sanitize(text)}</span>
+                      ))}
+                    </p>
                   )}
                   {message.image && (
                     <img
@@ -267,7 +287,12 @@ const Message = ({ message, members, index, array, user, otherUser }) => {
               <div className={styles.messageContent}>
                 <div>
                   {message.message && (
-                    <p className={styles.messageText}>{message.message}</p>
+                    <p className={styles.messageText}>
+                      {/* split the messages by newlines, then map them out */}
+                      {message.message.split(/[\r\n]+/).map((text, index) => (
+                        <span key={index}>{DOMPurify.sanitize(text)}</span>
+                      ))}
+                    </p>
                   )}
                   {message.image && (
                     <img
