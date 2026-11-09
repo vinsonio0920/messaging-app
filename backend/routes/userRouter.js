@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   createFriendRequest,
   getAllUsers,
+  getUser,
   getUserFriend,
   getUserFriends,
   putUser,
@@ -12,6 +13,7 @@ import { upload } from "../lib/multer.js";
 const userRouter = Router();
 
 userRouter.get("/", getAllUsers);
+userRouter.get("/:userId", verifyToken, getUser);
 userRouter.put("/:userId", verifyToken, upload.single("profile"), putUser);
 userRouter.get("/:userId/friends", getUserFriends);
 userRouter.get("/:userId/friends/:friendId", verifyToken, getUserFriend);

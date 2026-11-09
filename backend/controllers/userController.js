@@ -28,6 +28,29 @@ async function getAllUsers(req, res, next) {
   }
 }
 
+async function getUser(req, res, next) {
+  // gets user info including email and password, so it must be secure!
+  const { userId } = req.params;
+
+  try {
+    const jwtToken = req.headers["authorization"].split(" ")[1];
+    const userIdMatches = jwtUserIdMatches(userId, jwtToken);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
+
+    const userInfo = await findUserById(userId);
+
+    return res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: userInfo,
+      errors: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function putUser(req, res, next) {
   // for now we just update the profile picture
   const { userId } = req.params;
@@ -199,6 +222,7 @@ async function createFriendRequest(req, res, next) {
 
 export {
   getAllUsers,
+  getUser,
   putUser,
   getUserFriends,
   getUserFriend,

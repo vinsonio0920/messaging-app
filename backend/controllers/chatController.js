@@ -77,7 +77,7 @@ async function postChatMessage(req, res, next) {
 
     // must have either a message or an image
     if (!message && !image)
-      throw new Error("A message or an image is required to post.");
+      throw new Error("A message or an image is required");
 
     if (image) {
       // upload image to supabase and get the image url
