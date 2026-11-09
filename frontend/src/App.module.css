@@ -177,6 +177,7 @@
 .createButton .createIcon,
 .dropdownButton .signInIcon,
 .profileDropdown .signOutIcon,
+.profileDropdown .settingsIcon,
 .chatsError .errorIcon {
   font-size: 2rem;
   margin-right: 0.75rem;
@@ -377,8 +378,24 @@
     font-size: 1.5rem;
   }
 
-  .profileDropdown .signOutIcon {
+  .profileDropdown .signOutIcon,
+  .profileDropdown .settingsIcon {
     margin-right: 0.75rem !important;
+  }
+
+  .profileDropdown .settingsLink {
+    justify-content: flex-start !important;
+    align-items: center;
+    font-weight: 400;
+    padding: 0.5rem;
+  }
+
+  .profileDropdown .settingsLink:hover {
+    background-color: #e6e6e6;
+  }
+
+  .profileDropdown .settingsLink:active {
+    background-color: #e9e9e9;
   }
 
   /* default styling */

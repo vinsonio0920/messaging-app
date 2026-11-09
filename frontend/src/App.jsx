@@ -282,6 +282,16 @@ function App() {
                       Sign out
                     </button>
                   </li>
+                  <li>
+                    <Link to="/settings" className={styles.settingsLink}>
+                      <span
+                        className={`material-symbols-outlined ${styles.settingsIcon}`}
+                      >
+                        settings
+                      </span>
+                      Settings
+                    </Link>
+                  </li>
                 </ul>
               </div>
             ) : (
