@@ -120,6 +120,8 @@ function App() {
         // remove jwtToken on localStorage and update user state
         localStorage.removeItem("jwtToken");
         setUser(false);
+
+        return handleSidebarClick();
       } else {
         console.error(result);
         return result;
@@ -283,7 +285,11 @@ function App() {
                     </button>
                   </li>
                   <li>
-                    <Link to="/settings" className={styles.settingsLink}>
+                    <Link
+                      to="/settings"
+                      className={styles.settingsLink}
+                      onClick={handleSidebarLiClick}
+                    >
                       <span
                         className={`material-symbols-outlined ${styles.settingsIcon}`}
                       >
@@ -298,6 +304,7 @@ function App() {
               <Link
                 to="/sign-in"
                 className={`${styles.dropdownButton} ${styles.notSignedInButton}`}
+                onClick={handleSidebarLiClick}
               >
                 <span
                   className={`material-symbols-outlined ${styles.signInIcon}`}

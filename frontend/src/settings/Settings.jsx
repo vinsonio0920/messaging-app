@@ -7,6 +7,7 @@ const Settings = () => {
   const user = useOutletContext();
   const [errors, setErrors] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     if (!user) return;
@@ -20,11 +21,11 @@ const Settings = () => {
             Authorization: "Bearer " + localStorage.getItem("jwtToken"),
           },
         });
-        console.log(response);
         const result = await response.json();
 
         if (result.status === "success") {
           setUserInfo(result.data);
+          setUsername(user?.username);
         } else {
           throw new Error("Error fetching the user info.");
         }
@@ -37,46 +38,59 @@ const Settings = () => {
     fetchUserInfo();
   }, [user]);
 
+  function handleUsernameChange(event) {
+    setUsername(event.target.value);
+  }
+
+  function handleImageChange(event) {}
+
   return (
-    <>
+    <div className={styles.settingsContainer}>
       <h1>Profile Settings</h1>
       <p>Update your picture and username</p>
       <form>
         <div>
           <div>
-            <div>
+            <div className={styles.fieldContainer}>
               <label htmlFor="username">Username</label>
               <input
                 id="username"
                 name="username"
                 type="text"
-                value={userInfo?.username ?? ""}
+                value={username}
                 required
                 minLength="3"
                 maxLength="64"
+                onChange={handleUsernameChange}
               />
             </div>
-            <div>
+            <div className={styles.fieldContainer}>
               <label htmlFor="email">Email</label>
-              <input
-                id="email"
-                name="email"
-                type="text"
-                value={userInfo?.email ?? ""}
-                required
-                readOnly
-              />
+              <div className={styles.readOnlyContainer}>
+                <input
+                  id="email"
+                  name="email"
+                  type="text"
+                  value={userInfo?.email ?? ""}
+                  required
+                  readOnly
+                  className={styles.readOnlyInput}
+                />
+              </div>
             </div>
-            <div>
+            <div className={styles.fieldContainer}>
               <label htmlFor="password">Password</label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                value={userInfo?.password ?? ""}
-                required
-                readOnly
-              />
+              <div className={styles.readOnlyContainer}>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={userInfo?.password ?? ""}
+                  required
+                  readOnly
+                  className={styles.readOnlyInput}
+                />
+              </div>
             </div>
           </div>
           <div className={styles.imageSection}>
@@ -84,18 +98,29 @@ const Settings = () => {
               src={userInfo?.profile}
               width="50"
               alt="Your profile picture"
-              className={styles}
+              className={styles.profilePicture}
             />
-            <label htmlFor="image">Upload a picture</label>
-            <input id="image" name="image" type="file" accept="image/*" />
+            <label htmlFor="image" className={styles.imageLabel}>
+              Upload a picture
+            </label>
+            <input
+              id="image"
+              name="image"
+              type="file"
+              accept="image/*"
+              className={`visually-hidden`}
+              onChange={handleImageChange}
+            />
           </div>
         </div>
         <div>
-          <button type="button">Reset changes</button>
+          <button type="button" className={styles.resetButton}>
+            Reset changes
+          </button>
           <button type="submit">Save changes</button>
         </div>
       </form>
-    </>
+    </div>
   );
 };
 

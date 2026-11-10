@@ -44,6 +44,15 @@ input.invalid {
   margin: 0 0 1rem 0;
 }
 
+.formContainer input,
+.formContainer button {
+  height: 2.75rem;
+}
+
+.formContainer button {
+  margin-top: 1.4rem !important;
+}
+
 .signInPara {
   text-align: center;
   margin-top: 1.5rem;
