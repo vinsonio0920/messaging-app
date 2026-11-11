@@ -1,5 +1,7 @@
 .settingsContainer {
+  max-height: 100%;
   padding: 1.25rem clamp(1rem, 4vw, 2rem);
+  overflow: auto;
 }
 
 .settingsContainer h1 {
@@ -18,13 +20,24 @@
 
 .settingsContainer input,
 .settingsContainer .readOnlyContainer::after {
-  max-width: 25rem;
+  width: 100%;
 }
 
 .settingsContainer input,
 .settingsContainer button,
 .imageLabel {
   height: 2.75rem;
+}
+
+.fieldsContainer {
+  display: flex;
+  flex-direction: column-reverse;
+  max-width: 30rem;
+  margin: 0 auto;
+}
+
+.fieldContainer {
+  margin-bottom: 1.5rem;
 }
 
 .readOnlyContainer {
@@ -44,17 +57,17 @@
   opacity: 0.05;
 }
 
-.fieldContainer {
-  margin-bottom: 1.5rem;
-}
-
 .profilePicture {
   display: block;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 50%;
   width: 100%;
-  max-width: 15rem;
+  max-width: 12.5rem;
   margin: 0 auto;
+}
+
+.imageSection {
+  margin-top: 1rem;
 }
 
 .imageLabel {
@@ -76,6 +89,12 @@
   background-color: #4d6ca5;
 }
 
+.buttonsContainer {
+  max-width: 30rem;
+  margin: 0 auto;
+  margin-top: 4rem;
+}
+
 .resetButton {
   font-size: 1rem;
   font-weight: 500;
@@ -93,4 +112,74 @@
 
 .resetButton:active {
   background-color: #626262;
+}
+
+@media (min-width: 500px) {
+  .buttonsContainer {
+    margin-top: 6rem;
+  }
+}
+
+@media (min-width: 800px) {
+  .settingsContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 2rem;
+  }
+
+  .settingsContainer input,
+  .readOnlyContainer::after {
+    max-width: 30rem;
+  }
+
+  .fieldsContainer {
+    flex-direction: row;
+    gap: 1.5rem;
+    max-width: 65rem;
+    margin-top: 10rem;
+  }
+
+  .fieldsContainer > * {
+    flex: 1;
+    margin: 0;
+  }
+
+  .fieldContainer:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .imageSection {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .imageLabel {
+    border: 1px solid #405989;
+    height: 3.5rem;
+    max-width: 15rem;
+    margin: 1.5rem auto 0 auto;
+    padding: 1rem 0.5rem;
+  }
+
+  .buttonsContainer {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    max-width: 30rem;
+    margin-top: 12.5rem;
+  }
+
+  .buttonsContainer button {
+    height: 3.5rem;
+    margin: 0 !important;
+  }
+}
+
+@media (min-width: 1000px) {
+  .buttonsContainer {
+    gap: 4rem;
+    max-width: 32.5rem;
+  }
 }

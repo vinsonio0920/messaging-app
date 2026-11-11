@@ -46,10 +46,12 @@ const Settings = () => {
 
   return (
     <div className={styles.settingsContainer}>
-      <h1>Profile Settings</h1>
-      <p>Update your picture and username</p>
-      <form>
-        <div>
+      <div>
+        <h1>Profile Settings</h1>
+        <p>Update your picture and username</p>
+      </div>
+      <form className={styles.settingsForm}>
+        <div className={styles.fieldsContainer}>
           <div>
             <div className={styles.fieldContainer}>
               <label htmlFor="username">Username</label>
@@ -113,7 +115,7 @@ const Settings = () => {
             />
           </div>
         </div>
-        <div>
+        <div className={styles.buttonsContainer}>
           <button type="button" className={styles.resetButton}>
             Reset changes
           </button>
