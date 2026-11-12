@@ -99,4 +99,32 @@ const chatAction = async ({ request }) => {
   }
 };
 
-export { signUpAction, signInAction, chatAction };
+const settingsAction = async ({ request }) => {
+  const formData = await request.formData();
+  const userId = formData.get("userId");
+  const url = `${import.meta.env.VITE_SERVER_URL}/users/${userId}`;
+
+  // turn base64 image to file
+  const base64Image = formData.get("profile");
+  if (typeof base64Image === "string" && base64Image.startsWith("data:")) {
+    formData.set("profile", await base64ToFile(base64Image));
+  }
+
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+      },
+      body: formData,
+    });
+
+    const result = await response.json();
+
+    return result;
+  } catch (error) {
+    console.error(error.message);
+  }
+};
+
+export { signUpAction, signInAction, chatAction, settingsAction };

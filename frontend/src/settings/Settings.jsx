@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import styles from "./Settings.module.css";
 import { useFetcher, useOutletContext } from "react-router";
 
+// after we are done adding functionality we should also show the unhashed password as well, with a checkbox to show the password!
+// also add error handling!
+
 const Settings = () => {
   const fetcher = useFetcher();
   const user = useOutletContext();
   const [errors, setErrors] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
   const [username, setUsername] = useState("");
+  const [profile, setProfile] = useState(null);
 
   useEffect(() => {
     if (!user) return;
@@ -26,6 +30,7 @@ const Settings = () => {
         if (result.status === "success") {
           setUserInfo(result.data);
           setUsername(user?.username);
+          setProfile(user?.profile);
         } else {
           throw new Error("Error fetching the user info.");
         }
@@ -42,7 +47,30 @@ const Settings = () => {
     setUsername(event.target.value);
   }
 
-  function handleImageChange(event) {}
+  function handleProfileChange(event) {
+    const file = event.target.files[0];
+
+    if (!file.type.startsWith("image"))
+      return setErrors((prevState) => [...prevState, "fileType"]);
+    if (file.size > 2097152)
+      return setErrors((prevState) => [...prevState, "fileSize"]);
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setProfile(e.target.result);
+    };
+    reader.onerror = () => {
+      setErrors((prevState) => [...prevState, "reader"]);
+    };
+
+    reader.readAsDataURL(file);
+  }
+
+  function handleResetClick() {
+    // reset back to user's information
+    setUsername(user.username);
+    setProfile(user?.profile);
+  }
 
   return (
     <div className={styles.settingsContainer}>
@@ -50,7 +78,7 @@ const Settings = () => {
         <h1>Profile Settings</h1>
         <p>Update your picture and username</p>
       </div>
-      <form className={styles.settingsForm}>
+      <fetcher.Form method="PUT" className={styles.settingsForm}>
         <div className={styles.fieldsContainer}>
           <div>
             <div className={styles.fieldContainer}>
@@ -97,31 +125,49 @@ const Settings = () => {
           </div>
           <div className={styles.imageSection}>
             <img
-              src={userInfo?.profile}
+              src={profile}
               width="50"
               alt="Your profile picture"
               className={styles.profilePicture}
             />
-            <label htmlFor="image" className={styles.imageLabel}>
+            <label htmlFor="profileInput" className={styles.profileLabel}>
               Upload a picture
             </label>
             <input
-              id="image"
-              name="image"
+              id="profileInput"
+              name="profileInput"
               type="file"
               accept="image/*"
               className={`visually-hidden`}
-              onChange={handleImageChange}
+              onChange={handleProfileChange}
             />
           </div>
         </div>
+        <div>
+          <input
+            id="profile"
+            name="profile"
+            type="hidden"
+            value={profile ?? ""}
+          />
+          <input
+            id="userId"
+            name="userId"
+            type="hidden"
+            value={user?.id ?? ""}
+          />
+        </div>
         <div className={styles.buttonsContainer}>
-          <button type="button" className={styles.resetButton}>
+          <button
+            type="button"
+            className={styles.resetButton}
+            onClick={handleResetClick}
+          >
             Reset changes
           </button>
           <button type="submit">Save changes</button>
         </div>
-      </form>
+      </fetcher.Form>
     </div>
   );
 };
