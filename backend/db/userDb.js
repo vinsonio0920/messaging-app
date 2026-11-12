@@ -119,7 +119,7 @@ async function makeUserFriends(useFriends1Id, userFriends2Id) {
   }
 }
 
-async function updateUser(userId, profileUrl) {
+async function updateUser(userId, profileUrl, username) {
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -127,6 +127,7 @@ async function updateUser(userId, profileUrl) {
       },
       data: {
         profile: profileUrl,
+        username,
       },
     });
 
