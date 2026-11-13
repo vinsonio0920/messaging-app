@@ -16,7 +16,7 @@ import {
   requiredErr,
 } from "../utils.js";
 import { supabase } from "../lib/supabase.js";
-import { findUserById } from "../db/authorizationDb.js";
+import { findUserById, findUserInfoById } from "../db/authorizationDb.js";
 import { body, matchedData, validationResult } from "express-validator";
 
 const validateSettingsForm = [
@@ -67,6 +67,29 @@ async function getUser(req, res, next) {
   }
 }
 
+async function getUserInfo(req, res, next) {
+  // get the user info without the password
+  const { userId } = req.params;
+
+  try {
+    const jwtToken = req.headers["authorization"].split(" ")[1];
+    const userIdMatches = jwtUserIdMatches(userId, jwtToken);
+    if (!userIdMatches)
+      throw new Error("Signed in user's id doesn't match params user id.");
+
+    const userInfo = await findUserInfoById(userId);
+
+    return res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: userInfo,
+      errors: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 // first, valid the form fields (just username for now)!
 const putUser = [
   validateSettingsForm,
@@ -88,8 +111,6 @@ const putUser = [
     const { username } = matchedData(req);
     const profile = req.file;
     let profileUrl = null;
-
-    console.log(profile);
 
     try {
       const jwtToken = req.headers["authorization"].split(" ")[1];
@@ -156,8 +177,6 @@ const putUser = [
       }
 
       const updatedUser = await updateUser(userId, profileUrl, username);
-
-      console.log(updatedUser);
 
       return res.json({
         apiVersion: "1.0",
@@ -263,6 +282,7 @@ async function createFriendRequest(req, res, next) {
 export {
   getAllUsers,
   getUser,
+  getUserInfo,
   putUser,
   getUserFriends,
   getUserFriend,

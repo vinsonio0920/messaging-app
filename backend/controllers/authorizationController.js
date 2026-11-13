@@ -166,6 +166,7 @@ async function postSignIn(req, res, next) {
             apiVersion: "1.0",
             status: "success",
             data: {
+              userId: user.id,
               token,
             },
             errors: null,
