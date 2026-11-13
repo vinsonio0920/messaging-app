@@ -1,34 +1,18 @@
-import { Link, Outlet } from "react-router";
+import { Link, Outlet, useLoaderData } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 import { useEffect, useState } from "react";
 import { MessageForm } from "./messageForm/MessageForm.jsx";
 
 function App() {
+  const { user } = useLoaderData();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
   const [showFormOverlay, setShowFormOverlay] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
   const [showMessageForm, setShowMessageForm] = useState(false);
-  const [user, setUser] = useState(null);
   const [chats, setChats] = useState([]);
   const [errors, setErrors] = useState([]);
-
-  // Checks if the user is signed in
-  useEffect(() => {
-    const url = `${import.meta.env.VITE_SERVER_URL}/check-authentication`;
-    const jwtToken = localStorage.getItem("jwtToken");
-
-    fetch(url, {
-      method: "POST",
-      body: new URLSearchParams({
-        jwtToken: jwtToken,
-      }),
-    })
-      .then((response) => response.json())
-      .then((response) => setUser(response))
-      .catch(() => setErrors((prevState) => [...prevState, "auth"]));
-  }, []);
 
   // fetch all user chats for list
   // also update chat after user made friends!
@@ -286,7 +270,7 @@ function App() {
                   </li>
                   <li>
                     <Link
-                      to="/settings"
+                      to={`/users/${user.id}/settings`}
                       className={styles.settingsLink}
                       onClick={handleSidebarLiClick}
                     >

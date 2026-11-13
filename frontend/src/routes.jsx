@@ -8,6 +8,7 @@ import { App } from "./App.jsx";
 import { Chat } from "./chat/Chat.jsx";
 import { ErrorPage } from "./errorPage/errorPage.jsx";
 import { Homepage } from "./homepage/Homepage.jsx";
+import { appLoader } from "./loaders.js";
 import { Settings } from "./settings/Settings.jsx";
 import { SignIn } from "./signIn/SignIn.jsx";
 import { SignUp } from "./signUp/SignUp.jsx";
@@ -28,11 +29,12 @@ const routes = [
         action: chatAction,
       },
       {
-        path: "/settings",
+        path: "/users/:userId/settings",
         element: <Settings />,
         action: settingsAction,
       },
     ],
+    loader: appLoader,
   },
   {
     path: "/sign-up",

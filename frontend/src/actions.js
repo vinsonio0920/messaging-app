@@ -57,8 +57,9 @@ const signInAction = async ({ request }) => {
     const result = await response.json();
 
     if (result.status === "success") {
-      const token = result.data.token;
+      const { token, userId } = result.data;
       localStorage.setItem("jwtToken", token);
+      localStorage.setItem("userId", userId);
 
       return redirect("/");
     } else {

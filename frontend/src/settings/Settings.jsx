@@ -2,9 +2,6 @@ import { useEffect, useState } from "react";
 import styles from "./Settings.module.css";
 import { useFetcher, useOutletContext } from "react-router";
 
-// after we are done adding functionality we should also show the unhashed password as well, with a checkbox to show the password!
-// also add error handling!
-
 const Settings = () => {
   const fetcher = useFetcher();
   const user = useOutletContext();
