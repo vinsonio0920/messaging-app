@@ -109,8 +109,9 @@ const putUser = [
 
     const { userId } = req.params;
     const { username } = matchedData(req);
+    const { originalProfile, makeDefaultProfile } = req.body;
     const profile = req.file;
-    let profileUrl = null;
+    let profileUrl = originalProfile;
 
     try {
       const jwtToken = req.headers["authorization"].split(" ")[1];
@@ -122,7 +123,7 @@ const putUser = [
       const user = await findUserById(userId);
       if (!user) throw new Error("User does not exist.");
 
-      // update the image (doesn't check if the same for now)
+      // update the profile (doesn't check if the same for now)
       if (profile) {
         const filePath = `${userId}/${crypto.randomUUID()}${path.extname(profile.originalname)}`;
         const { data: profileData, error: profileError } =
@@ -155,7 +156,7 @@ const putUser = [
           .getPublicUrl(filePath);
 
         profileUrl = urlData.publicUrl;
-      } else {
+      } else if (makeDefaultProfile === "true") {
         // delete previous image if applicable
         const previousFilePath = getFilePathFromPublicUrl(user.profile);
         if (previousFilePath && user.profile) {
@@ -171,9 +172,7 @@ const putUser = [
             );
         }
 
-        // set to default profile picture
-        profileUrl =
-          "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original";
+        profileUrl = process.env.DEFAULT_PROFILE_URL;
       }
 
       const updatedUser = await updateUser(userId, profileUrl, username);
