@@ -57,6 +57,59 @@
   opacity: 0.05;
 }
 
+.imageSection {
+  margin-top: 1rem;
+}
+
+.profileContainer {
+  position: relative;
+  width: 100%;
+  max-width: 12.5rem;
+  max-height: 12.5rem;
+  margin: 0 auto;
+}
+
+.profileContainer .profileRemove {
+  opacity: 0;
+  position: absolute;
+  top: 0rem;
+  right: 0.5rem;
+  color: #fff;
+  background: #5b6363;
+  background: linear-gradient(
+    138deg,
+    rgba(91, 99, 99, 1) 0%,
+    rgba(0, 0, 0, 1) 100%
+  );
+  border: none;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  width: 2.5rem;
+  height: 2.5rem;
+  transition:
+    opacity 0.1s ease-in,
+    transform 0.1s ease-in;
+}
+
+.profileContainer:hover .profileRemove {
+  opacity: 1;
+}
+
+.profileContainer .profileRemove:hover {
+  transform: scale(1.05);
+  opacity: 0.95;
+}
+
+.profileContainer .profileRemove:active {
+  opacity: 0.85;
+  transition: opacity 0.01s ease-in;
+}
+
+.profileRemove span {
+  position: relative;
+  top: 0.075rem;
+}
+
 .profilePicture {
   display: block;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -65,10 +118,6 @@
   max-width: 12.5rem;
   max-height: 12.5rem;
   margin: 0 auto;
-}
-
-.imageSection {
-  margin-top: 1rem;
 }
 
 .profileLabel {

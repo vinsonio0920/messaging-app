@@ -9,6 +9,7 @@ const Settings = () => {
   const [userInfo, setUserInfo] = useState(null);
   const [username, setUsername] = useState("");
   const [profile, setProfile] = useState(null);
+  const [makeDefaultProfile, setMakeDefaultProfile] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -55,6 +56,7 @@ const Settings = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setProfile(e.target.result);
+      setMakeDefaultProfile(false);
     };
     reader.onerror = () => {
       setErrors((prevState) => [...prevState, "reader"]);
@@ -63,10 +65,16 @@ const Settings = () => {
     reader.readAsDataURL(file);
   }
 
+  function handleProfileRemoveClick() {
+    setProfile(import.meta.env.VITE_DEFAULT_PROFILE_URL);
+    setMakeDefaultProfile(true);
+  }
+
   function handleResetClick() {
     // reset back to user's information
     setUsername(user.username);
     setProfile(user?.profile);
+    setMakeDefaultProfile(false);
   }
 
   return (
@@ -121,12 +129,24 @@ const Settings = () => {
             </div>
           </div>
           <div className={styles.imageSection}>
-            <img
-              src={profile}
-              width="50"
-              alt="Your profile picture"
-              className={styles.profilePicture}
-            />
+            <div className={styles.profileContainer}>
+              <img
+                src={profile}
+                width="50"
+                alt="Your profile picture"
+                className={styles.profilePicture}
+              />
+              {profile !== import.meta.env.VITE_DEFAULT_PROFILE_URL && (
+                <button
+                  type="button"
+                  className={styles.profileRemove}
+                  aria-label="Remove profile picture"
+                  onClick={handleProfileRemoveClick}
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              )}
+            </div>
             <label htmlFor="profileInput" className={styles.profileLabel}>
               Upload a picture
             </label>
@@ -152,6 +172,12 @@ const Settings = () => {
             name="userId"
             type="hidden"
             value={user?.id ?? ""}
+          />
+          <input
+            id="makeDefaultProfile"
+            name="makeDefaultProfile"
+            type="hidden"
+            value={makeDefaultProfile}
           />
         </div>
         <div className={styles.buttonsContainer}>
