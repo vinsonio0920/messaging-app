@@ -8,14 +8,15 @@ datasource db {
 }
 
 model User {
-  id       Int       @id @default(autoincrement())
-  email    String    @unique
-  password String
-  username String    @unique
-  profile  String
-  online   Boolean   @default(false)
-  messages Message[]
-  chats    Chat[]
+  id                Int       @id @default(autoincrement())
+  email             String    @unique
+  password          String
+  username          String    @unique
+  previousUsernames String[]
+  profile           String
+  online            Boolean   @default(false)
+  messages          Message[]
+  chats             Chat[]
 }
 
 model Message {
@@ -49,4 +50,10 @@ model Session {
   sid       String   @unique
   data      String
   expiresAt DateTime
+}
+
+// this is an array of all taken usernames throughout every user
+model TakenUsernames {
+  id       Int    @id
+  username String @unique
 }
