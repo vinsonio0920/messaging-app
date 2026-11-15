@@ -4,6 +4,7 @@ import {
   createUserFriends,
   findAllUsers,
   findOtherFriendRequesting,
+  findTakenUsername,
   findUserFriendById,
   findUserFriends,
   makeUserFriends,
@@ -26,7 +27,34 @@ const validateSettingsForm = [
     .withMessage(`Username ${requiredErr}`)
     .bail()
     .isLength({ min: 3, max: 64 })
-    .withMessage(`Username ${lengthErr(3, 64)}`),
+    .withMessage(`Username ${lengthErr(3, 64)}`)
+    .bail()
+    .custom((value) => !/\s/.test(value))
+    .withMessage("Username must not contain any spaces")
+    .bail()
+    .custom((value) => /^[a-z0-9._-]+$/i.test(value))
+    .withMessage(
+      "Username must only have letters, numbers, periods, hyphens, or underscores",
+    )
+    .bail()
+    .custom((value) =>
+      /^(?!.*\.(?:com|net|org|io|co|us|uk|ca|ie|au)$)[a-z0-9]+(?:[._-][a-z0-9]+)*$/i.test(
+        value,
+      ),
+    )
+    .withMessage(
+      "Username must start and end with a letter or number, cannot have two symbols in a row (like .., --, ._), and cannot end with a domain extension (.com)",
+    )
+    .bail()
+    .custom(async (value) => {
+      const usernameExists = findTakenUsername(value);
+
+      if (usernameExists) {
+        throw new Error("Username already in database");
+      }
+      return true;
+    })
+    .withMessage("The username has already been taken"),
 ];
 
 async function getAllUsers(req, res, next) {

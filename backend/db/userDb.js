@@ -138,6 +138,24 @@ async function updateUser(userId, profileUrl, username) {
   }
 }
 
+async function findTakenUsername(username) {
+  try {
+    const takenUsername = await prisma.takenUsernames.findFirst({
+      where: {
+        username: {
+          equals: username,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    return takenUsername;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
 export {
   findAllUsers,
   findUserFriends,
@@ -146,4 +164,5 @@ export {
   createUserFriends,
   makeUserFriends,
   updateUser,
+  findTakenUsername,
 };
