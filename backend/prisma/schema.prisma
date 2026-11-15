@@ -54,6 +54,6 @@ model Session {
 
 // this is an array of all taken usernames throughout every user
 model TakenUsernames {
-  id       Int    @id
+  id       Int    @id @default(autoincrement())
   username String @unique
 }

@@ -1,6 +1,7 @@
 import path from "path";
 import { createChat } from "../db/chatDb.js";
 import {
+  createTakenUsername,
   createUserFriends,
   findAllUsers,
   findOtherFriendRequesting,
@@ -47,11 +48,12 @@ const validateSettingsForm = [
     )
     .bail()
     .custom(async (value) => {
-      const usernameExists = findTakenUsername(value);
+      const usernameExists = await findTakenUsername(value);
 
       if (usernameExists) {
         throw new Error("Username already in database");
       }
+
       return true;
     })
     .withMessage("The username has already been taken"),
@@ -137,7 +139,7 @@ const putUser = [
 
     const { userId } = req.params;
     const { username } = matchedData(req);
-    const { originalProfile, makeDefaultProfile } = req.body;
+    const { originalProfile, makeDefaultProfile, previousUsername } = req.body;
     const profile = req.file;
     let profileUrl = originalProfile;
 
@@ -203,7 +205,15 @@ const putUser = [
         profileUrl = process.env.DEFAULT_PROFILE_URL;
       }
 
-      const updatedUser = await updateUser(userId, profileUrl, username);
+      // add username to the list of taken usernames
+      await createTakenUsername(previousUsername);
+
+      const updatedUser = await updateUser(
+        userId,
+        profileUrl,
+        username,
+        previousUsername,
+      );
 
       return res.json({
         apiVersion: "1.0",

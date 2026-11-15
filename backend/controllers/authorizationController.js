@@ -75,7 +75,18 @@ const validateSignUp = [
     )
     .withMessage(
       "Username must start and end with a letter or number, cannot have two symbols in a row (like .., --, ._), and cannot end with a domain extension (.com)",
-    ),
+    )
+    .bail()
+    .custom(async (value) => {
+      const usernameExists = await findTakenUsername(value);
+
+      if (usernameExists) {
+        throw new Error("Username already in database");
+      }
+
+      return true;
+    })
+    .withMessage("The username has already been taken"),
 ];
 
 async function checkAuthentication(req, res) {

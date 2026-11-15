@@ -119,7 +119,7 @@ async function makeUserFriends(useFriends1Id, userFriends2Id) {
   }
 }
 
-async function updateUser(userId, profileUrl, username) {
+async function updateUser(userId, profileUrl, username, previousUsername) {
   try {
     const updatedUser = await prisma.user.update({
       where: {
@@ -128,10 +128,28 @@ async function updateUser(userId, profileUrl, username) {
       data: {
         profile: profileUrl,
         username,
+        previousUsernames: {
+          push: previousUsername,
+        },
       },
     });
 
     return updatedUser;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
+async function createTakenUsername(previousUsername) {
+  try {
+    const takenUsername = await prisma.takenUsernames.create({
+      data: {
+        username: previousUsername,
+      },
+    });
+
+    return takenUsername;
   } catch (err) {
     console.error(err);
     throw new Error(err);
@@ -164,5 +182,6 @@ export {
   createUserFriends,
   makeUserFriends,
   updateUser,
+  createTakenUsername,
   findTakenUsername,
 };
