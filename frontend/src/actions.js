@@ -122,6 +122,9 @@ const settingsAction = async ({ request }) => {
 
     const result = await response.json();
 
+    localStorage.removeItem("profileUsername");
+    localStorage.removeItem("profileImage");
+
     return result;
   } catch (error) {
     console.error(error.message);

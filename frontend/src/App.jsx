@@ -104,6 +104,8 @@ function App() {
       if (result.status === "success") {
         // remove jwtToken on localStorage and update user state
         localStorage.removeItem("jwtToken");
+        localStorage.removeItem("profileUsername");
+        localStorage.removeItem("profileImage");
 
         handleSidebarClick();
         return navigate("/sign-in", { replace: true });

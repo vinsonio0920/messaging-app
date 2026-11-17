@@ -7,8 +7,12 @@ const Settings = () => {
   const user = useOutletContext();
   const [errors, setErrors] = useState([]);
   const [userInfo, setUserInfo] = useState(null);
-  const [username, setUsername] = useState("");
-  const [profile, setProfile] = useState(null);
+  const [username, setUsername] = useState(
+    localStorage.getItem("profileUsername") ?? "",
+  );
+  const [profile, setProfile] = useState(
+    localStorage.getItem("profileImage") ?? null,
+  );
   const [makeDefaultProfile, setMakeDefaultProfile] = useState(false);
 
   let formError = null;
@@ -43,8 +47,14 @@ const Settings = () => {
 
         if (result.status === "success") {
           setUserInfo(result.data);
-          setUsername(user?.username);
-          setProfile(user?.profile);
+          if (!localStorage.getItem("profileUsername")) {
+            setUsername(user?.username);
+            localStorage.setItem("profileUsername", user?.username);
+          }
+          if (!localStorage.getItem("profileImage")) {
+            setProfile(user?.profile);
+            localStorage.setItem("profileImage", user?.profile);
+          }
         } else {
           throw new Error("Error fetching the user info.");
         }
@@ -59,6 +69,7 @@ const Settings = () => {
 
   function handleUsernameChange(event) {
     setUsername(event.target.value);
+    localStorage.setItem("profileUsername", event.target.value);
   }
 
   function handleProfileChange(event) {
@@ -72,6 +83,7 @@ const Settings = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       setProfile(e.target.result);
+      localStorage.setItem("profileImage", e.target.result);
       setMakeDefaultProfile(false);
     };
     reader.onerror = () => {
@@ -83,13 +95,16 @@ const Settings = () => {
 
   function handleProfileRemoveClick() {
     setProfile(import.meta.env.VITE_DEFAULT_PROFILE_URL);
+    localStorage.removeItem("profileImage");
     setMakeDefaultProfile(true);
   }
 
   function handleResetClick() {
     // reset back to user's information
     setUsername(user.username);
+    localStorage.setItem("profileUsername", user.username);
     setProfile(user?.profile);
+    localStorage.setItem("profileImage", user?.profile);
     setMakeDefaultProfile(false);
   }
 
