@@ -18,6 +18,10 @@
   font-weight: 500;
 }
 
+.settingsContainer input {
+  border: 1px solid #000;
+}
+
 .settingsContainer input,
 .settingsContainer .readOnlyContainer::after {
   width: 100%;
@@ -27,6 +31,18 @@
 .settingsContainer button,
 .profileLabel {
   height: 2.75rem;
+}
+
+.settingsContainer input.invalid {
+  background-color: #ffeaea;
+  border: 1px solid #ff0000;
+  box-shadow: rgba(255, 0, 0, 0.2) 0px 2px 8px 0px;
+}
+
+.settingsContainer input[type="password"] {
+  border: none;
+  max-width: 12ch;
+  text-overflow: "";
 }
 
 .fieldsContainer {
@@ -43,7 +59,12 @@
 .readOnlyContainer {
   position: relative;
   border-radius: 5px;
+  max-width: 30rem;
   overflow: clip;
+}
+
+.readOnlyContainer:has(input[type="password"]) {
+  border: 1px solid #000;
 }
 
 .readOnlyContainer::after {
@@ -120,6 +141,11 @@
   margin: 0 auto;
 }
 
+.invalidProfile {
+  border: 1px solid red;
+  box-shadow: rgba(255, 0, 0, 0.5) 0px 2px 8px 0px;
+}
+
 .profileLabel {
   text-align: center;
   color: #fff;
@@ -162,6 +188,27 @@
 
 .resetButton:active {
   background-color: #626262;
+}
+
+.formErrorContainer p {
+  text-align: center;
+  color: #ff0000;
+  margin-top: 1rem;
+}
+
+.fetchErrorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  padding: 1rem;
+}
+
+.fetchErrorContainer p {
+  color: #ff0000;
+  width: 90%;
+  margin-bottom: 3rem;
 }
 
 @media (min-width: 500px) {
@@ -225,11 +272,19 @@
     height: 3.5rem;
     margin: 0 !important;
   }
+
+  .formErrorContainer p {
+    margin-top: 3rem;
+  }
 }
 
 @media (min-width: 1000px) {
   .buttonsContainer {
     gap: 4rem;
     max-width: 32.5rem;
+  }
+
+  .formErrorContainer p {
+    margin-top: 3.5rem;
   }
 }

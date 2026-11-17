@@ -1,10 +1,11 @@
-import { Link, Outlet, useLoaderData } from "react-router";
+import { Link, Outlet, useLoaderData, useNavigate } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 import { useEffect, useState } from "react";
 import { MessageForm } from "./messageForm/MessageForm.jsx";
 
 function App() {
+  const navigate = useNavigate();
   const { user } = useLoaderData();
   const [showSidebar, setShowSidebar] = useState(false);
   const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
@@ -103,9 +104,9 @@ function App() {
       if (result.status === "success") {
         // remove jwtToken on localStorage and update user state
         localStorage.removeItem("jwtToken");
-        setUser(false);
 
-        return handleSidebarClick();
+        handleSidebarClick();
+        return navigate("/sign-in", { replace: true });
       } else {
         console.error(result);
         return result;

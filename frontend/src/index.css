@@ -55,6 +55,12 @@ a {
   text-decoration: none;
 }
 
+input[type="password"] {
+  font-family: Verdana, sans-serif;
+  font-size: 0.9rem;
+  letter-spacing: 0.125rem;
+}
+
 button:hover {
   cursor: pointer;
 }

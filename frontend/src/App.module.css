@@ -456,7 +456,12 @@
   }
 
   .dropdownButton {
-    padding: 0 0.5rem 0 0;
+    padding: 0;
+  }
+
+  .dropdownButton .profilePicture {
+    position: relative;
+    top: 0.1rem;
   }
 
   .mainContent {

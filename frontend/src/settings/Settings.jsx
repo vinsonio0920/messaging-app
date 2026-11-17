@@ -11,6 +11,22 @@ const Settings = () => {
   const [profile, setProfile] = useState(null);
   const [makeDefaultProfile, setMakeDefaultProfile] = useState(false);
 
+  let formError = null;
+  let profileError = false;
+
+  if (fetcher.data?.errors) {
+    formError = fetcher.data?.errors[0].msg;
+  } else if (errors.includes("fileType")) {
+    formError = "Only image files are accepted";
+    profileError = true;
+  } else if (errors.includes("fileSize")) {
+    formError = "File must not exceed 2 MB";
+    profileError = true;
+  } else if (errors.includes("reader")) {
+    formError = "There was an error reading the file. Please try again later";
+    profileError = true;
+  }
+
   useEffect(() => {
     if (!user) return;
 
@@ -77,6 +93,17 @@ const Settings = () => {
     setMakeDefaultProfile(false);
   }
 
+  if (errors.includes("userInfo")) {
+    return (
+      <div className={styles.fetchErrorContainer}>
+        <p>
+          There was an error getting the user information. Please try again
+          later.
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.settingsContainer}>
       <div>
@@ -97,6 +124,11 @@ const Settings = () => {
                 minLength="3"
                 maxLength="64"
                 onChange={handleUsernameChange}
+                className={
+                  fetcher.data?.errors?.find(
+                    (error) => error.path === "username",
+                  ) && styles.invalid
+                }
               />
             </div>
             <div className={styles.fieldContainer}>
@@ -134,7 +166,7 @@ const Settings = () => {
                 src={profile}
                 width="50"
                 alt="Your profile picture"
-                className={styles.profilePicture}
+                className={`${styles.profilePicture} ${profileError && styles.invalidProfile}`}
               />
               {profile !== import.meta.env.VITE_DEFAULT_PROFILE_URL && (
                 <button
@@ -179,6 +211,15 @@ const Settings = () => {
             type="hidden"
             value={makeDefaultProfile}
           />
+          <input
+            id="previousUsername"
+            name="previousUsername"
+            type="hidden"
+            value={user.username}
+          />
+        </div>
+        <div className={styles.formErrorContainer}>
+          {formError && <p>{formError}</p>}
         </div>
         <div className={styles.buttonsContainer}>
           <button
