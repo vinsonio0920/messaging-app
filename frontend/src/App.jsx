@@ -2,7 +2,7 @@ import { Link, Outlet, useLoaderData, useNavigate } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 import { useEffect, useState } from "react";
-import { MessageForm } from "./messageForm/MessageForm.jsx";
+import { MessageForm } from "./messageForm/FriendForm.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -219,15 +219,15 @@ function App() {
               <li>
                 <button
                   type="button"
-                  className={styles.createButton}
+                  className={styles.friendsButton}
                   onClick={handleAddMessageClick}
                 >
                   <span
-                    className={`material-symbols-outlined ${styles.createIcon}`}
+                    className={`material-symbols-outlined ${styles.friendIcon}`}
                   >
-                    add
+                    group_add
                   </span>
-                  <span className={styles.sidebarText}>Create a new chat</span>
+                  <span className={styles.sidebarText}>Friends</span>
                 </button>
               </li>
             </ul>

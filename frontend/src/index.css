@@ -82,7 +82,7 @@ button:hover {
   display: block;
 }
 
-.messageFormContainer ~ .form-overlay {
+.friendFormContainer ~ .form-overlay {
   z-index: 9998;
 }
 

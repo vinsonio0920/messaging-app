@@ -148,7 +148,7 @@
   padding-left: 0.75rem;
 }
 
-.createButton {
+.friendsButton {
   display: flex;
   align-items: center;
   font-size: 1rem;
@@ -159,14 +159,14 @@
   background-color: transparent;
 }
 
-.createButton:hover,
+.friendsButton:hover,
 .dropdownButton:hover,
 .sidebarButton:hover,
 .messagesUl a:hover {
   background-color: #e6e6e6;
 }
 
-.createButton:active,
+.friendsButton:active,
 .dropdownButton:active,
 .sidebarButton:active,
 .messagesUl a:active {
@@ -174,7 +174,7 @@
 }
 
 .homeLink .homeIcon,
-.createButton .createIcon,
+.friendsButton .friendIcon,
 .dropdownButton .signInIcon,
 .profileDropdown .signOutIcon,
 .profileDropdown .settingsIcon,
@@ -325,7 +325,7 @@
   .navbar.hideSidebar .homeLink,
   .navbar.hideSidebar button:not(.sidebarButton),
   .navbar.hideSidebar a,
-  .navbar.hideSidebar .createButton {
+  .navbar.hideSidebar .friendsButton {
     width: 100%;
     margin: 0;
     height: 3.25rem;
@@ -360,7 +360,7 @@
     display: none;
   }
 
-  .navbar.hideSidebar .createIcon {
+  .navbar.hideSidebar .friendIcon {
     margin: 0;
   }
 
@@ -447,7 +447,7 @@
     padding: 0;
   }
 
-  .createButton {
+  .friendsButton {
     padding: 0.5rem;
   }
 
