@@ -148,6 +148,7 @@
   padding-left: 0.75rem;
 }
 
+.chatButton,
 .friendsButton {
   display: flex;
   align-items: center;
@@ -159,6 +160,7 @@
   background-color: transparent;
 }
 
+.chatButton:hover,
 .friendsButton:hover,
 .dropdownButton:hover,
 .sidebarButton:hover,
@@ -166,6 +168,7 @@
   background-color: #e6e6e6;
 }
 
+.chatButton:active,
 .friendsButton:active,
 .dropdownButton:active,
 .sidebarButton:active,
@@ -174,6 +177,7 @@
 }
 
 .homeLink .homeIcon,
+.chatButton .chatIcon,
 .friendsButton .friendIcon,
 .dropdownButton .signInIcon,
 .profileDropdown .signOutIcon,
@@ -325,6 +329,7 @@
   .navbar.hideSidebar .homeLink,
   .navbar.hideSidebar button:not(.sidebarButton),
   .navbar.hideSidebar a,
+  .navbar.hideSidebar .chatButton,
   .navbar.hideSidebar .friendsButton {
     width: 100%;
     margin: 0;
@@ -447,6 +452,7 @@
     padding: 0;
   }
 
+  .chatButton,
   .friendsButton {
     padding: 0.5rem;
   }

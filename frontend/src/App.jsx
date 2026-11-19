@@ -2,7 +2,8 @@ import { Link, Outlet, useLoaderData, useNavigate } from "react-router";
 import { logoSvg } from "./assets/index.js";
 import styles from "./App.module.css";
 import { useEffect, useState } from "react";
-import { MessageForm } from "./messageForm/FriendForm.jsx";
+import { MessageForm } from "./friendForm/FriendForm.jsx";
+import { ChatForm } from "./chatForm/ChatForm.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ function App() {
   const [showSidebarOverlay, setShowSidebarOverlay] = useState(false);
   const [showFormOverlay, setShowFormOverlay] = useState(false);
   const [showProfileDropdown, setShowProfileDropdown] = useState(false);
-  const [showMessageForm, setShowMessageForm] = useState(false);
+  const [showFriendsForm, setShowFriendsForm] = useState(false);
+  const [showChatForm, setShowChatForm] = useState(false);
   const [chats, setChats] = useState([]);
   const [errors, setErrors] = useState([]);
 
@@ -73,7 +75,8 @@ function App() {
   }
 
   function handleFormOverlayClick() {
-    setShowMessageForm(false);
+    setShowFriendsForm(false);
+    setShowChatForm(false);
     setShowFormOverlay(false);
   }
 
@@ -81,8 +84,13 @@ function App() {
     setShowProfileDropdown(!showProfileDropdown);
   }
 
-  function handleAddMessageClick() {
-    setShowMessageForm(true);
+  function handleChatButtonClick() {
+    setShowChatForm(true);
+    setShowFormOverlay(true);
+  }
+
+  function handleFriendsClick() {
+    setShowFriendsForm(true);
     setShowFormOverlay(true);
   }
 
@@ -131,7 +139,8 @@ function App() {
 
   return (
     <div className={styles.pageContainer}>
-      {showMessageForm && <MessageForm user={user} />}
+      {showFriendsForm && <MessageForm user={user} />}
+      {showChatForm && <ChatForm user={user} />}
       <nav
         className={`${styles.navbar} ${showSidebar ? styles.showSidebar : styles.hideSidebar}`}
       >
@@ -219,8 +228,22 @@ function App() {
               <li>
                 <button
                   type="button"
+                  className={styles.chatButton}
+                  onClick={handleChatButtonClick}
+                >
+                  <span
+                    className={`material-symbols-outlined ${styles.chatIcon}`}
+                  >
+                    add
+                  </span>
+                  <span className={styles.sidebarText}>New chat</span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
                   className={styles.friendsButton}
-                  onClick={handleAddMessageClick}
+                  onClick={handleFriendsClick}
                 >
                   <span
                     className={`material-symbols-outlined ${styles.friendIcon}`}
