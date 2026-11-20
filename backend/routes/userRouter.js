@@ -6,6 +6,7 @@ import {
   getUserFriend,
   getUserFriends,
   getUserInfo,
+  getUserMutualFriends,
   putUser,
 } from "../controllers/userController.js";
 import { verifyToken } from "../utils.js";
@@ -18,6 +19,7 @@ userRouter.get("/:userId", verifyToken, getUser);
 userRouter.get("/:userId/info", verifyToken, getUserInfo);
 userRouter.put("/:userId", verifyToken, upload.single("profile"), putUser);
 userRouter.get("/:userId/friends", getUserFriends);
+userRouter.get("/:userId/friends/mutual", getUserMutualFriends);
 userRouter.get("/:userId/friends/:friendId", verifyToken, getUserFriend);
 userRouter.post("/:userId/friends/:friendId", verifyToken, createFriendRequest);
 

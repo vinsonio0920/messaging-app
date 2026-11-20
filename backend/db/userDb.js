@@ -36,6 +36,24 @@ async function findOtherFriendRequesting(userId) {
   }
 }
 
+async function findUserMutualFriends(userId) {
+  try {
+    const mutualFriends = await prisma.userFriends.findMany({
+      where: {
+        user1: {
+          equals: Number(userId),
+        },
+        accepted: true,
+      },
+    });
+
+    return mutualFriends;
+  } catch (err) {
+    console.error(err);
+    throw new Error(err);
+  }
+}
+
 async function findUserFriends(userId) {
   try {
     const userFriends = await prisma.userFriends.findMany({
@@ -176,6 +194,7 @@ async function findTakenUsername(username) {
 
 export {
   findAllUsers,
+  findUserMutualFriends,
   findUserFriends,
   findOtherFriendRequesting,
   findUserFriendById,

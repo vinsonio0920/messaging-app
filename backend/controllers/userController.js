@@ -8,6 +8,7 @@ import {
   findTakenUsername,
   findUserFriendById,
   findUserFriends,
+  findUserMutualFriends,
   makeUserFriends,
   updateUser,
 } from "../db/userDb.js";
@@ -205,15 +206,14 @@ const putUser = [
         profileUrl = process.env.DEFAULT_PROFILE_URL;
       }
 
-      // add username to the list of taken usernames
-      await createTakenUsername(previousUsername);
-
       const updatedUser = await updateUser(
         userId,
         profileUrl,
         username,
         previousUsername,
       );
+      // add username to the list of taken usernames
+      await createTakenUsername(previousUsername);
 
       return res.json({
         apiVersion: "1.0",
@@ -226,6 +226,23 @@ const putUser = [
     }
   },
 ];
+
+async function getUserMutualFriends(req, res, next) {
+  const { userId } = req.params;
+
+  try {
+    const mutualFriends = await findUserMutualFriends(userId);
+
+    return res.json({
+      apiVersion: "1.0",
+      status: "success",
+      data: mutualFriends,
+      errors: null,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 async function getUserFriends(req, res, next) {
   const { userId } = req.params;
@@ -254,7 +271,7 @@ async function getUserFriend(req, res, next) {
     return res.json({
       apiVersion: "1.0",
       status: "success",
-      data: [otherUserFriends, userFriend],
+      data: userFriend,
       errors: null,
     });
   } catch (err) {
@@ -322,6 +339,7 @@ export {
   getUserInfo,
   putUser,
   getUserFriends,
+  getUserMutualFriends,
   getUserFriend,
   createFriendRequest,
 };
