@@ -114,6 +114,8 @@ function App() {
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("profileUsername");
         localStorage.removeItem("profileImage");
+        localStorage.removeItem("chatFormName");
+        localStorage.removeItem("chatFormSearch");
 
         handleSidebarClick();
         return navigate("/sign-in", { replace: true });

@@ -153,7 +153,6 @@ const MessageForm = ({ user }) => {
     event.preventDefault();
 
     try {
-      // update this!
       const url = `${import.meta.env.VITE_SERVER_URL}/users/${user.id}/friends/${selectedUser}`;
 
       const response = await fetch(url, {
@@ -186,6 +185,9 @@ const MessageForm = ({ user }) => {
       <div className={styles.friendDiv}>
         <h1>Friends</h1>
         <form className={styles.friendForm}>
+          <label htmlFor="search" className="visually-hidden">
+            Search users
+          </label>
           <input
             type="text"
             id="search"
