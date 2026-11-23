@@ -38,7 +38,7 @@
 
 .usersUl {
   max-height: 18.75rem;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .usersUl li {

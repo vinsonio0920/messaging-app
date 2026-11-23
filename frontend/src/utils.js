@@ -49,6 +49,24 @@ function sortPendingAcceptance(friends, currentUser) {
   };
 }
 
+function sortFriendsList(selectedFriends) {
+  return function compare(friend1, friend2) {
+    if (
+      selectedFriends.includes(String(friend1.id)) &&
+      !selectedFriends.includes(String(friend2.id))
+    ) {
+      return -1;
+    } else if (
+      !selectedFriends.includes(String(friend1.id)) &&
+      selectedFriends.includes(String(friend2.id))
+    ) {
+      return 1;
+    } else {
+      return 0;
+    }
+  };
+}
+
 function formatChatDate(date) {
   return format(date, "MMMM do, yyyy");
 }
@@ -86,6 +104,7 @@ async function base64ToFile(dataUrl, filename = "upload") {
 export {
   compareUsersList,
   sortPendingAcceptance,
+  sortFriendsList,
   formatChatDate,
   formatMessageDate,
   base64ToFile,

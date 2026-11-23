@@ -1,12 +1,24 @@
 import { useEffect, useState } from "react";
 import styles from "./ChatForm.module.css";
 import { useFetcher } from "react-router";
+import { sortFriendsList } from "../utils";
 
-const FriendLi = ({ friend }) => {
-  console.log(friend);
+const FriendLi = ({ friend, selectedFriends, setSelectedFriends }) => {
+  function handleButtonClick(event) {
+    const friendId = event.currentTarget.dataset.id;
+
+    if (selectedFriends.includes(friendId)) {
+      setSelectedFriends((prevState) =>
+        prevState.filter((id) => id !== friendId),
+      );
+    } else {
+      setSelectedFriends((prevState) => [...prevState, friendId]);
+    }
+  }
+
   return (
     <li>
-      <button type="button">
+      <button type="button" data-id={friend.id} onClick={handleButtonClick}>
         <div className={styles.leftButton}>
           <img
             src={friend.profile}
@@ -17,7 +29,13 @@ const FriendLi = ({ friend }) => {
           <span>{friend.username}</span>
         </div>
         <div className={styles.rightButton}>
-          {/* add friend status later */}
+          {selectedFriends.includes(String(friend.id)) && (
+            <span
+              className={`material-symbols-outlined ${styles.checkmarkIcon}`}
+            >
+              check
+            </span>
+          )}
         </div>
       </button>
     </li>
@@ -34,6 +52,15 @@ const ChatForm = ({ user }) => {
     localStorage.getItem("chatFormSearch") ?? "",
   );
   const [errors, setErrors] = useState([]);
+  const [selectedFriends, setSelectedFriends] = useState([]);
+
+  const friendsList =
+    friends &&
+    friends
+      .filter((friend) =>
+        friend.username.toLowerCase().includes(search.toLowerCase()),
+      )
+      .sort(sortFriendsList(selectedFriends));
 
   // only enable when name is filled out for now
   let disableButton = false;
@@ -103,9 +130,14 @@ const ChatForm = ({ user }) => {
               {friends && friends.length === 0 && (
                 <li>You have no friends right now.</li>
               )}
-              {friends && friends.length > 0 ? (
-                friends.map((friend) => (
-                  <FriendLi key={friend.id} friend={friend} />
+              {friendsList && friendsList.length > 0 ? (
+                friendsList.map((friend) => (
+                  <FriendLi
+                    key={friend.id}
+                    friend={friend}
+                    selectedFriends={selectedFriends}
+                    setSelectedFriends={setSelectedFriends}
+                  />
                 ))
               ) : (
                 <li>No friends found</li>
