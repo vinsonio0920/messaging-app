@@ -6,16 +6,20 @@ const FriendLi = ({ friend }) => {
   console.log(friend);
   return (
     <li>
-      <div className={styles.leftLi}>
-        <img
-          src={friend.profile}
-          alt={`${friend.username}'s profile picture`}
-          width="32"
-          className={styles.profilePicture}
-        />
-        <span>{friend.username}</span>
-      </div>
-      <div className={styles.rightLi}>{/* add friend status later */}</div>
+      <button type="button">
+        <div className={styles.leftButton}>
+          <img
+            src={friend.profile}
+            alt={`${friend.username}'s profile picture`}
+            width="32"
+            className={styles.profilePicture}
+          />
+          <span>{friend.username}</span>
+        </div>
+        <div className={styles.rightButton}>
+          {/* add friend status later */}
+        </div>
+      </button>
     </li>
   );
 };
@@ -92,8 +96,10 @@ const ChatForm = ({ user }) => {
               name="search"
               value={search}
               onChange={handleSearchChange}
+              className={styles.searchInput}
+              placeholder="Search friends"
             />
-            <ul className={styles.friendsList}>
+            <ul className={styles.friendsUl}>
               {friends && friends.length === 0 && (
                 <li>You have no friends right now.</li>
               )}
