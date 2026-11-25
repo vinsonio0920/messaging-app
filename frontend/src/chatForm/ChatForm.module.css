@@ -99,7 +99,28 @@
 
 /* error */
 
+.fetchErrorContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 2rem);
+  max-width: 35.5rem;
+  padding: 0.5rem;
+  margin-top: -2rem;
+  z-index: 9999;
+
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 1rem;
+}
+
+.fetchErrorContainer .errorPara {
+  text-align: center;
+  margin: 1rem 0;
+}
+
 .errorPara {
   color: #ff0000;
-  margin-top: 0;
+  margin-top: 0.5rem;
 }

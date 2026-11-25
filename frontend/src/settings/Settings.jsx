@@ -112,7 +112,7 @@ const Settings = () => {
     return (
       <div className={styles.fetchErrorContainer}>
         <p>
-          There was an error getting the user information. Please try again
+          There was an error fetching the user information. Please try again
           later.
         </p>
       </div>

@@ -82,7 +82,8 @@ button:hover {
   display: block;
 }
 
-.friendFormContainer ~ .form-overlay {
+.friendFormContainer ~ .form-overlay,
+.chatFormDiv ~ .form-overlay {
   z-index: 9998;
 }
 

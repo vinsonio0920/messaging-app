@@ -54,6 +54,8 @@ const ChatForm = ({ user }) => {
   const [errors, setErrors] = useState([]);
   const [selectedFriends, setSelectedFriends] = useState([]);
 
+  console.log(fetcher.data);
+
   const friendsList =
     friends &&
     friends
@@ -97,8 +99,18 @@ const ChatForm = ({ user }) => {
     setSearch(event.target.value);
   }
 
+  if (errors.includes("fetch")) {
+    return (
+      <div className={`${styles.fetchErrorContainer} chatFormDiv`}>
+        <p className={styles.errorPara}>
+          There was an error fetching the chat form. Please try again later.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className={`${styles.chatFormContainer} chatFormContainer`}>
+    <div className={`${styles.chatFormContainer} chatFormDiv`}>
       <div className={styles.chatDiv}>
         <h1>New Chat</h1>
         <fetcher.Form method="POST" className={styles.chatForm}>
@@ -111,6 +123,14 @@ const ChatForm = ({ user }) => {
               value={chatName}
               onChange={handleChatChange}
             />
+            {fetcher.data?.errors?.find((error) => error.path === "name") && (
+              <p className={styles.errorPara}>
+                {
+                  fetcher.data?.errors?.find((error) => error.path === "name")
+                    .msg
+                }
+              </p>
+            )}
           </div>
           <div>
             <p>Members</p>
@@ -143,6 +163,17 @@ const ChatForm = ({ user }) => {
                 <li>No friends found</li>
               )}
             </ul>
+            {fetcher.data?.errors?.find(
+              (error) => error.path === "members",
+            ) && (
+              <p className={styles.errorPara}>
+                {
+                  fetcher.data?.errors?.find(
+                    (error) => error.path === "members",
+                  ).msg
+                }
+              </p>
+            )}
           </div>
           <div>
             <input
