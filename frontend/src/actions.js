@@ -1,6 +1,33 @@
 import { redirect } from "react-router";
 import { base64ToFile } from "./utils";
 
+const appAction = async ({ request }) => {
+  const formData = Object.fromEntries(await request.formData());
+  const formType = formData.type;
+
+  if (formType === "chat") {
+    try {
+      const url = `${import.meta.env.VITE_SERVER_URL}/chats/form`;
+
+      const response = await fetch(url, {
+        method: "post",
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+        },
+        body: new URLSearchParams(formData),
+      });
+
+      const result = await response.json();
+
+      console.log(result);
+
+      return result;
+    } catch (error) {
+      console.error(error.message);
+    }
+  }
+};
+
 const signUpAction = async ({ request }) => {
   const formData = Object.fromEntries(await request.formData());
   const url = `${import.meta.env.VITE_SERVER_URL}/sign-up`;
@@ -131,4 +158,4 @@ const settingsAction = async ({ request }) => {
   }
 };
 
-export { signUpAction, signInAction, chatAction, settingsAction };
+export { signUpAction, signInAction, chatAction, appAction, settingsAction };

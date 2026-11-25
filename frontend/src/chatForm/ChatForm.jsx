@@ -145,8 +145,19 @@ const ChatForm = ({ user }) => {
             </ul>
           </div>
           <div>
+            <input
+              type="hidden"
+              id="members"
+              name="members"
+              value={JSON.stringify(selectedFriends)}
+            />
+            <input type="hidden" id="userId" name="userId" value={user.id} />
+          </div>
+          <div>
             <button
               type="submit"
+              name="type"
+              value="chat"
               className={styles.submitButton}
               disabled={disableButton}
             >

@@ -1,4 +1,5 @@
 import {
+  appAction,
   chatAction,
   settingsAction,
   signInAction,
@@ -35,6 +36,7 @@ const routes = [
       },
     ],
     loader: appLoader,
+    action: appAction,
   },
   {
     path: "/sign-up",
