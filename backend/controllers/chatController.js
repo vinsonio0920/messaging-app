@@ -25,6 +25,30 @@ const validateChatForm = [
     .bail()
     .isLength({ min: 3, max: 32 })
     .withMessage(`Name ${lengthErr(3, 64)}`),
+  body("members")
+    .trim()
+    .notEmpty()
+    .withMessage("At least two members must be selected")
+    .bail()
+    .custom((value) => {
+      // check that members is not empty (this will automatically throw error for us)
+      return JSON.parse(value);
+    })
+    .withMessage("Members must have a valid value")
+    .bail()
+    .custom((value) => {
+      // check that there are at least two members
+      const members = JSON.parse(value);
+      console.log(members);
+
+      if (members.length < 2)
+        throw new Error(
+          "Group chat doesn't meet the minimum members requirement!",
+        );
+
+      return true;
+    })
+    .withMessage("At least two members must be selected"),
 ];
 
 async function getAllChats(req, res, next) {
@@ -99,8 +123,6 @@ const postChatForm = [
       if (!userIdMatches)
         throw new Error("Signed in user's id doesn't match params user id.");
 
-      // check that the members are indeed mutual friends of the user
-      // I didn't do it on form validation because this requires a userId
       const membersArray = JSON.parse(members);
       const mutualFriendsId = (await findUserMutualFriends(userId)).map(
         (friend) => friend.user2,

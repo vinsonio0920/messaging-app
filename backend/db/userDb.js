@@ -1,4 +1,5 @@
 import { prisma } from "../lib/prisma.js";
+import { findUserById } from "./authorizationDb.js";
 
 async function findAllUsers() {
   try {
@@ -47,7 +48,15 @@ async function findUserMutualFriends(userId) {
       },
     });
 
-    return mutualFriends;
+    const friendsInfo = await Promise.all(
+      mutualFriends.map(async (friend) => {
+        const friendInfo = await findUserById(friend.user2);
+
+        return friendInfo;
+      }),
+    );
+
+    return friendsInfo;
   } catch (err) {
     console.error(err);
     throw new Error(err);
